@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_theme"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_margin="12dp">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/record"
+                android:textColor="@color/black"
+                android:textSize="44dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/logo" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_view_in_main"
+            android:elevation="8dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/allRecordsLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/main_click_button">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/sound_wave" />
+
+                <Button
+                    android:id="@+id/allRecords"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="16dp"
+                    android:text="@string/all_records"
+                    android:textColor="@color/black"
+                    android:clickable="false"
+                    android:focusable="false"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="right|center"
+                    android:orientation="horizontal"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:id="@+id/allRecordQuantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"/>
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/get_in" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/underline" />
+
+            <LinearLayout
+                android:id="@+id/recentlyDeletedLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/main_click_button">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:padding="8dp"
+                    android:src="@drawable/trash_bin" />
+
+                <Button
+                    android:id="@+id/recentlyDeleted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="16dp"
+                    android:text="@string/recently_deleted"
+                    android:textColor="@color/black"
+                    android:clickable="false"
+                    android:focusable="false"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="right|center"
+                    android:orientation="horizontal"
+                    android:paddingRight="16dp">
+
+                    <TextView
+                        android:id="@+id/deletedQuantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"/>
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/get_in" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_folder"
+            android:textAllCaps="true"
+            android:textColor="@color/aux_text"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp" />
+
+        <ListView
+            android:id="@+id/folderListView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_view_in_main"
+            android:padding="8dp"
+            android:descendantFocusability="blocksDescendants"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/addAFolderLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/click_extra_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="24dp"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ImageButton
+            android:id="@+id/addAFolder"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:background="@android:color/transparent"
+            android:src="@drawable/add_folder"
+            android:clickable="false"
+            android:focusable="false"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

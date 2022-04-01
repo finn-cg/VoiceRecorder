@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="app_name">VoiceRecorder</string>
+
+    <string name="my_folder">My folders</string>
+    <string name="all_records">All records</string>
+    <string name="recently_deleted">Recently deleted</string>
+    <string name="record">Records</string>
+
+    <string name="new_folder">New folder</string>
+    <string name="input_folder_name">Input this folder\'s name.</string>
+    <string name="name">Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    
+    <string name="recorder">Recorder</string>
+    <string name="player">Player</string>
+    <string name="setting">Setting</string>
+    <string name="press_record">Press the button to record</string>
+
+</resources>

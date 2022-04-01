@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VoiceRecorder</string>
+    <string name="record">Ghi âm</string>
+    <string name="my_folder">Thư mục của tôi</string>
+    <string name="all_records">Tất cả bản ghi</string>
+    <string name="recently_deleted">Đã xóa gần đây</string>
+    <string name="new_folder">Thư mục mới</string>
+    <string name="input_folder_name">Nhập tên cho thư mục này.</string>
+    <string name="name">Tên</string>
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="recorder">Ghi âm</string>
+    <string name="player">Trình phát nhạc</string>
+    <string name="setting">Cài đặt</string>
+    <string name="press_record">Nhấn nút để ghi âm</string>
+</resources>
