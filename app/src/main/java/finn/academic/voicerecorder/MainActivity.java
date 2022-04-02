@@ -39,13 +39,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         adapter = new FolderAdapter(this, R.layout.custom_listview_in_main, folders);
         folderListView.setAdapter(adapter);
 
-        folderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(MainActivity.this, folders.get(i).getName(), Toast.LENGTH_SHORT);
-            }
-        });
-
         allRecords.setOnClickListener(this);
         recentlyDeleted.setOnClickListener(this);
         addAFolder.setOnClickListener(this);

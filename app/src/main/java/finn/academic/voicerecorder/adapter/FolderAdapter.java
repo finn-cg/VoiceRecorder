@@ -1,6 +1,7 @@
 package finn.academic.voicerecorder.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class FolderAdapter extends ArrayAdapter<Folder> {
     private class ViewHolder {
         Button btnName;
         TextView txtQuantity;
+        LinearLayout mainFolderLayout;
     }
 
     @NonNull
@@ -50,6 +52,7 @@ public class FolderAdapter extends ArrayAdapter<Folder> {
 
             holder.btnName = (Button) convertView.findViewById(R.id.folderName);
             holder.txtQuantity = (TextView) convertView.findViewById(R.id.recordQuantity);
+            holder.mainFolderLayout = convertView.findViewById(R.id.mainFolderLayout);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -57,6 +60,16 @@ public class FolderAdapter extends ArrayAdapter<Folder> {
 
         Folder folder = folderList.get(position);
         holder.btnName.setText(folder.getName());
+//        holder.txtQuantity.setText(folder.getRecords());
+
+        View finalConvertView = convertView;
+        holder.mainFolderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(finalConvertView.getContext(), folder.getName(), Toast.LENGTH_SHORT).show();
+                Log.d("Error", folder.getName());
+            }
+        });
 
         return convertView;
     }

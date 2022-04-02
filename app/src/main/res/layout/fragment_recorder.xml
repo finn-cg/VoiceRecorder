@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/main_theme"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -72,9 +73,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/gradient_record_button"
-        android:clickable="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        >
 
         <RelativeLayout
             android:id="@+id/recordButtonInside"

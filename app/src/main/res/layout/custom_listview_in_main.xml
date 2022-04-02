@@ -2,9 +2,10 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/mainFolderLayout"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout android:id="@+id/mainFolderLayout"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/main_click_button">
@@ -22,7 +23,9 @@
             android:background="@android:color/transparent"
             android:paddingLeft="16dp"
             android:text="Tất cả bản ghi"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:focusable="false"
+            android:clickable="false"/>
 
         <LinearLayout
             android:id="@+id/quantityLayout"

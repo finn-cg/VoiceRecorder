@@ -26,7 +26,7 @@ public class FragmentRecorder extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recorder, container, false);
 
-        startRecord = false;
+        startRecord = true;
 
         Animation animScaleOutside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_outside);
         Animation animScaleInside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_inside);
