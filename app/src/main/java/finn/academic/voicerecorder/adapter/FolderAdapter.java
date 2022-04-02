@@ -60,7 +60,7 @@ public class FolderAdapter extends ArrayAdapter<Folder> {
 
         Folder folder = folderList.get(position);
         holder.btnName.setText(folder.getName());
-//        holder.txtQuantity.setText(folder.getRecords());
+        holder.txtQuantity.setText(String.valueOf(folder.getRecords()));
 
         View finalConvertView = convertView;
         holder.mainFolderLayout.setOnClickListener(new View.OnClickListener() {

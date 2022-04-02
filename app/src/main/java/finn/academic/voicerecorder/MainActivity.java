@@ -79,6 +79,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void goToMainStream() {
         startActivity(new Intent(MainActivity.this, MainStream.class));
+        overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
     }
 
     private void showAddFolderDialog() {
