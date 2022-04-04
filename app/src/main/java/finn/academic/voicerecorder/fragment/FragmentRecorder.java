@@ -37,7 +37,7 @@ public class FragmentRecorder extends Fragment {
     private RelativeLayout recordButton;
     private RelativeLayout recordButtonInside;
     private ImageView iconRecord;
-    private Boolean startRecord;
+    //private Boolean startRecord;
     private boolean isRecording = false;
     private String recordPermission = Manifest.permission.RECORD_AUDIO;
     private int PERMISSION_CODE = 101;
@@ -53,7 +53,7 @@ public class FragmentRecorder extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recorder, container, false);
 
-        startRecord = true;
+        //startRecord = true;
 
         Animation animScaleOutside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_outside);
         Animation animScaleInside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_inside);
@@ -63,10 +63,11 @@ public class FragmentRecorder extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startRecord) {
+/*                if (startRecord) {
                     iconRecord.setImageResource(R.drawable.square_stop);
                     view.startAnimation(animScaleOutside);
                     recordButtonInside.startAnimation(animScaleInside);
+                    StopRecording();
                     startRecord = false;
 
                 } else {
@@ -74,15 +75,21 @@ public class FragmentRecorder extends Fragment {
                     view.clearAnimation();
                     recordButtonInside.clearAnimation();
                     startRecord = true;
-                }
+                }*/
                 if (isRecording) {
                     //Stop recording
+                    iconRecord.setImageResource(R.drawable.logo);
+                    view.clearAnimation();
+                    recordButtonInside.clearAnimation();
                     StopRecording();
                     isRecording = false;
                 }
                 else {
                     //Start recording
                     if (checkPermissions()) {
+                        iconRecord.setImageResource(R.drawable.square_stop);
+                        view.startAnimation(animScaleOutside);
+                        recordButtonInside.startAnimation(animScaleInside);
                         StartRecording();
                         isRecording = true;
                     }
@@ -116,7 +123,7 @@ public class FragmentRecorder extends Fragment {
         timer.start(); //Start timer
 
         recordPath = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Set record path
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh:mm:ss", Locale.JAPAN);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.JAPAN);
         Date now = new Date();
         recordFile = "Recording_" + formatter.format(now) + ".3gp";
         recordFormat = ".3gp";
