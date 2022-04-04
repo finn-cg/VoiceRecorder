@@ -17,5 +17,7 @@
     <string name="player">Player</string>
     <string name="setting">Setting</string>
     <string name="press_record">Press the button to record</string>
+    <string name="new_record">New record</string>
+    <string name="input_record_name">Input this record\'s name</string>
 
 </resources>

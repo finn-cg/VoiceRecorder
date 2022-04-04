@@ -48,10 +48,10 @@
             <ImageView
                 android:id="@+id/startRecording"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:padding="4dp"
+                android:layout_height="match_parent"
                 android:layout_weight=".33333333"
-                android:src="@drawable/mic"/>
+                android:padding="4dp"
+                android:src="@drawable/mic" />
 
             <ImageView
                 android:id="@+id/listRecords"

@@ -14,4 +14,6 @@
     <string name="player">Trình phát nhạc</string>
     <string name="setting">Cài đặt</string>
     <string name="press_record">Nhấn nút để ghi âm</string>
+    <string name="new_record">Bản ghi âm mới</string>
+    <string name="input_record_name">Nhập tên cho bản ghi âm này.</string>
 </resources>
