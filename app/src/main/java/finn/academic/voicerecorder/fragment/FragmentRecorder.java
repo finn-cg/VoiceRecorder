@@ -1,5 +1,6 @@
 package finn.academic.voicerecorder.fragment;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

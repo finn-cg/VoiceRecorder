@@ -1,6 +1,7 @@
 package finn.academic.voicerecorder.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import finn.academic.voicerecorder.MainActivity;
+import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 
 import java.util.List;
@@ -62,15 +65,17 @@ public class FolderAdapter extends ArrayAdapter<Folder> {
         holder.btnName.setText(folder.getName());
         holder.txtQuantity.setText(String.valueOf(folder.getRecords()));
 
-        View finalConvertView = convertView;
         holder.mainFolderLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(finalConvertView.getContext(), folder.getName(), Toast.LENGTH_SHORT).show();
-                Log.d("Error", folder.getName());
+                goToMainStream();
             }
         });
 
         return convertView;
+    }
+
+    private void goToMainStream() {
+        context.startActivity(new Intent(context, MainStream.class));
     }
 }
