@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/main_theme"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -146,22 +148,39 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/my_folder"
-            android:textAllCaps="true"
-            android:textColor="@color/aux_text"
-            android:textSize="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-        <ListView
-            android:id="@+id/folderListView"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_folder"
+                android:textAllCaps="true"
+                android:textColor="@color/aux_text"
+                android:textSize="16dp"
+                android:layout_centerVertical="true"/>
+
+            <Button
+                android:id="@+id/select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:text="Sửa"
+                android:textColor="@color/light_red"
+                />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/folderRecyclerView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_view_in_main"
             android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/custom_recyclerview_in_main"
             />
 
     </LinearLayout>

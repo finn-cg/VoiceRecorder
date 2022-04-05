@@ -22,8 +22,7 @@ public class Record {
         this.name = name;
     }
 
-    public long timeAgo() { return Long.parseLong(timeAgo.getTimeAgo(time));
-    }
+    public long timeAgo() { return Long.parseLong(timeAgo.getTimeAgo(time)); }
 
     public long duration() {
         return duration;

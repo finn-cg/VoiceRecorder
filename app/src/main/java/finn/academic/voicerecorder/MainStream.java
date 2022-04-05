@@ -31,8 +31,6 @@ public class MainStream extends Activity implements View.OnClickListener {
         startRecording.setOnClickListener(this);
         listRecords.setOnClickListener(this);
         setting.setOnClickListener(this);
-
-        overridePendingTransition(R.anim.anim_enter, R.anim.anim_exit);
     }
 
     private void SetUp() {
