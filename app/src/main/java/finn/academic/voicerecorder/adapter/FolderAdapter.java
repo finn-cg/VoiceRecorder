@@ -1,81 +1,151 @@
 package finn.academic.voicerecorder.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
-import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import finn.academic.voicerecorder.model.Folder;
 
-public class FolderAdapter extends ArrayAdapter<Folder> {
-    private Context context;
-    private int layout;
-    private List<Folder> folderList;
+public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
+    Context context;
+    ArrayList<Folder> folders;
 
-    public FolderAdapter(@NonNull Context context, int resource, @NonNull List<Folder> objects) {
-        super(context, resource, objects);
-
+    public FolderAdapter(Context context, ArrayList<Folder> folders) {
         this.context = context;
-        this.layout = resource;
-        this.folderList = objects;
-    }
-
-    private class ViewHolder {
-        Button btnName;
-        TextView txtQuantity;
-        LinearLayout mainFolderLayout;
+        this.folders = folders;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
-
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
-            holder = new ViewHolder();
-
-            holder.btnName = (Button) convertView.findViewById(R.id.folderName);
-            holder.txtQuantity = (TextView) convertView.findViewById(R.id.recordQuantity);
-            holder.mainFolderLayout = convertView.findViewById(R.id.mainFolderLayout);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        Folder folder = folderList.get(position);
-        holder.btnName.setText(folder.getName());
-        holder.txtQuantity.setText(String.valueOf(folder.getRecords()));
-
-        holder.mainFolderLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToMainStream();
-            }
-        });
-
-        return convertView;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.custom_recyclerview_in_main, parent, false);
+        return new ViewHolder(view);
     }
 
-    private void goToMainStream() {
-        context.startActivity(new Intent(context, MainStream.class));
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Folder folder = folders.get(position);
+        holder.folderName.setText(folder.getName());
+        holder.recordQuantity.setText(String.valueOf(folder.getRecords()));
+    }
+
+    @Override
+    public int getItemCount() {
+        return folders.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        LinearLayout mainFolderLayout;
+        Button folderName;
+        TextView recordQuantity;
+
+        ImageView deleteFolder, renameFolder;
+
+        LinearLayout goToFolder;
+        LinearLayout nameLayout;
+
+        public ViewHolder(@NonNull View folderView) {
+            super(folderView);
+
+            mainFolderLayout = folderView.findViewById(R.id.mainFolderLayout);
+            folderName = folderView.findViewById(R.id.folderName);
+            recordQuantity = folderView.findViewById(R.id.recordQuantity);
+
+            goToFolder = folderView.findViewById(R.id.goToFolder);
+            nameLayout = folderView.findViewById(R.id.nameLayout);
+
+            goToFolder.setOnClickListener(this);
+
+            goToFolder.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Animation animation;
+                    LinearLayout utils = folderView.findViewById(R.id.btnUtils);
+
+                    if (utils.getVisibility() == View.GONE) {
+                        utils.setVisibility(View.VISIBLE);
+                        nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_enter));
+                        animation = AnimationUtils.loadAnimation(context, R.anim.anim_enter);
+                        utils.startAnimation(animation);
+                    } else {
+                        animation = AnimationUtils.loadAnimation(context, R.anim.anim_exit);
+                        utils.startAnimation(animation);
+                        nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_exit));
+                        utils.setVisibility(View.GONE);
+                    }
+                    return true;
+                }
+            });
+
+            deleteFolder = folderView.findViewById(R.id.deleteFolder);
+            renameFolder = folderView.findViewById(R.id.renameFolder);
+
+            deleteFolder.setOnClickListener(this);
+            renameFolder.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == deleteFolder.getId()) {
+                Toast.makeText(context, "Delete " + folders.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
+            } else if (view.getId() == renameFolder.getId()) {
+                showRenameDialog();
+            } else {
+                goToMainStream();
+            }
+        }
+
+        private void goToMainStream() {
+            context.startActivity(new Intent(context, MainStream.class));
+        }
+
+        private void showRenameDialog() {
+            final Dialog dialog = new Dialog(context);
+            dialog.setContentView(R.layout.diaglog_make_change);
+            dialog.setCanceledOnTouchOutside(false);
+
+            TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+            TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+
+            title.setText(context.getResources().getString(R.string.rename_folder) + " " + folders.get(getAdapterPosition()).getName());
+            description.setText(context.getResources().getString(R.string.input_record_name));
+
+            Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
+            Button save = dialog.findViewById(R.id.saveDialogMakeChange);
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            dialog.show();
+        }
     }
 }

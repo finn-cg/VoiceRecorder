@@ -3,9 +3,32 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/button_cancel_dialog_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/button_red_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/button_save_dialog_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/cancel_click.xml" value="0.2265" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/click_extra_button.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_button_in_fragment.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_button_record.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_click_extra_button.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_main_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_view_in_main.xml" value="0.2265" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/extra_button.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/main_cancel_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/main_click_button.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/main_red_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/main_save_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/normal_click.xml" value="0.2265" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/red_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/save_click.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/selecting_custom.xml" value="0.2265" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/activity_main_stream.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/custom_listview_in_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/custom_recyclerview_in_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_add_folder.xml" value="0.1265625" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_make_change.xml" value="0.1265625" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/dialog_save_record.xml" value="0.2" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/fragment_recorder.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/VoiceRecorder/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2265" />
         <entry key="..\:/Android/VoiceRecorder/app/src/main/res/drawable/button_cancle_dialog_click.xml" value="0.2265" />

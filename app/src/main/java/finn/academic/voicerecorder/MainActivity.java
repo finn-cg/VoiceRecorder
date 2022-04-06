@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -19,13 +19,15 @@ import finn.academic.voicerecorder.adapter.FolderAdapter;
 import finn.academic.voicerecorder.model.Folder;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    ListView folderListView;
+    RecyclerView folderRecyclerView;
     ArrayList<Folder> folders;
     FolderAdapter adapter;
 
     LinearLayout allRecords;
     LinearLayout recentlyDeleted;
     RelativeLayout addAFolder;
+
+    Button selectBtn;
 
     Animation animation;
 
@@ -36,18 +38,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
 
-        adapter = new FolderAdapter(this, R.layout.custom_listview_in_main, folders);
-        folderListView.setAdapter(adapter);
+        adapter = new FolderAdapter(MainActivity.this, folders);
+        folderRecyclerView.setAdapter(adapter);
 
         allRecords.setOnClickListener(this);
         recentlyDeleted.setOnClickListener(this);
         addAFolder.setOnClickListener(this);
+
+        selectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void SetUp() {
-        folderListView = (ListView) findViewById(R.id.folderListView);
+        folderRecyclerView = findViewById(R.id.folderRecyclerView);
         allRecords = (LinearLayout) findViewById(R.id.allRecordsLayout);
         recentlyDeleted = (LinearLayout) findViewById(R.id.recentlyDeletedLayout);
+        selectBtn = findViewById(R.id.select_button);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
 
         folders = new ArrayList<>();
@@ -83,11 +93,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void showAddFolderDialog() {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.diaglog_add_folder);
+        dialog.setContentView(R.layout.diaglog_make_change);
         dialog.setCanceledOnTouchOutside(false);
 
-        Button cancel = dialog.findViewById(R.id.cancelAddFolder);
-        Button save = dialog.findViewById(R.id.saveNewFolder);
+        Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
+        Button save = dialog.findViewById(R.id.saveDialogMakeChange);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override

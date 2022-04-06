@@ -16,4 +16,5 @@
     <string name="press_record">Nhấn nút để ghi âm</string>
     <string name="new_record">Bản ghi âm mới</string>
     <string name="input_record_name">Nhập tên cho bản ghi âm này.</string>
+    <string name="rename_folder">Đổi tên thư mục</string>
 </resources>
