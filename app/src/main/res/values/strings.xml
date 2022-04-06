@@ -8,6 +8,7 @@
     <string name="record">Records</string>
 
     <string name="new_folder">New folder</string>
+    <string name="rename_folder">Rename folder</string>
     <string name="input_folder_name">Input this folder\'s name.</string>
     <string name="name">Name</string>
     <string name="cancel">Cancel</string>

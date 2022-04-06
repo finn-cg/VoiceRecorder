@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -199,11 +197,17 @@ public class FragmentRecorder extends Fragment {
 
     private void showSaveRecordDialog() {
         final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.dialog_save_record);
+        dialog.setContentView(R.layout.diaglog_make_change);
         dialog.setCanceledOnTouchOutside(false);
 
-        Button cancel = dialog.findViewById(R.id.cancelSaveRecord);
-        Button save = dialog.findViewById(R.id.saveRecord);
+        TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+        TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+
+        title.setText(getResources().getString(R.string.new_record));
+        description.setText(getResources().getString(R.string.input_record_name));
+
+        Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
+        Button save = dialog.findViewById(R.id.saveDialogMakeChange);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,7 +226,7 @@ public class FragmentRecorder extends Fragment {
             public void onClick(View view) {
 
                 File dir = new File(recordPath+"/");
-                newRecordName = (EditText) dialog.findViewById(R.id.newRecordName);
+                newRecordName = (EditText) dialog.findViewById(R.id.newName);
                 if(dir.exists()){
                     File from = new File(dir,recordFile);
                     File to = new File(dir,newRecordName.getText().toString() + recordFormat);

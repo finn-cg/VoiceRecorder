@@ -61,33 +61,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/nameLayout"
+            android:id="@+id/goToFolder"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="16dp"
-                android:src="@drawable/folder" />
-
-            <Button
-                android:id="@+id/folderName"
+            <LinearLayout
+                android:id="@+id/nameLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingLeft="16dp"
-                android:text="Tất cả bản ghi"
-                android:textColor="@color/black"
-                android:focusable="false"
-                android:clickable="false"
-                android:focusableInTouchMode="false"/>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="16dp"
+                    android:src="@drawable/folder" />
+
+                <Button
+                    android:id="@+id/folderName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="16dp"
+                    android:text="Tất cả bản ghi"
+                    android:textColor="@color/black"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:focusableInTouchMode="false"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/quantityLayout"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
+                android:layout_height="fill_parent"
                 android:gravity="right|center"
                 android:orientation="horizontal"
                 android:paddingRight="16dp">

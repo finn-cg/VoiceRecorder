@@ -8,6 +8,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
+        android:id="@+id/mainTitleDialogMakeChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new_folder"
@@ -17,6 +18,7 @@
         android:layout_marginTop="16dp"/>
 
     <TextView
+        android:id="@+id/descriptionDialogMakeChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/input_folder_name"
@@ -26,6 +28,7 @@
         android:layout_marginRight="32dp"/>
 
     <EditText
+        android:id="@+id/newName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/name"
@@ -55,7 +58,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/cancelAddFolder"
+                android:id="@+id/cancelDialogMakeChange"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"
@@ -71,7 +74,7 @@
                 android:background="@drawable/underline"/>
 
             <Button
-                android:id="@+id/saveNewFolder"
+                android:id="@+id/saveDialogMakeChange"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight=".50"

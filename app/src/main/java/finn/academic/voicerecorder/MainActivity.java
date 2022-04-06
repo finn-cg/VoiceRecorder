@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -18,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.adapter.FolderAdapter;
-import finn.academic.voicerecorder.listener.ClickListener;
-import finn.academic.voicerecorder.listener.RecyclerItemClickListener;
 import finn.academic.voicerecorder.model.Folder;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -42,7 +38,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
 
-        adapter = new FolderAdapter(getApplicationContext(), folders);
+        adapter = new FolderAdapter(MainActivity.this, folders);
         folderRecyclerView.setAdapter(adapter);
 
         allRecords.setOnClickListener(this);
@@ -97,11 +93,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void showAddFolderDialog() {
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.diaglog_add_folder);
+        dialog.setContentView(R.layout.diaglog_make_change);
         dialog.setCanceledOnTouchOutside(false);
 
-        Button cancel = dialog.findViewById(R.id.cancelAddFolder);
-        Button save = dialog.findViewById(R.id.saveNewFolder);
+        Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
+        Button save = dialog.findViewById(R.id.saveDialogMakeChange);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override

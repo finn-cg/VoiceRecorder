@@ -25,6 +25,10 @@
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/activity_main_stream.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/custom_listview_in_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/custom_recyclerview_in_main.xml" value="0.22826086956521738" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_add_folder.xml" value="0.1265625" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_make_change.xml" value="0.1265625" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/dialog_save_record.xml" value="0.2" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/fragment_recorder.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/VoiceRecorder/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2265" />
         <entry key="..\:/Android/VoiceRecorder/app/src/main/res/drawable/button_cancle_dialog_click.xml" value="0.2265" />
