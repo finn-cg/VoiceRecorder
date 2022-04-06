@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import finn.academic.voicerecorder.R;
+import finn.academic.voicerecorder.VisualizerView;
 
 public class FragmentRecorder extends Fragment {
     private RelativeLayout recordButton;
@@ -49,6 +51,9 @@ public class FragmentRecorder extends Fragment {
     private EditText newRecordName;
     int second = 0, minute = 0, hour = 0;
     volatile boolean running = false;
+    public static final int REPEAT_INTERVAL = 40;
+    VisualizerView visualizerView;
+    private Handler handler; // Handler for updating the visualizer
     Thread t;
     @Nullable
     @Override
@@ -95,12 +100,14 @@ public class FragmentRecorder extends Fragment {
                         recordButtonInside.startAnimation(animScaleInside);
                         isRecording = true;
                         StartRecording();
+                        handler.post(updateVisualizer);
 
                     }
                 }
             }
         });
-
+        visualizerView = (VisualizerView) view.findViewById(R.id.visualizer);
+        handler = new Handler();
         return view;
     }
 
@@ -112,6 +119,8 @@ public class FragmentRecorder extends Fragment {
         minuteRecord = view.findViewById(R.id.minuteRecord);
         secondRecord = view.findViewById(R.id.secondRecord);
         iconRecord = view.findViewById(R.id.iconRecord);
+
+
 
 /*        hourRecord.setVisibility(View.VISIBLE);
         minuteRecord.setVisibility(View.VISIBLE);
@@ -181,6 +190,7 @@ public class FragmentRecorder extends Fragment {
         catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     private void StopRecording() {
@@ -194,6 +204,8 @@ public class FragmentRecorder extends Fragment {
         mediaRecorder.stop(); //Stop record
         mediaRecorder.release();
         mediaRecorder = null;
+        handler.removeCallbacks(updateVisualizer);
+        visualizerView.clear();
         showSaveRecordDialog();
     }
 
@@ -293,6 +305,18 @@ public class FragmentRecorder extends Fragment {
             }
         };
     }
+    Runnable updateVisualizer = new Runnable() {
+        @Override
+        public void run() {
+                // get the current amplitude
+                int x = mediaRecorder.getMaxAmplitude();
+                visualizerView.addAmplitude(x); // update the VisualizeView
+                visualizerView.invalidate(); // refresh the VisualizerView
+
+                // update in 40 milliseconds
+                handler.postDelayed(this, REPEAT_INTERVAL);
+        }
+    };
     private void resetTimer() {
         second = 0;
         minute = 0;

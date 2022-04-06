@@ -100,5 +100,18 @@
 
         </RelativeLayout>
     </RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
+
+        <finn.academic.voicerecorder.VisualizerView
+            android:id="@+id/visualizer"
+            android:layout_width="220dp"
+            android:layout_height="75dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp" />
+
+    </RelativeLayout>
 
 </LinearLayout>
