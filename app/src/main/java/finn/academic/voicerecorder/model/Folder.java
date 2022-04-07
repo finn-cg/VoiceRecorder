@@ -3,10 +3,28 @@ package finn.academic.voicerecorder.model;
 public class Folder {
     private String name;
     private int records;
+    private Boolean canSelect = false;
+    private Boolean isSelected = false;
 
     public Folder(String name, int records) {
         this.name = name;
         this.records = records;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
+
+    public Boolean getCanSelect() {
+        return canSelect;
+    }
+
+    public void setCanSelect(Boolean selected) {
+        canSelect = selected;
     }
 
     public String getName() {

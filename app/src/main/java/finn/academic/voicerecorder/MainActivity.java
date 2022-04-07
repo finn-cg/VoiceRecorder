@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,8 +29,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     RelativeLayout addAFolder;
 
     Button selectBtn;
+    LinearLayout selectAllLayout;
+    Button selectAllBtn;
 
     Animation animation;
+
+    ArrayList<FolderAdapter.ViewHolder> viewHolders = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +43,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
 
-        adapter = new FolderAdapter(MainActivity.this, folders);
+        adapter = new FolderAdapter(MainActivity.this, folders, viewHolders);
         folderRecyclerView.setAdapter(adapter);
+        folderRecyclerView.setLayoutFrozen(false);
 
         allRecords.setOnClickListener(this);
         recentlyDeleted.setOnClickListener(this);
@@ -48,7 +54,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (selectBtn.getText().equals(getResources().getString(R.string.edit))) {
+                    selectBtn.setText(getResources().getString(R.string.delete));
+                    selectAllLayout.setVisibility(View.VISIBLE);
+                    selectAllLayout.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.select_all_enter));
+                    adapter.showAllSelecting();
+                } else {
+                    selectBtn.setText(getResources().getString(R.string.edit));
+                    selectAllLayout.setVisibility(View.GONE);
+                    adapter.hideAllSelecting();
+                }
+            }
+        });
 
+        selectAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectAllBtn.getText().equals(getResources().getString(R.string.select_all))) {
+                    selectAllBtn.setText(getResources().getString(R.string.unselect_all));
+                    adapter.setAllChecked();
+                } else {
+                    selectAllBtn.setText(getResources().getString(R.string.select_all));
+                    adapter.setAllUnchecked();
+                }
             }
         });
     }
@@ -58,6 +86,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         allRecords = (LinearLayout) findViewById(R.id.allRecordsLayout);
         recentlyDeleted = (LinearLayout) findViewById(R.id.recentlyDeletedLayout);
         selectBtn = findViewById(R.id.select_button);
+        selectAllLayout = findViewById(R.id.selectAllLayout);
+        selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
 
         folders = new ArrayList<>();

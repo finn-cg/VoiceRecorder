@@ -21,4 +21,9 @@
     <string name="new_record">New record</string>
     <string name="input_record_name">Input this record\'s name</string>
 
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="select_all">Select all</string>
+    <string name="unselect_all">Unselect all</string>
+
 </resources>

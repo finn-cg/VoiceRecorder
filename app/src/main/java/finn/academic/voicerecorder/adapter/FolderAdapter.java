@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +28,15 @@ import java.util.ArrayList;
 import finn.academic.voicerecorder.model.Folder;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
-    Context context;
-    ArrayList<Folder> folders;
+    private Context context;
+    private ArrayList<Folder> folders;
+//    private ShowSelectingListener showSelectingListener;
+    private ArrayList<ViewHolder> viewHolders;
 
-    public FolderAdapter(Context context, ArrayList<Folder> folders) {
+    public FolderAdapter(Context context, ArrayList<Folder> folders, ArrayList<ViewHolder> viewHolders /*, ShowSelectingListener showSelectingListener*/) {
         this.context = context;
         this.folders = folders;
+        this.viewHolders = viewHolders;
     }
 
     @NonNull
@@ -45,6 +51,20 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         Folder folder = folders.get(position);
         holder.folderName.setText(folder.getName());
         holder.recordQuantity.setText(String.valueOf(folder.getRecords()));
+
+        if (folder.getCanSelect()) {
+            holder.selectFolder.setVisibility(View.VISIBLE);
+            holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_enter));
+        } else {
+            holder.selectFolder.setVisibility(View.GONE);
+            holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_exit));
+        }
+
+        if (folder.getSelected()) {
+            holder.checkBox();
+        } else {
+            holder.uncheckBox();
+        }
     }
 
     @Override
@@ -52,7 +72,45 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         return folders.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//    public List<Folder> getSelectedFolder() {
+//        List<Folder> folderList = new ArrayList<>();
+//        for (Folder folder : folders) {
+//            if (folder.getSelected()) {
+//                folderList.add(folder);
+//            }
+//        }
+//        return folderList;
+//    }
+
+    public void showAllSelecting() {
+        for (Folder folder : folders) {
+            folder.setCanSelect(true);
+        }
+        this.notifyDataSetChanged();
+    }
+
+    public void hideAllSelecting() {
+        for (Folder folder : folders) {
+            folder.setCanSelect(false);
+        }
+        this.notifyDataSetChanged();
+    }
+
+    public void setAllChecked() {
+        for (Folder folder : folders) {
+            folder.setSelected(true);
+        }
+        this.notifyDataSetChanged();
+    }
+
+    public void setAllUnchecked() {
+        for (Folder folder : folders) {
+            folder.setSelected(false);
+        }
+        this.notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         LinearLayout mainFolderLayout;
         Button folderName;
         TextView recordQuantity;
@@ -62,12 +120,38 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         LinearLayout goToFolder;
         LinearLayout nameLayout;
 
+        RelativeLayout selectFolder;
+
+        LinearLayout quantityLayout;
+
+        CheckBox selectBox;
+
+        public RelativeLayout getSelectFolder() {
+            return selectFolder;
+        }
+
+        public LinearLayout getQuantityLayout() {
+            return quantityLayout;
+        }
+
+        public void checkBox() {
+            selectBox.setChecked(true);
+        }
+
+        public void uncheckBox() {
+            selectBox.setChecked(false);
+        }
+
         public ViewHolder(@NonNull View folderView) {
             super(folderView);
 
             mainFolderLayout = folderView.findViewById(R.id.mainFolderLayout);
             folderName = folderView.findViewById(R.id.folderName);
             recordQuantity = folderView.findViewById(R.id.recordQuantity);
+
+            selectFolder = folderView.findViewById(R.id.selectFolder);
+            quantityLayout = folderView.findViewById(R.id.quantityLayout);
+            selectBox = folderView.findViewById(R.id.selectFolderBox);
 
             goToFolder = folderView.findViewById(R.id.goToFolder);
             nameLayout = folderView.findViewById(R.id.nameLayout);
@@ -82,8 +166,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
                     if (utils.getVisibility() == View.GONE) {
                         utils.setVisibility(View.VISIBLE);
-                        nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_enter));
-                        animation = AnimationUtils.loadAnimation(context, R.anim.anim_enter);
+                        animation = AnimationUtils.loadAnimation(context, R.anim.trans_name_enter);
+                        nameLayout.startAnimation(animation);
                         utils.startAnimation(animation);
                     } else {
                         animation = AnimationUtils.loadAnimation(context, R.anim.anim_exit);
@@ -91,6 +175,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                         nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_exit));
                         utils.setVisibility(View.GONE);
                     }
+
                     return true;
                 }
             });
@@ -124,9 +209,11 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
             TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
             TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+            EditText newName = dialog.findViewById(R.id.newName);
 
-            title.setText(context.getResources().getString(R.string.rename_folder) + " " + folders.get(getAdapterPosition()).getName());
+            title.setText(context.getResources().getString(R.string.rename_folder));
             description.setText(context.getResources().getString(R.string.input_record_name));
+            newName.setText(folders.get(getAdapterPosition()).getName());
 
             Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
             Button save = dialog.findViewById(R.id.saveDialogMakeChange);
@@ -147,5 +234,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
             dialog.show();
         }
+
+
     }
 }
