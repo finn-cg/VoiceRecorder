@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/input_folder_name"
         android:textSize="16dp"
-        android:textColor="@color/aux_text"
+        android:textColor="@color/aux_item"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"/>
 

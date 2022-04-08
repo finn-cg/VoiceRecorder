@@ -4,7 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -33,6 +38,40 @@ public class DeletedRecordsActivity extends AppCompatActivity {
 
         adapter = new RecordAdapter(DeletedRecordsActivity.this, records);
         recentlyDeletedRecyclerView.setAdapter(adapter);
+
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editBtn.getText().equals(getResources().getString(R.string.edit))) {
+                    editBtn.setText(getResources().getString(R.string.cancel));
+
+                    utilLayout.setVisibility(View.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(DeletedRecordsActivity.this, R.anim.glide_up);
+                    utilLayout.startAnimation(animation);
+
+                    adapter.showAllSelecting();
+                } else {
+                    editBtn.setText(getResources().getString(R.string.edit));
+                    utilLayout.setVisibility(View.GONE);
+
+                    adapter.hideAllSelecting();
+                }
+                setSelectButton();
+            }
+        });
+    }
+
+    private void setSelectButton() {
+        for (Record record : records) {
+            if (record.getSelected()) {
+                recoverBtn.setText(getResources().getString(R.string.recover));
+                deleteBtn.setText(getResources().getString(R.string.delete));
+                return;
+            }
+        }
+
+        recoverBtn.setText(getResources().getString(R.string.recover_all));
+        deleteBtn.setText(getResources().getString(R.string.delete_all));
     }
 
     private void SetUp() {

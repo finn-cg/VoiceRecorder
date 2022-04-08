@@ -7,10 +7,29 @@ public class Record {
     private long time;
     private long duration; //in milliseconds
 
+    private Boolean canSelect = false;
+    private Boolean isSelected = false;
+
     public Record(String name, long time, long duration) {
         this.name = name;
         this.time = time;
         this.duration = duration;
+    }
+
+    public Boolean getCanSelect() {
+        return canSelect;
+    }
+
+    public void setCanSelect(Boolean canSelect) {
+        this.canSelect = canSelect;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
     }
 
     public String getName() {

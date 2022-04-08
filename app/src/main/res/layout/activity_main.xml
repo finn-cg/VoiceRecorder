@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/my_folder"
                 android:textAllCaps="true"
-                android:textColor="@color/aux_text"
+                android:textColor="@color/aux_item"
                 android:textSize="16dp"
                 android:layout_centerVertical="true"/>
 

@@ -88,7 +88,8 @@
                     android:focusable="false"
                     android:clickable="false"
                     android:focusableInTouchMode="false"
-                    android:textAlignment="textStart"/>
+                    android:textAlignment="textStart"
+                    android:textAllCaps="false"/>
 
             </LinearLayout>
 

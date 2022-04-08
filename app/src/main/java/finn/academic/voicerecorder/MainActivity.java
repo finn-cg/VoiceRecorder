@@ -81,7 +81,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
-    public void setSelectButton() {
+    private void setSelectButton() {
         for (Folder folder : folders) {
             if (folder.getSelected()) {
                 selectBtn.setText(getResources().getString(R.string.delete));

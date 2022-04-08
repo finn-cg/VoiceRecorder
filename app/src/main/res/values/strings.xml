@@ -23,7 +23,11 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="delete_all">Delete all</string>
+    <string name="recover">Recover</string>
+    <string name="recover_all">Recover all</string>
     <string name="select_all">Select all</string>
     <string name="unselect_all">Unselect all</string>
+    <string name="search">Search</string>
 
 </resources>

@@ -21,4 +21,8 @@
     <string name="delete">Xóa</string>
     <string name="select_all">Chọn tất cả</string>
     <string name="unselect_all">Bỏ chọn tất cả</string>
+    <string name="delete_all">Xóa tất cả</string>
+    <string name="recover_all">Khôi phục tất cả</string>
+    <string name="recover">Khôi phục</string>
+    <string name="search">Tìm kiếm</string>
 </resources>
