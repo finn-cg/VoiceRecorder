@@ -87,7 +87,8 @@
                     android:textColor="@color/black"
                     android:focusable="false"
                     android:clickable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:textAlignment="textStart"/>
 
             </LinearLayout>
 

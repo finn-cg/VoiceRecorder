@@ -45,7 +45,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         adapter = new FolderAdapter(MainActivity.this, folders, viewHolders);
         folderRecyclerView.setAdapter(adapter);
-        folderRecyclerView.setLayoutFrozen(false);
 
         allRecords.setOnClickListener(this);
         recentlyDeleted.setOnClickListener(this);
@@ -54,15 +53,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectBtn.getText().equals(getResources().getString(R.string.edit))) {
-                    selectBtn.setText(getResources().getString(R.string.delete));
+                String txt = (String) selectBtn.getText();
+                if (txt.equals(getResources().getString(R.string.edit))) {
+                    setSelectButton();
                     selectAllLayout.setVisibility(View.VISIBLE);
                     selectAllLayout.startAnimation(AnimationUtils.loadAnimation(MainActivity.this, R.anim.select_all_enter));
                     adapter.showAllSelecting();
-                } else {
+                } else if (txt.equals(getResources().getString(R.string.cancel))) {
                     selectBtn.setText(getResources().getString(R.string.edit));
                     selectAllLayout.setVisibility(View.GONE);
                     adapter.hideAllSelecting();
+                } else {
+
                 }
             }
         });
@@ -79,6 +81,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
+    }
+
+    public void setSelectButton() {
+        for (Folder folder : folders) {
+            if (folder.getSelected()) {
+                selectBtn.setText(getResources().getString(R.string.delete));
+                return;
+            }
+        }
+        selectBtn.setText(getResources().getString(R.string.cancel));
     }
 
     private void SetUp() {
@@ -111,7 +123,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (allRecords.equals(view)) {
             goToMainStream();
         } else if (recentlyDeleted.equals(view)) {
-            Toast.makeText(this, "Go to recently deleted", Toast.LENGTH_SHORT).show();
+            goToRecentlyDelete();
         } else if (addAFolder.equals(view)) {
             showAddFolderDialog();
         }
@@ -119,6 +131,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void goToMainStream() {
         startActivity(new Intent(MainActivity.this, MainStream.class));
+    }
+
+    private void goToRecentlyDelete() {
+        startActivity(new Intent(MainActivity.this, DeletedRecordsActivity.class));
     }
 
     private void showAddFolderDialog() {

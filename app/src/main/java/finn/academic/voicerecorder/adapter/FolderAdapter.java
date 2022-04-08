@@ -1,5 +1,6 @@
 package finn.academic.voicerecorder.adapter;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +67,22 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         } else {
             holder.uncheckBox();
         }
+
+        holder.selectBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                folder.setSelected(b);
+
+                Button selectBtn = ((Activity) context).findViewById(R.id.select_button);
+                for (Folder f : folders) {
+                    if (f.getSelected()) {
+                        selectBtn.setText(context.getResources().getString(R.string.delete));
+                        return;
+                    }
+                }
+                selectBtn.setText(context.getResources().getString(R.string.cancel));
+            }
+        });
     }
 
     @Override
