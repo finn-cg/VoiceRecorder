@@ -30,12 +30,10 @@ import finn.academic.voicerecorder.model.Record;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Record> records;
-    private ArrayList<FolderAdapter.ViewHolder> viewHolders;
 
-    public RecordAdapter(Context context, ArrayList<Record> records, ArrayList<FolderAdapter.ViewHolder> viewHolders) {
+    public RecordAdapter(Context context, ArrayList<Record> records) {
         this.context = context;
         this.records = records;
-        this.viewHolders = viewHolders;
     }
 
     @NonNull
@@ -52,7 +50,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Record record = records.get(position);
         holder.nameRecord.setText(record.getName());
-        holder.timeRecord.setText(String.valueOf(record.timeAgo()));
+        holder.timeRecord.setText(record.timeAgo());
         holder.durationRecord.setText(String.valueOf(record.duration()));
     }
 

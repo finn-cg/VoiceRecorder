@@ -34,8 +34,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     Animation animation;
 
-    ArrayList<FolderAdapter.ViewHolder> viewHolders = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
 
-        adapter = new FolderAdapter(MainActivity.this, folders, viewHolders);
+        adapter = new FolderAdapter(MainActivity.this, folders);
         folderRecyclerView.setAdapter(adapter);
 
         allRecords.setOnClickListener(this);

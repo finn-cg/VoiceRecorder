@@ -33,12 +33,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
     private Context context;
     private ArrayList<Folder> folders;
 //    private ShowSelectingListener showSelectingListener;
-    private ArrayList<ViewHolder> viewHolders;
 
-    public FolderAdapter(Context context, ArrayList<Folder> folders, ArrayList<ViewHolder> viewHolders /*, ShowSelectingListener showSelectingListener*/) {
+    public FolderAdapter(Context context, ArrayList<Folder> folders /*, ShowSelectingListener showSelectingListener*/) {
         this.context = context;
         this.folders = folders;
-        this.viewHolders = viewHolders;
     }
 
     @NonNull

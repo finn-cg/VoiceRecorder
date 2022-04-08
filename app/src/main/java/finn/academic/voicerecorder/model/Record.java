@@ -6,7 +6,6 @@ public class Record {
     private String name;
     private long time;
     private long duration; //in milliseconds
-    private TimeAgo timeAgo;
 
     public Record(String name, long time, long duration) {
         this.name = name;
@@ -22,7 +21,7 @@ public class Record {
         this.name = name;
     }
 
-    public long timeAgo() { return Long.parseLong(timeAgo.getTimeAgo(time)); }
+    public String timeAgo() { return (new TimeAgo()).getTimeAgo(time); }
 
     public long duration() {
         return duration;
