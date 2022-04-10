@@ -56,8 +56,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             holder.selectFolder.setVisibility(View.VISIBLE);
             holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_enter));
         } else {
-            holder.selectFolder.setVisibility(View.GONE);
             holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_exit));
+            holder.selectFolder.setVisibility(View.GONE);
         }
 
         if (folder.getSelected()) {
@@ -186,10 +186,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                         nameLayout.startAnimation(animation);
                         utils.startAnimation(animation);
                     } else {
-                        animation = AnimationUtils.loadAnimation(context, R.anim.anim_exit);
+                        utils.setVisibility(View.GONE);
+                        animation = AnimationUtils.loadAnimation(context, R.anim.exit_full_left);
                         utils.startAnimation(animation);
                         nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_exit));
-                        utils.setVisibility(View.GONE);
                     }
 
                     return true;

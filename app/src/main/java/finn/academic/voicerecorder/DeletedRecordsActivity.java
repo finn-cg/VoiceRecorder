@@ -1,19 +1,18 @@
 package finn.academic.voicerecorder;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
@@ -26,6 +25,11 @@ public class DeletedRecordsActivity extends AppCompatActivity {
     Button editBtn;
     Button recoverBtn;
     Button deleteBtn;
+
+    LinearLayout playLayout;
+    LinearLayout mainPlayLayout;
+
+    TextView playHeading;;
 
     RelativeLayout utilLayout;
 
@@ -46,17 +50,38 @@ public class DeletedRecordsActivity extends AppCompatActivity {
                     editBtn.setText(getResources().getString(R.string.cancel));
 
                     utilLayout.setVisibility(View.VISIBLE);
-                    Animation animation = AnimationUtils.loadAnimation(DeletedRecordsActivity.this, R.anim.glide_up);
-                    utilLayout.startAnimation(animation);
+                    utilLayout.startAnimation(AnimationUtils.loadAnimation(DeletedRecordsActivity.this, R.anim.glide_up));
 
                     adapter.showAllSelecting();
                 } else {
                     editBtn.setText(getResources().getString(R.string.edit));
+                    utilLayout.startAnimation(AnimationUtils.loadAnimation(DeletedRecordsActivity.this, R.anim.hide_glide_down));
                     utilLayout.setVisibility(View.GONE);
 
                     adapter.hideAllSelecting();
                 }
+                mainPlayLayout.setVisibility(View.GONE);
                 setSelectButton();
+            }
+        });
+
+        playHeading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mainPlayLayout.getVisibility() != View.VISIBLE) {
+                    mainPlayLayout.setVisibility(View.VISIBLE);
+                    playLayout.startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.show_play));
+                }
+            }
+        });
+
+        recentlyDeletedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (mainPlayLayout.getVisibility() != View.GONE) {
+                    mainPlayLayout.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -78,8 +103,13 @@ public class DeletedRecordsActivity extends AppCompatActivity {
         recentlyDeletedRecyclerView = findViewById(R.id.recentlyDeletedRecyclerView);
 
         editBtn = findViewById(R.id.editInDelButton);
-        recoverBtn = findViewById(R.id.recoverInDelButton);
-        deleteBtn = findViewById(R.id.deleteInDelButton);
+        recoverBtn = findViewById(R.id.recoverButton);
+        deleteBtn = findViewById(R.id.deleteButton);
+
+        playLayout = findViewById(R.id.playLayout);
+        mainPlayLayout = findViewById(R.id.mainPlayLayout);
+
+        playHeading = findViewById(R.id.playHeading);
 
         utilLayout = findViewById(R.id.deleteUtilsLayout);
 

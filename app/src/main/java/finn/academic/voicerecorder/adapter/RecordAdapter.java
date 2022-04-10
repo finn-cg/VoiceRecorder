@@ -1,9 +1,7 @@
 package finn.academic.voicerecorder.adapter;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +10,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
-import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.model.Record;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
@@ -76,18 +68,22 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 record.setSelected(b);
 
-                Button recoverBtn = ((Activity) context).findViewById(R.id.recoverInDelButton);
-                Button deleteBtn = ((Activity) context).findViewById(R.id.deleteInDelButton);
+                Button recoverBtn = ((Activity) context).findViewById(R.id.recoverButton);
+                Button deleteBtn = ((Activity) context).findViewById(R.id.deleteButton);
 
                 for (Record record : records) {
                     if (record.getSelected()) {
-                        recoverBtn.setText(context.getResources().getString(R.string.recover));
+                        if (recoverBtn != null) {
+                            recoverBtn.setText(context.getResources().getString(R.string.recover));
+                        }
                         deleteBtn.setText(context.getResources().getString(R.string.delete));
                         return;
                     }
                 }
 
-                recoverBtn.setText(context.getResources().getString(R.string.recover_all));
+                if (recoverBtn != null) {
+                    recoverBtn.setText(context.getResources().getString(R.string.recover_all));
+                }
                 deleteBtn.setText(context.getResources().getString(R.string.delete_all));
             }
         });
@@ -95,10 +91,18 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         holder.mainRowRecordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (record.getSelected()) {
-                    holder.selectFolderBox.setChecked(false);
+                if (holder.selectFolderBox.getVisibility() == View.VISIBLE) {
+                    if (record.getSelected()) {
+                        holder.selectFolderBox.setChecked(false);
+                    } else {
+                        holder.selectFolderBox.setChecked(true);
+                    }
                 } else {
-                    holder.selectFolderBox.setChecked(true);
+                    LinearLayout playLayout = ((Activity) context).findViewById(R.id.playLayout);
+                    LinearLayout mainPlayLayout = ((Activity) context).findViewById(R.id.mainPlayLayout);
+
+                    mainPlayLayout.setVisibility(View.VISIBLE);
+                    playLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.show_play));
                 }
             }
         });

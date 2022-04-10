@@ -82,17 +82,160 @@
             android:layout_height="fill_parent"
             android:layout_weight=".90"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/custom_recyclerview_for_records"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:text="Voice Recorder"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textColor="@color/light_red"/>
+            tools:listitem="@layout/custom_recyclerview_for_records"
+            android:layout_marginBottom="44dp"/>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/playLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/playHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/play_heading"
+                android:gravity="center"
+                android:text="Voice Recorder"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <LinearLayout
+                android:id="@+id/mainPlayLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main_theme"
+                    android:paddingTop="8dp">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tên bài hát"
+                                android:textStyle="bold"
+                                android:textSize="18dp"
+                                android:textColor="@color/black"
+                                android:layout_marginLeft="12dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/aux_item"
+                                android:text="00:00"
+                                android:layout_marginLeft="12dp"
+                                android:textSize="14dp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/aux_util"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="12dp"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+                <SeekBar
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main_theme"
+                    android:progressTint="@color/light_red"
+                    android:thumbTint="@color/light_red"
+                    android:progressBackgroundTint="@color/aux_item"/>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main_theme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/aux_item"
+                        android:text="00:00"
+                        android:textSize="12dp"
+                        android:layout_marginLeft="4dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/aux_item"
+                        android:text="00:00"
+                        android:textSize="12dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="4dp"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@color/main_theme">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/red_rewind"
+                            android:layout_margin="8dp"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/red_play"
+                            android:layout_margin="8dp"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/red_fast_forward"
+                            android:layout_margin="8dp"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/deleteUtilsLayout"
@@ -103,7 +246,7 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/recoverInDelButton"
+            android:id="@+id/recoverButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -114,7 +257,7 @@
             android:paddingRight="24dp"/>
 
         <Button
-            android:id="@+id/deleteInDelButton"
+            android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_all"

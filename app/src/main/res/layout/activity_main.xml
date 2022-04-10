@@ -174,11 +174,13 @@
 
                     <Button
                         android:id="@+id/selectAllBtn"
-                        android:layout_width="136dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:text="@string/select_all"
-                        android:textColor="@color/light_red" />
+                        android:textColor="@color/light_red"
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"/>
 
                     <View
                         android:layout_width="1dp"
@@ -197,7 +199,8 @@
                     android:layout_alignParentRight="true"
                     android:background="@android:color/transparent"
                     android:text="@string/edit"
-                    android:textColor="@color/light_red" />
+                    android:textColor="@color/light_red"
+                    android:textAlignment="textEnd"/>
 
             </LinearLayout>
 
