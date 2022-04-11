@@ -10,12 +10,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.R;
@@ -24,10 +26,12 @@ import finn.academic.voicerecorder.model.Record;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Record> records;
+    private File[] files;
 
-    public RecordAdapter(Context context, ArrayList<Record> records) {
+    public RecordAdapter(Context context, ArrayList<Record> records, File[] files) {
         this.context = context;
         this.records = records;
+        this.files = files;
     }
 
     @NonNull
@@ -38,6 +42,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                         .inflate(R.layout.custom_recyclerview_for_records,
                                 parent, false)
         );
+
     }
 
     @Override
@@ -106,6 +111,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 }
             }
         });
+
     }
 
     public void showAllSelecting() {
@@ -127,7 +133,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return records.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         TextView nameRecord;
         TextView timeRecord;
         TextView durationRecord;
@@ -144,8 +150,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
             selectFolderBox = recordView.findViewById(R.id.selectFolderBox);
             mainRowRecordLayout = recordView.findViewById(R.id.mainRowRecordLayout);
+
         }
+
     }
+
     public static String formateMilliSeccond(long milliseconds) {
         String finalTimerString = "";
         String secondsString = "";
@@ -170,5 +179,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         finalTimerString = finalTimerString + minutes + ":" + secondsString;
 
         return finalTimerString;
+    }
+
+    public interface RecyclerViewClickInterface {
+        public void onItemClick(int position);
     }
 }

@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.adapter.RecordAdapter;
@@ -33,6 +34,7 @@ public class DeletedRecordsActivity extends AppCompatActivity {
 
     RelativeLayout utilLayout;
 
+    File[] files;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class DeletedRecordsActivity extends AppCompatActivity {
 
         SetUp();
 
-        adapter = new RecordAdapter(DeletedRecordsActivity.this, records);
+        adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files);
         recentlyDeletedRecyclerView.setAdapter(adapter);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +116,11 @@ public class DeletedRecordsActivity extends AppCompatActivity {
         utilLayout = findViewById(R.id.deleteUtilsLayout);
 
         records = new ArrayList<>();
+
+        records = new ArrayList<>();
+        String path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+        File directory = new File(path);
+        files = directory.listFiles(); //Get all files from path above
 /*        records.add(new Record("Record 1", 0, 360));
         records.add(new Record("Record 2", 5, 123));
         records.add(new Record("Record 3", 360, 20));

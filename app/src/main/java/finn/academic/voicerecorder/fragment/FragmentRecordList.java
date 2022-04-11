@@ -1,13 +1,18 @@
 package finn.academic.voicerecorder.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +21,11 @@ import android.app.Fragment;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +36,7 @@ import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
 
-public class FragmentRecordList extends Fragment {
+public class FragmentRecordList extends Fragment implements RecordAdapter.RecyclerViewClickInterface {
     RecyclerView recordsRecyclerView;
     ArrayList<Record> records;
     RecordAdapter adapter;
@@ -42,13 +50,17 @@ public class FragmentRecordList extends Fragment {
     LinearLayout playLayout;
     LinearLayout mainPlayLayout;
 
-    TextView playHeading;
+    TextView playHeading, durationPlayingRecord, startTimePlayingRecord;
+    SeekBar seekBarRecord;
+    ImageButton playRecord;
 
     Button cancelCheckButton;
 
     Boolean isShowUtils = false;
 
     private File[] files;
+    String path = "";
+    static MediaPlayer mMediaPlayer;
 
     @Nullable
     @Override
@@ -56,9 +68,11 @@ public class FragmentRecordList extends Fragment {
         View view = inflater.inflate(R.layout.fragment_record_list, container, false);
 
         SetUp(view);
+        initPlayer(0);
 
-        adapter = new RecordAdapter(view.getContext(), records);
+        adapter = new RecordAdapter(view.getContext(), records, files);
         recordsRecyclerView.setAdapter(adapter);
+
 
         utilRecordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +136,13 @@ public class FragmentRecordList extends Fragment {
             }
         });
 
+        playRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                play();
+            }
+        });
+
         cancelCheckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,18 +183,27 @@ public class FragmentRecordList extends Fragment {
         mainPlayLayout = view.findViewById(R.id.mainPlayLayout);
 
         playHeading = view.findViewById(R.id.playHeading);
+        durationPlayingRecord = view.findViewById(R.id.durationPlayingRecord);
+        startTimePlayingRecord = view.findViewById(R.id.startTimePlayingRecord);
+        playRecord = view.findViewById(R.id.playRecord);
+
+        seekBarRecord = view.findViewById(R.id.seekBarRecord);
 
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
 
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+        }
+
         records = new ArrayList<>();
-        String path = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+        path = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
-        //Toast.makeText(getContext(), path, Toast.LENGTH_SHORT).show();
+
         for (int i = 0; i < files.length; i++)
         {
-            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
-            Toast.makeText(getContext(), getActivity().getExternalFilesDir("/")+"/"+files[i].getName(), Toast.LENGTH_SHORT).show();
+            String sname = files[i].getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "");
+            records.add(new Record(getContext(),sname, files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
         }
 
         /*records.add(new Record("Record 1", 0, 360));
@@ -199,10 +229,127 @@ public class FragmentRecordList extends Fragment {
             String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             millSecond = Long.parseLong(duration);
 
-
         }catch (Exception e){
             e.printStackTrace();
         }
         return millSecond;
+    }
+    private void initPlayer(final int position) {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.reset();
+        }
+
+        mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(getActivity().getExternalFilesDir("/")+"/"+files[position].getName())); // create and load mediaplayer with song resources
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                String totalTime = createTimeLabel(mMediaPlayer.getDuration());
+                durationPlayingRecord.setText(totalTime);
+                seekBarRecord.setMax(mMediaPlayer.getDuration());
+                mMediaPlayer.start();
+                playRecord.setBackgroundResource(R.drawable.red_pause);
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                int curSongPoition = position;
+                // code to repeat songs until the
+                if (curSongPoition < files.length - 1) {
+                    curSongPoition++;
+                    initPlayer(curSongPoition);
+                } else {
+                    curSongPoition = 0;
+                    initPlayer(curSongPoition);
+                }
+
+            }
+        });
+
+        seekBarRecord.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mMediaPlayer.seekTo(progress);
+                    seekBarRecord.setProgress(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mMediaPlayer != null) {
+                    try {
+//                        Log.i("Thread ", "Thread Called");
+                        // create new message to send to handler
+                        if (mMediaPlayer.isPlaying()) {
+                            Message msg = new Message();
+                            msg.what = mMediaPlayer.getCurrentPosition();
+                            handler.sendMessage(msg);
+                            Thread.sleep(1000);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+//            Log.i("handler ", "handler called");
+            int current_position = msg.what;
+            seekBarRecord.setProgress(current_position);
+            String cTime = createTimeLabel(current_position);
+            startTimePlayingRecord.setText(cTime);
+        }
+    };
+    private void play() {
+        if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
+            mMediaPlayer.start();
+            playRecord.setBackgroundResource(R.drawable.red_pause);
+        } else {
+            pause();
+        }
+
+    }
+
+    private void pause() {
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            playRecord.setBackgroundResource(R.drawable.red_play);
+        }
+
+    }
+    public String createTimeLabel(int duration) {
+        String timeLabel = "";
+        int min = duration / 1000 / 60;
+        int sec = duration / 1000 % 60;
+
+        timeLabel += min + ":";
+        if (sec < 10) timeLabel += "0";
+        timeLabel += sec;
+
+        return timeLabel;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+
     }
 }

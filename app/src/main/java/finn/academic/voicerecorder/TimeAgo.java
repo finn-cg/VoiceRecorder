@@ -34,7 +34,7 @@ public class TimeAgo {
             return context.getResources().getString(R.string.aDayAgo);
         }
         else {
-            return "days ago";//days + " " + context.getResources().getString(R.string.manyDayAgo);
+            return days + " " + context.getResources().getString(R.string.manyDayAgo);
         }
     }
 }
