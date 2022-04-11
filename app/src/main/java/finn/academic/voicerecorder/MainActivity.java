@@ -20,19 +20,19 @@ import finn.academic.voicerecorder.adapter.FolderAdapter;
 import finn.academic.voicerecorder.model.Folder;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    RecyclerView folderRecyclerView;
-    ArrayList<Folder> folders;
-    FolderAdapter adapter;
+    private RecyclerView folderRecyclerView;
+    private ArrayList<Folder> folders;
+    private FolderAdapter adapter;
 
-    LinearLayout allRecords;
-    LinearLayout recentlyDeleted;
-    RelativeLayout addAFolder;
+    private LinearLayout allRecords;
+    private LinearLayout recentlyDeleted;
+    private RelativeLayout addAFolder;
 
-    Button selectBtn;
-    LinearLayout selectAllLayout;
-    Button selectAllBtn;
+    private Button selectBtn;
+    private LinearLayout selectAllLayout;
+    private Button selectAllBtn;
 
-    Animation animation;
+    private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

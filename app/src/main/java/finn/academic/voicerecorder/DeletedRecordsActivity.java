@@ -19,22 +19,22 @@ import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
 
 public class DeletedRecordsActivity extends AppCompatActivity {
-    RecyclerView recentlyDeletedRecyclerView;
-    ArrayList<Record> records;
-    RecordAdapter adapter;
+    private RecyclerView recentlyDeletedRecyclerView;
+    private ArrayList<Record> records;
+    private RecordAdapter adapter;
 
-    Button editBtn;
-    Button recoverBtn;
-    Button deleteBtn;
+    private Button editBtn;
+    private Button recoverBtn;
+    private Button deleteBtn;
 
-    LinearLayout playLayout;
-    LinearLayout mainPlayLayout;
+    private LinearLayout playLayout;
+    private LinearLayout mainPlayLayout;
 
-    TextView playHeading;;
+    private TextView playHeading;;
 
-    RelativeLayout utilLayout;
+    private RelativeLayout utilLayout;
 
-    File[] files;
+    private File[] files;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

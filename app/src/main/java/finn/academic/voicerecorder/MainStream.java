@@ -16,11 +16,11 @@ import finn.academic.voicerecorder.fragment.FragmentRecorder;
 import finn.academic.voicerecorder.fragment.FragmentSetting;
 
 public class MainStream extends Activity implements View.OnClickListener {
-    ImageView startRecording;
-    ImageView listRecords;
-    ImageView setting;
+    private ImageView startRecording;
+    private ImageView listRecords;
+    private ImageView setting;
 
-    TextView actionName;
+    private TextView actionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
