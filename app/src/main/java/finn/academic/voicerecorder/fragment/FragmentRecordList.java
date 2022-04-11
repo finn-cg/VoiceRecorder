@@ -50,9 +50,9 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     LinearLayout playLayout;
     LinearLayout mainPlayLayout;
 
-    TextView playHeading, durationPlayingRecord, startTimePlayingRecord;
+    TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
     SeekBar seekBarRecord;
-    ImageButton playRecord;
+    ImageButton playRecord, rewindRecord, forwardRecord;
 
     Button cancelCheckButton;
 
@@ -61,6 +61,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private File[] files;
     String path = "";
     static MediaPlayer mMediaPlayer;
+    private int pos;
 
     @Nullable
     @Override
@@ -70,7 +71,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         SetUp(view);
         initPlayer(0);
 
-        adapter = new RecordAdapter(view.getContext(), records, files);
+        adapter = new RecordAdapter(view.getContext(), records, files, this);
         recordsRecyclerView.setAdapter(adapter);
 
 
@@ -143,6 +144,32 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        rewindRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pos <= 0) {
+                    pos = files.length - 1;
+                } else {
+                    pos--;
+                }
+
+                initPlayer(pos);
+            }
+        });
+
+        forwardRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pos < files.length - 1) {
+                    pos++;
+                } else {
+                    pos = 0;
+
+                }
+                initPlayer(pos);
+            }
+        });
+
         cancelCheckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,9 +210,15 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         mainPlayLayout = view.findViewById(R.id.mainPlayLayout);
 
         playHeading = view.findViewById(R.id.playHeading);
+        namePlayingRecord = view.findViewById(R.id.namePlayingRecord);
+
         durationPlayingRecord = view.findViewById(R.id.durationPlayingRecord);
         startTimePlayingRecord = view.findViewById(R.id.startTimePlayingRecord);
+        endTimePlayingRecord = view.findViewById(R.id.endTimePlayingRecord);
+
         playRecord = view.findViewById(R.id.playRecord);
+        rewindRecord = view.findViewById(R.id.rewindRecord);
+        forwardRecord = view.findViewById(R.id.forwardRecord);
 
         seekBarRecord = view.findViewById(R.id.seekBarRecord);
 
@@ -202,8 +235,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
         for (int i = 0; i < files.length; i++)
         {
-            String sname = files[i].getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "");
-            records.add(new Record(getContext(),sname, files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
+            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
         }
 
         /*records.add(new Record("Record 1", 0, 360));
@@ -238,6 +270,9 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
         }
+
+        String sname = files[position].getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
+        namePlayingRecord.setText(sname);
 
         mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), Uri.parse(getActivity().getExternalFilesDir("/")+"/"+files[position].getName())); // create and load mediaplayer with song resources
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -315,8 +350,10 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 //            Log.i("handler ", "handler called");
             int current_position = msg.what;
             seekBarRecord.setProgress(current_position);
-            String cTime = createTimeLabel(current_position);
-            startTimePlayingRecord.setText(cTime);
+            String sTime = createTimeLabel(current_position);
+            String eTime = createTimeLabel(current_position - mMediaPlayer.getDuration());
+            startTimePlayingRecord.setText(sTime);
+            endTimePlayingRecord.setText(eTime);
         }
     };
     private void play() {
@@ -350,6 +387,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
     @Override
     public void onItemClick(int position) {
-
+        initPlayer(position);
+        pos = position;
     }
 }

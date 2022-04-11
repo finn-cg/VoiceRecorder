@@ -42,7 +42,7 @@ public class DeletedRecordsActivity extends AppCompatActivity {
 
         SetUp();
 
-        adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files);
+        adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files, (RecordAdapter.RecyclerViewClickInterface) this);
         recentlyDeletedRecyclerView.setAdapter(adapter);
 
         editBtn.setOnClickListener(new View.OnClickListener() {

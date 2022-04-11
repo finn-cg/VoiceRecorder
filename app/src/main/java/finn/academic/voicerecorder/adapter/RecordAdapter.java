@@ -1,5 +1,6 @@
 package finn.academic.voicerecorder.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +29,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private Context context;
     private ArrayList<Record> records;
     private File[] files;
+    private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecordAdapter(Context context, ArrayList<Record> records, File[] files) {
+    public RecordAdapter(Context context, ArrayList<Record> records, File[] files, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.records = records;
         this.files = files;
+        this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
     @NonNull
@@ -107,11 +111,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                     LinearLayout mainPlayLayout = ((Activity) context).findViewById(R.id.mainPlayLayout);
 
                     mainPlayLayout.setVisibility(View.VISIBLE);
+                    recyclerViewClickInterface.onItemClick(holder.getAdapterPosition());
                     playLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.show_play));
                 }
             }
         });
-
     }
 
     public void showAllSelecting() {
@@ -150,7 +154,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
             selectFolderBox = recordView.findViewById(R.id.selectFolderBox);
             mainRowRecordLayout = recordView.findViewById(R.id.mainRowRecordLayout);
-
         }
 
     }
