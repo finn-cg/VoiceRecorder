@@ -1,6 +1,8 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.app.Activity;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.R;
@@ -43,6 +47,8 @@ public class FragmentRecordList extends Fragment {
     Button cancelCheckButton;
 
     Boolean isShowUtils = false;
+
+    private File[] files;
 
     @Nullable
     @Override
@@ -160,7 +166,17 @@ public class FragmentRecordList extends Fragment {
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
 
         records = new ArrayList<>();
-        records.add(new Record("Record 1", 0, 360));
+        String path = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+        File directory = new File(path);
+        files = directory.listFiles(); //Get all files from path above
+        //Toast.makeText(getContext(), path, Toast.LENGTH_SHORT).show();
+        for (int i = 0; i < files.length; i++)
+        {
+            records.add(new Record(files[i].getName(), files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
+            Toast.makeText(getContext(), getActivity().getExternalFilesDir("/")+"/"+files[i].getName(), Toast.LENGTH_SHORT).show();
+        }
+
+        /*records.add(new Record("Record 1", 0, 360));
         records.add(new Record("Record 2", 5, 123));
         records.add(new Record("Record 3", 360, 20));
         records.add(new Record("Record 4", 255, 35));
@@ -171,6 +187,22 @@ public class FragmentRecordList extends Fragment {
         records.add(new Record("Record 9", 1000, 33));
         records.add(new Record("Record 10", 600, 88));
         records.add(new Record("Record 11", 530, 99));
-        records.add(new Record("Record 12", 30, 120));
+        records.add(new Record("Record 12", 30, 120));*/
+    }
+    public long getAudioFileLength(String path) {
+        StringBuilder stringBuilder = new StringBuilder();
+        long millSecond = 0;
+        try {
+            Uri uri = Uri.parse(path);
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(getActivity(), uri);
+            String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            millSecond = Long.parseLong(duration);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return millSecond;
     }
 }

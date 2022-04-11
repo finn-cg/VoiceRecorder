@@ -45,7 +45,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         Record record = records.get(position);
         holder.nameRecord.setText(record.getName());
         holder.timeRecord.setText(record.timeAgo());
-        holder.durationRecord.setText(String.valueOf(record.duration()));
+        holder.durationRecord.setText(formateMilliSeccond(record.duration()));
 
         if (record.getCanSelect()) {
             holder.selectFolderBox.setVisibility(View.VISIBLE);
@@ -145,5 +145,30 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             selectFolderBox = recordView.findViewById(R.id.selectFolderBox);
             mainRowRecordLayout = recordView.findViewById(R.id.mainRowRecordLayout);
         }
+    }
+    public static String formateMilliSeccond(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString = "";
+
+        // Convert total duration into time
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        finalTimerString = finalTimerString + minutes + ":" + secondsString;
+
+        return finalTimerString;
     }
 }

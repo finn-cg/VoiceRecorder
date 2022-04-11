@@ -69,19 +69,6 @@ public class FragmentRecorder extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-/*                if (startRecord) {
-                    iconRecord.setImageResource(R.drawable.square_stop);
-                    view.startAnimation(animScaleOutside);
-                    recordButtonInside.startAnimation(animScaleInside);
-                    StopRecording();
-                    startRecord = false;
-
-                } else {
-                    iconRecord.setImageResource(R.drawable.logo);
-                    view.clearAnimation();
-                    recordButtonInside.clearAnimation();
-                    startRecord = true;
-                }*/
                 if (isRecording) {
                     //Stop recording
                     iconRecord.setImageResource(R.drawable.logo);
@@ -119,12 +106,6 @@ public class FragmentRecorder extends Fragment {
         secondRecord = view.findViewById(R.id.secondRecord);
         iconRecord = view.findViewById(R.id.iconRecord);
 
-
-
-/*        hourRecord.setVisibility(View.VISIBLE);
-        minuteRecord.setVisibility(View.VISIBLE);
-        secondRecord.setVisibility(View.VISIBLE);
-        timer.setVisibility(View.GONE);*/
     }
     private boolean checkPermissions() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -137,43 +118,18 @@ public class FragmentRecorder extends Fragment {
         }
     }
     private void StartRecording() {
-/*        hourRecord.setVisibility(View.GONE);
-        minuteRecord.setVisibility(View.GONE);
-        secondRecord.setVisibility(View.GONE);
-        timer.setVisibility(View.VISIBLE);*/
-/*        timer.setBase(SystemClock.elapsedRealtime()); //Get base on system real time
-        timer.start(); //Start timer*/
         if (!running) {
             startTimer();
             t.start();
             running = true;
         }
-/*        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener(){
-            @Override
-            public void onChronometerTick(Chronometer chronometer) {
-                long time = SystemClock.elapsedRealtime() - chronometer.getBase();
-                int h = (int)(time /3600000);
-                int m = (int)(time - h*3600000)/60000;
-                int s = (int)(time - h*3600000- m*60000)/1000;
-                hourRecord.setText(String.valueOf(h));
-                minuteRecord.setText(String.valueOf(m));
-                secondRecord.setText(String.valueOf(s));
-                String t = (h < 10 ? "0"+h: h)+":"+(m < 10 ? "0"+m: m)+":"+ (s < 10 ? "0"+s: s);
-                secondRecord.setText(s);
-                chronometer.setText(t);
-            }
-        });
-        timer.setBase(SystemClock.elapsedRealtime());
-        timer.setText("00:00:00");
-        timer.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
-        timer.start();*/
-
 
         recordPath = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Set record path
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.JAPAN);
         Date now = new Date();
-        recordFile = "Recording_" + formatter.format(now) + ".3gp";
-        recordFormat = ".3gp";
+        recordFormat = ".mp3";
+        recordFile = "Recording_" + formatter.format(now) + recordFormat;
+
 
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //Get audio source from mic
@@ -193,11 +149,6 @@ public class FragmentRecorder extends Fragment {
     }
 
     private void StopRecording() {
-        //timer.stop(); //Stop timer
-        /*timeWhenStopped = timer.getBase() - SystemClock.elapsedRealtime();
-        hourRecord.setText("0");
-        minuteRecord.setText("00");
-        secondRecord.setText("00");*/
         resetTimer();
 
         mediaRecorder.stop(); //Stop record

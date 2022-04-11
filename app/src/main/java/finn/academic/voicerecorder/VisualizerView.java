@@ -1,5 +1,5 @@
 package finn.academic.voicerecorder;
-
+//Reference: https://stackoverflow.com/questions/14295427/android-audio-recording-with-voice-level-visualization
 import java.util.ArrayList;
 import java.util.List;
 
