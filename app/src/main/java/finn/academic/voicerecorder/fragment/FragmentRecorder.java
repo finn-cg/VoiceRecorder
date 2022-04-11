@@ -1,6 +1,7 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
@@ -35,6 +36,7 @@ import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.VisualizerView;
 
 public class FragmentRecorder extends Fragment {
+    private View view;
     private RelativeLayout recordButton;
     private RelativeLayout recordButtonInside;
     private ImageView iconRecord;
@@ -51,20 +53,20 @@ public class FragmentRecorder extends Fragment {
     int second = 0, minute = 0, hour = 0;
     volatile boolean running = false;
     public static final int REPEAT_INTERVAL = 40;
-    VisualizerView visualizerView;
+    private VisualizerView visualizerView;
     private Handler handler; // Handler for updating the visualizer
-    Thread t;
+    private Thread t;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recorder, container, false);
+        view = inflater.inflate(R.layout.fragment_recorder, container, false);
 
         //startRecord = true;
 
-        Animation animScaleOutside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_outside);
-        Animation animScaleInside = AnimationUtils.loadAnimation(getActivity(), R.anim.scale_record_inside);
+        Animation animScaleOutside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_outside);
+        Animation animScaleInside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_inside);
 
-        SetUp(view);
+        SetUp();
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +99,7 @@ public class FragmentRecorder extends Fragment {
         return view;
     }
 
-    private void SetUp(View view) {
+    private void SetUp() {
         recordButton = view.findViewById(R.id.recordButtonOutside);
         recordButtonInside = view.findViewById(R.id.recordButtonInside);
         timer = (Chronometer) view.findViewById(R.id.record_timer);
@@ -112,7 +114,7 @@ public class FragmentRecorder extends Fragment {
             return true;
         }
         else {
-            ActivityCompat.requestPermissions(getActivity(),new String[] {recordPermission}, PERMISSION_CODE);
+            ActivityCompat.requestPermissions((Activity) view.getContext(),new String[] {recordPermission}, PERMISSION_CODE);
             return false;
 
         }
@@ -124,7 +126,7 @@ public class FragmentRecorder extends Fragment {
             running = true;
         }
 
-        recordPath = getActivity().getExternalFilesDir("/").getAbsolutePath(); //Set record path
+        recordPath = view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Set record path
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.JAPAN);
         Date now = new Date();
         recordFormat = ".mp3";
@@ -211,7 +213,7 @@ public class FragmentRecorder extends Fragment {
                 while (!isInterrupted() && isRecording) {
                     try {
                         Thread.sleep(1000);
-                        getActivity().runOnUiThread(new Runnable() {
+                        ((Activity) view.getContext()).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (second <= 60)
