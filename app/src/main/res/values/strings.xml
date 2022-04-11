@@ -29,5 +29,13 @@
     <string name="select_all">Select all</string>
     <string name="unselect_all">Unselect all</string>
     <string name="search">Search</string>
+    <string name="justNow">Just now</string>
+    <string name="aMinAgo">A minute ago</string>
+    <string name="manyMinAgo">minutes ago</string>
+    <string name="anHourAgo">An hour ago</string>
+    <string name="manyHourAgo">hours ago</string>
+    <string name="aDayAgo">A day ago</string>
+    <string name="manyDayAgo">days ago</string>
+
 
 </resources>

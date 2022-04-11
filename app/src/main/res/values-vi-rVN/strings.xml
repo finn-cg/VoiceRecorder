@@ -25,4 +25,11 @@
     <string name="recover_all">Khôi phục tất cả</string>
     <string name="recover">Khôi phục</string>
     <string name="search">Tìm kiếm</string>
+    <string name="justNow">Mới tức thì</string>
+    <string name="aMinAgo">Một phút trước</string>
+    <string name="manyMinAgo"> phút trước</string>
+    <string name="anHourAgo">Một giờ trước</string>
+    <string name="manyHourAgo"> giờ trước</string>
+    <string name="aDayAgo">Một ngày trước</string>
+    <string name="manyDayAgo"> ngày trước</string>
 </resources>

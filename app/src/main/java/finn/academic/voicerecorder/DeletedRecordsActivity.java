@@ -114,7 +114,7 @@ public class DeletedRecordsActivity extends AppCompatActivity {
         utilLayout = findViewById(R.id.deleteUtilsLayout);
 
         records = new ArrayList<>();
-        records.add(new Record("Record 1", 0, 360));
+/*        records.add(new Record("Record 1", 0, 360));
         records.add(new Record("Record 2", 5, 123));
         records.add(new Record("Record 3", 360, 20));
         records.add(new Record("Record 4", 255, 35));
@@ -125,6 +125,6 @@ public class DeletedRecordsActivity extends AppCompatActivity {
         records.add(new Record("Record 9", 1000, 33));
         records.add(new Record("Record 10", 600, 88));
         records.add(new Record("Record 11", 530, 99));
-        records.add(new Record("Record 12", 30, 120));
+        records.add(new Record("Record 12", 30, 120));*/
     }
 }

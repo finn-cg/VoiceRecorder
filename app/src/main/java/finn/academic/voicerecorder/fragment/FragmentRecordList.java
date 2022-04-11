@@ -172,7 +172,7 @@ public class FragmentRecordList extends Fragment {
         //Toast.makeText(getContext(), path, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < files.length; i++)
         {
-            records.add(new Record(files[i].getName(), files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
+            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getActivity().getExternalFilesDir("/")+"/"+files[i].getName())));
             Toast.makeText(getContext(), getActivity().getExternalFilesDir("/")+"/"+files[i].getName(), Toast.LENGTH_SHORT).show();
         }
 

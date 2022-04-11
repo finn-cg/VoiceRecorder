@@ -1,11 +1,13 @@
 package finn.academic.voicerecorder;
 
+import android.content.Context;
+
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class TimeAgo {
 
-    public String getTimeAgo(long duration) {
+    public String getTimeAgo(Context context, long duration) {
         Date now = new Date();
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(now.getTime() - duration);
@@ -14,25 +16,25 @@ public class TimeAgo {
         long days = TimeUnit.MILLISECONDS.toDays(now.getTime() - duration);
 
         if (seconds < 60) {
-            return "Just now";
+            return context.getResources().getString(R.string.justNow);
         }
         else if (minutes == 1) {
-            return "a minute ago";
+            return context.getResources().getString(R.string.aMinAgo);
         }
         else if (minutes > 1 && minutes < 60) {
-            return minutes + " minutes ago";
+            return minutes + " " + context.getResources().getString(R.string.manyMinAgo);
         }
         else if (hours == 1) {
-            return "an hour ago";
+            return context.getResources().getString(R.string.anHourAgo);
         }
         else if (hours > 1 && hours < 24) {
-            return hours + " hours ago";
+            return hours + " " + context.getResources().getString(R.string.manyHourAgo);
         }
         else if (days == 1) {
-            return "a day ago";
+            return context.getResources().getString(R.string.aDayAgo);
         }
         else {
-            return days + " days ago";
+            return "days ago";//days + " " + context.getResources().getString(R.string.manyDayAgo);
         }
     }
 }
