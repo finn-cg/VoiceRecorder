@@ -40,22 +40,28 @@ public class FragmentRecorder extends Fragment {
     private RelativeLayout recordButton;
     private RelativeLayout recordButtonInside;
     private ImageView iconRecord;
+
+    private Button pauseRecordButton;
+
     //private Boolean startRecord;
     private boolean isRecording = false;
     private String recordPermission = Manifest.permission.RECORD_AUDIO;
     private int PERMISSION_CODE = 101;
+
     private MediaRecorder mediaRecorder;
     private String recordFile;
     private Chronometer timer;
     private TextView hourRecord, minuteRecord, secondRecord;
     private String recordPath, recordPathAbs, recordFormat;
     private EditText newRecordName;
+
     int second = 0, minute = 0, hour = 0;
     volatile boolean running = false;
     public static final int REPEAT_INTERVAL = 40;
     private VisualizerView visualizerView;
     private Handler handler; // Handler for updating the visualizer
     private Thread t;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +100,16 @@ public class FragmentRecorder extends Fragment {
                 }
             }
         });
+
+        pauseRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // enable = true => black
+                // enable = false => aux_item
+                // enable when recording and disable when starting pause
+            }
+        });
+
         visualizerView = (VisualizerView) view.findViewById(R.id.visualizer);
         handler = new Handler();
         return view;
@@ -102,6 +118,7 @@ public class FragmentRecorder extends Fragment {
     private void SetUp() {
         recordButton = view.findViewById(R.id.recordButtonOutside);
         recordButtonInside = view.findViewById(R.id.recordButtonInside);
+        pauseRecordButton = view.findViewById(R.id.pauseRecordButton);
         timer = (Chronometer) view.findViewById(R.id.record_timer);
         hourRecord = view.findViewById(R.id.hourRecord);
         minuteRecord = view.findViewById(R.id.minuteRecord);

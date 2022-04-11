@@ -3,7 +3,6 @@ package finn.academic.voicerecorder;
 import android.app.Activity;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
@@ -50,21 +49,21 @@ public class MainStream extends Activity implements View.OnClickListener {
         Fragment fragment = null;
 
         if (startRecording.equals(view)) {
-            startRecording.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blur_to_clear));
+            startRecording.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_blur_to_clear));
             startRecording.setBackgroundResource(R.drawable.custom_button_in_fragment);
             listRecords.setBackgroundResource(R.color.light_red);
             setting.setBackgroundResource(R.color.light_red);
             actionName.setText(getResources().getString(R.string.recorder));
             fragment = new FragmentRecorder();
         } else if (listRecords.equals(view)) {
-            listRecords.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blur_to_clear));
+            listRecords.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_blur_to_clear));
             listRecords.setBackgroundResource(R.drawable.custom_button_in_fragment);
             startRecording.setBackgroundResource(R.color.light_red);
             setting.setBackgroundResource(R.color.light_red);
             actionName.setText(getResources().getString(R.string.player));
             fragment = new FragmentRecordList();
         } else if (setting.equals(view)) {
-            setting.startAnimation(AnimationUtils.loadAnimation(this, R.anim.blur_to_clear));
+            setting.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_blur_to_clear));
             setting.setBackgroundResource(R.drawable.custom_button_in_fragment);
             startRecording.setBackgroundResource(R.color.light_red);
             listRecords.setBackgroundResource(R.color.light_red);
@@ -72,6 +71,9 @@ public class MainStream extends Activity implements View.OnClickListener {
             fragment = new FragmentSetting();
         }
 
-        getFragmentManager().beginTransaction().replace(R.id.fragmentStream, fragment).commit();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
+        transaction.replace(R.id.fragmentStream, fragment);
+        transaction.commit();
     }
 }

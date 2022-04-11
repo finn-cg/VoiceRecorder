@@ -1,6 +1,7 @@
 <resources>
 
-    <string name="app_name">VoiceRecorder</string>
+    <string name="app_name">Voice Recorder</string>
+    <string name="version">Version 1.0.0</string>
 
     <string name="my_folder">My folders</string>
     <string name="all_records">All records</string>
@@ -37,5 +38,12 @@
     <string name="aDayAgo">A day ago</string>
     <string name="manyDayAgo">days ago</string>
 
+    <string name="pause">Pause</string>
+    <string name="volume">Volume</string>
+    <string name="continuous">Continuous play</string>
+    <string name="block_call">Block calls while recording</string>
+
+    <string name="is_on">is on</string>
+    <string name="is_off">is off</string>
 
 </resources>

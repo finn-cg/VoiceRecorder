@@ -33,31 +33,31 @@ import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
 
 public class FragmentRecordList extends Fragment implements RecordAdapter.RecyclerViewClickInterface {
-    View view;
+    private View view;
 
-    RecyclerView recordsRecyclerView;
-    ArrayList<Record> records;
-    RecordAdapter adapter;
+    private RecyclerView recordsRecyclerView;
+    private ArrayList<Record> records;
+    private RecordAdapter adapter;
 
-    RelativeLayout utilRecordLayout;
-    RelativeLayout selectRecordLayout;
-    RelativeLayout searchRecordLayout;
-    RelativeLayout utilLayout;
+    private RelativeLayout utilRecordLayout;
+    private RelativeLayout selectRecordLayout;
+    private RelativeLayout searchRecordLayout;
+    private RelativeLayout utilLayout;
 
-    LinearLayout searchRecordBar;
-    LinearLayout playLayout;
-    LinearLayout mainPlayLayout;
+    private LinearLayout searchRecordBar;
+    private LinearLayout playLayout;
+    private LinearLayout mainPlayLayout;
 
-    TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
-    SeekBar seekBarRecord;
-    ImageButton playRecord, rewindRecord, forwardRecord;
+    private TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
+    private SeekBar seekBarRecord;
+    private ImageButton playRecord, rewindRecord, forwardRecord;
 
-    Button cancelCheckButton;
+    private Button cancelCheckButton;
 
-    Boolean isShowUtils = false;
+    private Boolean isShowUtils = false;
 
     private File[] files;
-    String path = "";
+    private String path = "";
     static MediaPlayer mMediaPlayer;
     private int pos;
 
