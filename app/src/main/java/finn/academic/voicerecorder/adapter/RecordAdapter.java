@@ -54,7 +54,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             holder.mainRowRecordLayout.startAnimation(animation);
         } else {
             holder.selectFolderBox.setVisibility(View.GONE);
-            holder.mainRowRecordLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_exit));
+//            holder.mainRowRecordLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_exit));
         }
 
         if (record.getSelected()) {

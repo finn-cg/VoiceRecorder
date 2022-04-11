@@ -11,6 +11,7 @@
 
     <color name="dark_red">#900000</color>
     <color name="light_red">#d10101</color>
+    <color name="aux_red">#FF6060</color>
 
     <color name="main_theme">#f0f0f0</color>
     <color name="aux_item">#bfbfbf</color>

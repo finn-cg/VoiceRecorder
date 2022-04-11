@@ -195,6 +195,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/namePlayingRecord"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Tên bài hát"
@@ -204,6 +205,7 @@
                                 android:layout_marginLeft="12dp"/>
 
                             <TextView
+                                android:id="@+id/durationPlayingRecord"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/aux_item"
@@ -216,18 +218,20 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/menuPlayingRecord"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/aux_util"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginRight="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="12dp"
-                        android:layout_centerInParent="true"/>
+                        android:src="@drawable/aux_util" />
 
                 </RelativeLayout>
 
                 <SeekBar
+                    android:id="@+id/seekBarRecord"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/main_theme"
@@ -241,21 +245,23 @@
                     android:background="@color/main_theme">
 
                     <TextView
+                        android:id="@+id/startTimePlayingRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/aux_item"
+                        android:layout_marginLeft="4dp"
                         android:text="00:00"
-                        android:textSize="12dp"
-                        android:layout_marginLeft="4dp"/>
+                        android:textColor="@color/aux_item"
+                        android:textSize="12dp" />
 
                     <TextView
+                        android:id="@+id/endTimePlayingRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/aux_item"
-                        android:text="00:00"
-                        android:textSize="12dp"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="4dp"/>
+                        android:layout_marginRight="4dp"
+                        android:text="00:00"
+                        android:textColor="@color/aux_item"
+                        android:textSize="12dp" />
 
                 </RelativeLayout>
 
@@ -271,24 +277,38 @@
                         android:background="@color/main_theme">
 
                         <ImageView
+                            android:id="@+id/rewindRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:src="@drawable/red_rewind"
                             android:layout_margin="8dp"/>
 
                         <ImageView
+                            android:id="@+id/playRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:src="@drawable/red_play"
                             android:layout_margin="8dp"/>
 
                         <ImageView
+                            android:id="@+id/forwardRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:src="@drawable/red_fast_forward"
                             android:layout_margin="8dp"/>
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/deletePlayingRecord"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/red_trash" />
 
                 </RelativeLayout>
 

@@ -56,8 +56,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             holder.selectFolder.setVisibility(View.VISIBLE);
             holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_enter));
         } else {
-            holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_exit));
-            holder.selectFolder.setVisibility(View.GONE);
+                holder.quantityLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.select_box_exit));
+                holder.selectFolder.setVisibility(View.GONE);
         }
 
         if (folder.getSelected()) {
