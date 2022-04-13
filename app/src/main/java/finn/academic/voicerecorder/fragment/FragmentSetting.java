@@ -3,6 +3,7 @@ package finn.academic.voicerecorder.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,8 @@ public class FragmentSetting extends Fragment {
     private Switch blockCallCheck;
 
     SharedPreferences sharedPreferences;
+
+    AudioManager audioManager;
 
     @Nullable
     @Override
@@ -84,12 +87,15 @@ public class FragmentSetting extends Fragment {
     }
 
     private void SetUp() {
+        audioManager = (AudioManager) view.getContext().getSystemService(Context.AUDIO_SERVICE);
         seekBarVolume = view.findViewById(R.id.seekBarVolume);
+        seekBarVolume.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         continuousCheck = view.findViewById(R.id.continuousCheck);
         blockCallCheck = view.findViewById(R.id.blockCallCheck);
 
         sharedPreferences = view.getContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
         continuousCheck.setChecked(sharedPreferences.getBoolean("continuous", false));
         blockCallCheck.setChecked(sharedPreferences.getBoolean("block_call", false));
+        seekBarVolume.setProgress(sharedPreferences.getInt("adjust_vol", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
     }
 }
