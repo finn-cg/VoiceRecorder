@@ -1,5 +1,6 @@
 package finn.academic.voicerecorder.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,7 +24,9 @@ public class FragmentSetting extends Fragment {
     private View view;
 
     private SeekBar seekBarVolume;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch continuousCheck;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch blockCallCheck;
 
     SharedPreferences sharedPreferences;
