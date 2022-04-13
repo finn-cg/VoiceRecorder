@@ -10,11 +10,15 @@
     <string name="name">Tên</string>
     <string name="save">Lưu</string>
     <string name="cancel">Hủy</string>
+    <string name="no">Không</string>
+    <string name="yes">Có</string>
     <string name="recorder">Ghi âm</string>
     <string name="player">Trình phát nhạc</string>
     <string name="setting">Cài đặt</string>
     <string name="press_record">Nhấn nút để ghi âm</string>
     <string name="new_record">Bản ghi âm mới</string>
+    <string name="exist_record_name">Tên bản ghi âm đã tồn tại </string>
+    <string name="overwrite_record">Bạn có muốn ghi đè lên tên bản ghi âm đã tồn tại?</string>
     <string name="input_record_name">Nhập tên cho bản ghi âm này.</string>
     <string name="rename_folder">Đổi tên thư mục</string>
     <string name="edit">Sửa</string>

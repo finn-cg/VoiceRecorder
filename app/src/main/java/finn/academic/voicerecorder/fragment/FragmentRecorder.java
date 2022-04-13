@@ -197,10 +197,10 @@ public class FragmentRecorder extends Fragment {
             public void onClick(View view) {
 
                 dialog.dismiss();
-                File file = new File(recordPathAbs);
+/*                File file = new File(recordPathAbs);
                 if (file.exists()){
                     file.delete();
-                }
+                }*/
             }
         });
 
@@ -214,8 +214,39 @@ public class FragmentRecorder extends Fragment {
                     File from = new File(dir,recordFile);
                     File to = new File(dir,newRecordName.getText().toString() + recordFormat);
                     if(from.exists()) {
-                        from.renameTo(to);
-                        dialog.dismiss();
+                        if (to.exists()) {
+                            final Dialog dialog2 = new Dialog(getContext());
+                            dialog2.setContentView(R.layout.dialog_overwrite_record);
+                            dialog2.setCanceledOnTouchOutside(false);
+
+                            TextView title2 = dialog2.findViewById(R.id.mainTitleDialogMakeChange);
+                            TextView description2 = dialog2.findViewById(R.id.descriptionDialogMakeChange);
+
+                            title2.setText(getResources().getString(R.string.exist_record_name));
+                            description2.setText(getResources().getString(R.string.overwrite_record));
+
+                            Button no = dialog2.findViewById(R.id.noDialogMakeChange);
+                            Button yes = dialog2.findViewById(R.id.yesDialogMakeChange);
+                            yes.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    from.renameTo(to);
+                                    dialog.dismiss();
+                                    dialog2.dismiss();
+                                }
+                            });
+                            no.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    dialog2.dismiss();
+                                }
+                            });
+                            dialog2.show();
+                        }
+                        else {
+                            from.renameTo(to);
+                            dialog.dismiss();
+                        }
                     }
 
                 }

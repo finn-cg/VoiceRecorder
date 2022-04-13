@@ -14,6 +14,8 @@
     <string name="name">Name</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 
     <string name="recorder">Recorder</string>
     <string name="player">Player</string>
@@ -21,6 +23,8 @@
     <string name="press_record">Press the button to record</string>
     <string name="new_record">New record</string>
     <string name="input_record_name">Input this record\'s name</string>
+    <string name="exist_record_name">Existed record\'s name </string>
+    <string name="overwrite_record">Do you want to overwrite existed record\'s name?</string>
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
