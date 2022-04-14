@@ -1,11 +1,17 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,13 +92,8 @@ public class FragmentSetting extends Fragment {
         seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("adjust_vol", i);
-                editor.commit();
-
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, i, AudioManager.FLAG_SHOW_UI);
             }
-
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -104,6 +105,9 @@ public class FragmentSetting extends Fragment {
 
             }
         });
+
+        VolumeThread volumeThread = new VolumeThread();
+        volumeThread.start();
 
         return view;
     }
@@ -118,6 +122,15 @@ public class FragmentSetting extends Fragment {
         sharedPreferences = view.getContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
         continuousCheck.setChecked(sharedPreferences.getBoolean("continuous", false));
         blockCallCheck.setChecked(sharedPreferences.getBoolean("block_call", false));
-        seekBarVolume.setProgress(sharedPreferences.getInt("adjust_vol", audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)));
+        seekBarVolume.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+    }
+
+    private class VolumeThread extends Thread {
+        @Override
+        public void run() {
+            while (true) {
+                seekBarVolume.setProgress(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+            }
+        }
     }
 }
