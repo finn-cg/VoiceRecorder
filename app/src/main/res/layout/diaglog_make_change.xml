@@ -25,7 +25,8 @@
         android:textSize="16dp"
         android:textColor="@color/aux_item"
         android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"/>
+        android:layout_marginRight="32dp"
+        android:textAlignment="center"/>
 
     <EditText
         android:id="@+id/newName"
@@ -82,7 +83,9 @@
                 android:text="@string/save"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:alpha="0.2"/>
 
         </LinearLayout>
 

@@ -50,4 +50,10 @@
     <string name="is_on">is on</string>
     <string name="is_off">is off</string>
 
+    <string name="existing_name">This name exists already!</string>
+    <string name="namesake">You\'re reusing the old name!</string>
+    <string name="delete_folder">Delete this folder</string>
+    <string name="alert_delete_folder">All items in this folder would be deleted!</string>
+    <string name="deleted">Deleted</string>
+
 </resources>

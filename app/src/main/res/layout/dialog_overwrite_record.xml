@@ -11,21 +11,22 @@
         android:id="@+id/mainTitleDialogMakeChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/new_folder"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginTop="16dp"/>
+        android:textColor="@color/light_red"
+        android:layout_marginTop="16dp" />
 
     <TextView
         android:id="@+id/descriptionDialogMakeChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/input_folder_name"
         android:textSize="16dp"
         android:textColor="@color/aux_item"
         android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"/>
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

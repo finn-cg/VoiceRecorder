@@ -11,6 +11,7 @@
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_button_in_fragment.xml" value="0.137" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_button_record.xml" value="0.137" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_click_extra_button.xml" value="0.137" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_diaglog.xml" value="0.1555" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_main_click.xml" value="0.137" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_search_bar.xml" value="0.2265" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/drawable/custom_view_in_main.xml" value="0.2265" />
@@ -33,6 +34,7 @@
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/custom_recyclerview_in_main.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_add_folder.xml" value="0.1265625" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/diaglog_make_change.xml" value="0.1265625" />
+        <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/dialog_overwrite_record.xml" value="0.27447916666666666" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/dialog_save_record.xml" value="0.2" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/fragment_record_list.xml" value="0.22826086956521738" />
         <entry key="..\:/Android/Android Project/VoiceRecorder/app/src/main/res/layout/fragment_recorder.xml" value="0.22826086956521738" />

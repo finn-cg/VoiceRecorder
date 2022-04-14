@@ -1,23 +1,33 @@
 package finn.academic.voicerecorder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import finn.academic.voicerecorder.adapter.FolderAdapter;
+import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
+import finn.academic.voicerecorder.util.ListHandler;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private RecyclerView folderRecyclerView;
@@ -32,7 +42,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private LinearLayout selectAllLayout;
     private Button selectAllBtn;
 
+    private TextView txtFolder;
+
     private Animation animation;
+
+    Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +54,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         SetUp();
+        SetUpDB();
 
         adapter = new FolderAdapter(MainActivity.this, folders);
         folderRecyclerView.setAdapter(adapter);
@@ -81,6 +96,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    private void SetUpDB() {
+        database = new Database(this, "folder.sqlite", null, 1);
+        database.queryData("CREATE TABLE IF NOT EXISTS Folder(Name TEXT PRIMARY KEY, numRecords INTEGER)");
+
+        folders = new ArrayList<>();
+
+        Cursor dataFolders = database.getData("SELECT * FROM Folder");
+        while (dataFolders.moveToNext()) {
+            Folder folder = new Folder(dataFolders.getString(0), dataFolders.getInt(1));
+            folders.add(folder);
+        }
+
+        updateVisibilityFolderRecyclerView();
+    }
+
+    public void updateVisibilityFolderRecyclerView() {
+        if (folders.size() == 0) {
+            txtFolder.setVisibility(View.GONE);
+            folderRecyclerView.setVisibility(View.GONE);
+            selectBtn.setVisibility(View.GONE);
+        } else {
+            txtFolder.setVisibility(View.VISIBLE);
+            folderRecyclerView.setVisibility(View.VISIBLE);
+            selectBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setSelectButton() {
         for (Folder folder : folders) {
             if (folder.getSelected()) {
@@ -99,21 +141,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectAllLayout = findViewById(R.id.selectAllLayout);
         selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
+        txtFolder = findViewById(R.id.myFolderTxtView);
 
-        folders = new ArrayList<>();
-        folders.add(new Folder("Ưa thích", 15));
-        folders.add(new Folder("Du lịch", 4));
-        folders.add(new Folder("Gia đình", 22));
-        folders.add(new Folder("Bạn bè", 48));
-        folders.add(new Folder("Công việc", 19));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
-        folders.add(new Folder("Giải trí", 30));
+//        folders = new ArrayList<>();
+//        folders.add(new Folder("Abcd", 15));
+//        folders.add(new Folder("Du lịch", 4));
+//        folders.add(new Folder("Gia đình", 22));
+//        folders.add(new Folder("Bạn bè", 48));
+//        folders.add(new Folder("Công việc", 19));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
+//        folders.add(new Folder("Giải trí", 30));
     }
 
     @Override
@@ -143,6 +186,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
         Button save = dialog.findViewById(R.id.saveDialogMakeChange);
 
+        TextView txtAlert = dialog.findViewById(R.id.descriptionDialogMakeChange);
+        EditText txtName = dialog.findViewById(R.id.newName);
+
+        txtName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().isEmpty() || charSequence.toString().equals("")) {
+                    save.setEnabled(false);
+                    save.setAlpha(0.2f);
+                } else {
+                    save.setEnabled(true);
+                    save.setAlpha(1.0f);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,7 +221,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String name = txtName.getText().toString().trim();
 
+                if (ListHandler.containsName(folders, name)) {
+                    txtAlert.setText(getResources().getString(R.string.existing_name));
+                    txtAlert.setTextColor(getResources().getColor(R.color.light_red));
+                } else {
+                    database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
+
+                    folders.add(new Folder(name, 0));
+                    adapter.notifyDataSetChanged();
+
+                    updateVisibilityFolderRecyclerView();
+
+                    dialog.dismiss();
+                }
             }
         });
 

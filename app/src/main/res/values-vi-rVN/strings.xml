@@ -43,4 +43,9 @@
     <string name="version">Phiên bản 1.0.0</string>
     <string name="is_on">đã bật</string>
     <string name="is_off">đã tắt</string>
+    <string name="existing_name">Tên này đã được sử dụng!</string>
+    <string name="namesake">Bạn đang dùng lại tên cũ của thư mục này!</string>
+    <string name="delete_folder">Xóa thư mục này</string>
+    <string name="alert_delete_folder">Tất cả bản ghi trong thư mục này cũng sẽ bị xóa!</string>
+    <string name="deleted">Đã xóa</string>
 </resources>

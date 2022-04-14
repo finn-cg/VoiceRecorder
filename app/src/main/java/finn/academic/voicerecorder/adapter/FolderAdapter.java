@@ -1,14 +1,19 @@
 package finn.academic.voicerecorder.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -22,16 +27,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 
 import java.util.ArrayList;
 
+import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
+import finn.academic.voicerecorder.util.ListHandler;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Folder> folders;
+    Database database;
 //    private ShowSelectingListener showSelectingListener;
 
     public FolderAdapter(Context context, ArrayList<Folder> folders /*, ShowSelectingListener showSelectingListener*/) {
@@ -47,7 +56,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        database = new Database(context, "folder.sqlite", null, 1);
+
         Folder folder = folders.get(position);
         holder.folderName.setText(folder.getName());
         holder.recordQuantity.setText(String.valueOf(folder.getRecords()));
@@ -81,6 +92,167 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                 selectBtn.setText(context.getResources().getString(R.string.cancel));
             }
         });
+
+        holder.deleteFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showYesNoDialog(holder, position);
+            }
+        });
+
+        holder.renameFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRenameDialog(position);
+            }
+        });
+
+        holder.goToFolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMainStream();
+            }
+        });
+    }
+
+    private void goToMainStream() {
+        context.startActivity(new Intent(context, MainStream.class));
+    }
+
+    private void showRenameDialog(int position) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.diaglog_make_change);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+        TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+        EditText txtName = dialog.findViewById(R.id.newName);
+        txtName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (i == KeyEvent.KEYCODE_ENTER)) {
+                    String name = txtName.getText().toString().trim();
+
+                    if (name.equals(folders.get(position).getName())) {
+                        description.setText(context.getResources().getString(R.string.namesake));
+                        description.setTextColor(context.getResources().getColor(R.color.light_red));
+                    } else if (ListHandler.containsName(folders, name)) {
+                        description.setText(context.getResources().getString(R.string.existing_name));
+                        description.setTextColor(context.getResources().getColor(R.color.light_red));
+                    } else {
+                        database.queryData("UPDATE Folder " +
+                                "SET Name = '" + name + "' " +
+                                "WHERE Name = '" + folders.get(position).getName() + "'");
+
+                        folders.get(position).setName(name);
+                        notifyDataSetChanged();
+
+                        dialog.dismiss();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        title.setText(context.getResources().getString(R.string.rename_folder));
+        description.setText(context.getResources().getString(R.string.input_record_name));
+        txtName.setText(folders.get(position).getName());
+
+        Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
+        Button save = dialog.findViewById(R.id.saveDialogMakeChange);
+
+        txtName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().isEmpty() || charSequence.toString().equals("")) {
+                    save.setEnabled(false);
+                    save.setAlpha(0.2f);
+                } else {
+                    save.setEnabled(true);
+                    save.setAlpha(1.0f);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = txtName.getText().toString().trim();
+
+                if (name.equals(folders.get(position).getName())) {
+                    description.setText(context.getResources().getString(R.string.namesake));
+                    description.setTextColor(context.getResources().getColor(R.color.light_red));
+                } else if (ListHandler.containsName(folders, name)) {
+                    description.setText(context.getResources().getString(R.string.existing_name));
+                    description.setTextColor(context.getResources().getColor(R.color.light_red));
+                } else {
+                    database.queryData("UPDATE Folder " +
+                            "SET Name = '" + name + "' " +
+                            "WHERE Name = '" + folders.get(position).getName() + "'");
+
+                    folders.get(position).setName(name);
+                    notifyDataSetChanged();
+
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showYesNoDialog(ViewHolder holder, int position) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_overwrite_record);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+        TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+
+        title.setText(context.getResources().getString(R.string.delete_folder));
+        description.setText(context.getResources().getString(R.string.alert_delete_folder));
+
+        Button no = dialog.findViewById(R.id.noDialogMakeChange);
+        Button yes = dialog.findViewById(R.id.yesDialogMakeChange);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.queryData("DELETE FROM Folder WHERE Name = '" + folders.get(position).getName() + "'");
+                Toast.makeText(context, context.getResources().getString(R.string.deleted) + " "
+                        + folders.get(position).getName(), Toast.LENGTH_SHORT).show();
+                holder.utils.setVisibility(View.GONE);
+                folders.remove(position);
+                notifyDataSetChanged();
+                ((MainActivity) context).updateVisibilityFolderRecyclerView();
+                dialog.dismiss();
+            }
+        });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     @Override
@@ -126,7 +298,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         this.notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout mainFolderLayout;
         Button folderName;
         TextView recordQuantity;
@@ -135,6 +307,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
         LinearLayout goToFolder;
         LinearLayout nameLayout;
+        LinearLayout utils;
 
         RelativeLayout selectFolder;
 
@@ -171,14 +344,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
             goToFolder = folderView.findViewById(R.id.goToFolder);
             nameLayout = folderView.findViewById(R.id.nameLayout);
-
-            goToFolder.setOnClickListener(this);
+            utils = folderView.findViewById(R.id.btnUtils);
 
             goToFolder.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     Animation animation;
-                    LinearLayout utils = folderView.findViewById(R.id.btnUtils);
 
                     if (utils.getVisibility() == View.GONE) {
                         utils.setVisibility(View.VISIBLE);
@@ -187,7 +358,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                         utils.startAnimation(animation);
                     } else {
                         utils.setVisibility(View.GONE);
-                        animation = AnimationUtils.loadAnimation(context, R.anim.exit_full_left);
+                        animation = AnimationUtils.loadAnimation(context, R.anim.exit_full_right);
                         utils.startAnimation(animation);
                         nameLayout.startAnimation(AnimationUtils.loadAnimation(context, R.anim.trans_name_exit));
                     }
@@ -198,59 +369,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
 
             deleteFolder = folderView.findViewById(R.id.deleteFolder);
             renameFolder = folderView.findViewById(R.id.renameFolder);
-
-            deleteFolder.setOnClickListener(this);
-            renameFolder.setOnClickListener(this);
         }
-
-        @Override
-        public void onClick(View view) {
-            if (view.getId() == deleteFolder.getId()) {
-                Toast.makeText(context, "Delete " + folders.get(getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
-            } else if (view.getId() == renameFolder.getId()) {
-                showRenameDialog();
-            } else {
-                goToMainStream();
-            }
-        }
-
-        private void goToMainStream() {
-            context.startActivity(new Intent(context, MainStream.class));
-        }
-
-        private void showRenameDialog() {
-            final Dialog dialog = new Dialog(context);
-            dialog.setContentView(R.layout.diaglog_make_change);
-            dialog.setCanceledOnTouchOutside(false);
-
-            TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
-            TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
-            EditText newName = dialog.findViewById(R.id.newName);
-
-            title.setText(context.getResources().getString(R.string.rename_folder));
-            description.setText(context.getResources().getString(R.string.input_record_name));
-            newName.setText(folders.get(getAdapterPosition()).getName());
-
-            Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
-            Button save = dialog.findViewById(R.id.saveDialogMakeChange);
-
-            cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
-
-            save.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-
-            dialog.show();
-        }
-
-
     }
 }

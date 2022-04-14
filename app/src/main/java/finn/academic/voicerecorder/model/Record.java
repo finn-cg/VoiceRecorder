@@ -2,7 +2,7 @@ package finn.academic.voicerecorder.model;
 
 import android.content.Context;
 
-import finn.academic.voicerecorder.TimeAgo;
+import finn.academic.voicerecorder.util.TimeAgo;
 
 public class Record {
     private String name;

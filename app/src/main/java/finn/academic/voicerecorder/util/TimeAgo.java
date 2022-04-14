@@ -1,9 +1,11 @@
-package finn.academic.voicerecorder;
+package finn.academic.voicerecorder.util;
 
 import android.content.Context;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import finn.academic.voicerecorder.R;
 
 public class TimeAgo {
 

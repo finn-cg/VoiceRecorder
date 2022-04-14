@@ -296,7 +296,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                     curSongPoition = 0;
                     initPlayer(curSongPoition);
                 }
-
             }
         });
 
