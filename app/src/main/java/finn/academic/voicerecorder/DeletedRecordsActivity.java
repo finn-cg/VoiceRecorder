@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
 
-public class DeletedRecordsActivity extends AppCompatActivity {
+public class DeletedRecordsActivity extends AppCompatActivity implements RecordAdapter.RecyclerViewClickInterface {
     private RecyclerView recentlyDeletedRecyclerView;
     private ArrayList<Record> records;
     private RecordAdapter adapter;
@@ -42,7 +44,7 @@ public class DeletedRecordsActivity extends AppCompatActivity {
 
         SetUp();
 
-        adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files, (RecordAdapter.RecyclerViewClickInterface) this);
+        adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files, this);
         recentlyDeletedRecyclerView.setAdapter(adapter);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -121,17 +123,28 @@ public class DeletedRecordsActivity extends AppCompatActivity {
         String path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
-/*        records.add(new Record("Record 1", 0, 360));
-        records.add(new Record("Record 2", 5, 123));
-        records.add(new Record("Record 3", 360, 20));
-        records.add(new Record("Record 4", 255, 35));
-        records.add(new Record("Record 5", 16, 100));
-        records.add(new Record("Record 6", 90, 80));
-        records.add(new Record("Record 7", 120, 55));
-        records.add(new Record("Record 8", 100, 44));
-        records.add(new Record("Record 9", 1000, 33));
-        records.add(new Record("Record 10", 600, 88));
-        records.add(new Record("Record 11", 530, 99));
-        records.add(new Record("Record 12", 30, 120));*/
+        for (int i = 0; i < files.length; i++)
+        {
+            records.add(new Record(getApplicationContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getApplicationContext().getExternalFilesDir("/")+"/"+files[i].getName())));
+        }
+
+    }
+    public long getAudioFileLength(String path) {
+        StringBuilder stringBuilder = new StringBuilder();
+        long millSecond = 0;
+        try {
+            Uri uri = Uri.parse(path);
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(getApplicationContext(), uri);
+            String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            millSecond = Long.parseLong(duration);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return millSecond;
+    }
+    @Override
+    public void onItemClick(int position) {
     }
 }

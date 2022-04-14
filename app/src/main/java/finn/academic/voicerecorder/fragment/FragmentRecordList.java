@@ -50,7 +50,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
     private TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
     private SeekBar seekBarRecord;
-    private ImageButton playRecord, rewindRecord, forwardRecord;
+    private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
 
     private Button cancelCheckButton;
 
@@ -177,6 +177,13 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        deletePlayingRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
+
         recordsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -221,6 +228,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         seekBarRecord = view.findViewById(R.id.seekBarRecord);
 
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
+        deletePlayingRecord = view.findViewById(R.id.deletePlayingRecord);
 
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
