@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView txtFolder;
 
     private Animation animation;
+    private TextView allRecordQuantity, deletedQuantity;
 
     Database database;
 
@@ -142,21 +144,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
         txtFolder = findViewById(R.id.myFolderTxtView);
+        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
+        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
 
-//        folders = new ArrayList<>();
-//        folders.add(new Folder("Abcd", 15));
-//        folders.add(new Folder("Du lịch", 4));
-//        folders.add(new Folder("Gia đình", 22));
-//        folders.add(new Folder("Bạn bè", 48));
-//        folders.add(new Folder("Công việc", 19));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
-//        folders.add(new Folder("Giải trí", 30));
+        String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
+        File directory = new File(path);
+        int delQuantity = directory.listFiles().length;
+        path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
+        directory = new File(path);
+        int recQuantity = directory.listFiles().length;
+
+        allRecordQuantity.setText(String.valueOf(recQuantity));
+        deletedQuantity.setText(String.valueOf(delQuantity));
+
+        // folders = new ArrayList<>();
+        // folders.add(new Folder("Ưa thích", 15));
+        // folders.add(new Folder("Du lịch", 4));
+        // folders.add(new Folder("Gia đình", 22));
+        // folders.add(new Folder("Bạn bè", 48));
+        // folders.add(new Folder("Công việc", 19));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
+        // folders.add(new Folder("Giải trí", 30));
     }
 
     @Override

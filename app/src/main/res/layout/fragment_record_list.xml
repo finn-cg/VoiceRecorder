@@ -299,7 +299,7 @@
 
                     </LinearLayout>
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/deletePlayingRecord"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -308,7 +308,7 @@
                         android:layout_marginRight="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/red_trash" />
+                        android:background="@drawable/red_trash" />
 
                 </RelativeLayout>
 

@@ -1,9 +1,11 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.FragmentTransaction;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,9 +26,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
@@ -50,7 +58,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
     private TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
     private SeekBar seekBarRecord;
-    private ImageButton playRecord, rewindRecord, forwardRecord;
+    private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
 
     private Button cancelCheckButton;
 
@@ -69,7 +77,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         SetUp();
         initPlayer(0);
 
-        adapter = new RecordAdapter(view.getContext(), records, files, this);
+        adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
         recordsRecyclerView.setAdapter(adapter);
 
 
@@ -177,6 +185,23 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        deletePlayingRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                File curDirectory = files[pos];
+                String path = view.getContext().getExternalFilesDir("/") + "/deletedRecent";
+                createFolderIfNotExists(path);
+                File destDirectory = new File(path);
+                try {
+                    moveFile(curDirectory, destDirectory);
+                    refreshFragment();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         recordsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -221,6 +246,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         seekBarRecord = view.findViewById(R.id.seekBarRecord);
 
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
+        deletePlayingRecord = view.findViewById(R.id.deletePlayingRecord);
 
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
@@ -382,9 +408,40 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         return timeLabel;
     }
 
+    private void refreshFragment() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(this).attach(this).commit();
+    }
     @Override
     public void onItemClick(int position) {
         initPlayer(position);
         pos = position;
+    }
+
+    public static void moveFile(File srcFileOrDirectory, File desFileOrDirectory) throws IOException {
+        File newFile = new File(desFileOrDirectory, srcFileOrDirectory.getName());
+        try (FileChannel outputChannel = new FileOutputStream(newFile).getChannel(); FileChannel inputChannel = new FileInputStream(srcFileOrDirectory).getChannel()) {
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+            deleteRecursive(srcFileOrDirectory);
+        }
+    }
+
+    private static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : Objects.requireNonNull(fileOrDirectory.listFiles()))
+                deleteRecursive(child);
+        fileOrDirectory.delete();
+    }
+
+    public static boolean createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (folder.exists())
+            return true;
+        else
+            return folder.mkdirs();
     }
 }
