@@ -149,13 +149,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         File directory = new File(path);
-        int delQuantity = directory.listFiles().length;
-        path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
-        directory = new File(path);
-        int recQuantity = directory.listFiles().length;
+        if (directory.listFiles() != null) {
+            int delQuantity = directory.listFiles().length;
+            path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
+            directory = new File(path);
+            int recQuantity = directory.listFiles().length;
 
-        allRecordQuantity.setText(String.valueOf(recQuantity));
-        deletedQuantity.setText(String.valueOf(delQuantity));
+            allRecordQuantity.setText(String.valueOf(recQuantity));
+            deletedQuantity.setText(String.valueOf(delQuantity));
+        }
 
         // folders = new ArrayList<>();
         // folders.add(new Folder("Ưa thích", 15));
