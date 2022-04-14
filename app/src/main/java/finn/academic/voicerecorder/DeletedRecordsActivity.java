@@ -120,7 +120,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         records = new ArrayList<>();
 
         records = new ArrayList<>();
-        String path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+        String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
         for (int i = 0; i < files.length; i++)
