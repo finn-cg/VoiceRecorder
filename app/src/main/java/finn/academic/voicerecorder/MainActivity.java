@@ -10,10 +10,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.adapter.FolderAdapter;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button selectAllBtn;
 
     private Animation animation;
+    private TextView allRecordQuantity, deletedQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectAllLayout = findViewById(R.id.selectAllLayout);
         selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
+        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
+        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
+
+        String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
+        File directory = new File(path);
+        int delQuantity = directory.listFiles().length;
+        path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
+        directory = new File(path);
+        int recQuantity = directory.listFiles().length;
+
+        allRecordQuantity.setText(String.valueOf(recQuantity));
+        deletedQuantity.setText(String.valueOf(delQuantity));
 
         folders = new ArrayList<>();
         folders.add(new Folder("Ưa thích", 15));
