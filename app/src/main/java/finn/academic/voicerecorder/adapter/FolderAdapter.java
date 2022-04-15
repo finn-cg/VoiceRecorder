@@ -116,7 +116,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                 intent.putExtra("key", String.valueOf(folder.getName()));
                 String path = view.getContext().getExternalFilesDir("/") + "/" + folder.getName();
                 createFolderIfNotExists(path);
-                view.getContext().startActivity(intent);
+                context.startActivity(intent);
                 //goToMainStream();
             }
         });

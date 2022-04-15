@@ -87,4 +87,11 @@ public class MainStream extends Activity implements View.OnClickListener {
     public String getPath() {
         return path;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();  // optional depending on your needs
+        this.finish();
+    }
 }

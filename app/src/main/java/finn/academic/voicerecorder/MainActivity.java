@@ -14,9 +14,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +49,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Animation animation;
     private TextView allRecordQuantity, deletedQuantity;
 
+    private ImageButton refresh_button;
+
     Database database;
 
     @Override
@@ -56,6 +60,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
         SetUpDB();
+
 
         adapter = new FolderAdapter(MainActivity.this, folders);
         folderRecyclerView.setAdapter(adapter);
@@ -95,6 +100,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
+        
     }
 
     private void SetUpDB() {
@@ -144,7 +150,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
         txtFolder = findViewById(R.id.myFolderTxtView);
 
-        refreshMyData();
+        refreshRecords();
 
         // folders = new ArrayList<>();
         // folders.add(new Folder("Ưa thích", 15));
@@ -244,7 +250,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         dialog.show();
     }
-    public void refreshMyData(){
+    private void refreshRecords(){
         allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
         deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
 
@@ -261,9 +267,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    private void updateRecordsDB() {
+        database = new Database(this, "folder.sqlite", null, 1);
+        database.queryData("CREATE TABLE IF NOT EXISTS Folder(Name TEXT PRIMARY KEY, numRecords INTEGER)");
+        folders = new ArrayList<>();
+
+        Cursor dataFolders = database.getData("SELECT * FROM Folder");
+        while (dataFolders.moveToNext()) {
+            String folderName = dataFolders.getString(0);
+            String path = this.getExternalFilesDir("/") + "/" + folderName;
+            File directory = new File(path);
+            if (directory.listFiles() != null) {
+                directory = new File(path);
+                int recQuantity = directory.listFiles().length;
+                database.queryData("UPDATE Folder SET numRecords=" + String.valueOf(recQuantity) + " WHERE Name='" + folderName + "'");
+                Folder folder = new Folder(folderName, recQuantity);
+                folders.add(folder);
+
+            }
+        }
+        adapter.notifyDataSetChanged();
+        Toast.makeText(this, "Refreshed", Toast.LENGTH_SHORT).show();
+        updateVisibilityFolderRecyclerView();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        refreshMyData();
+        refreshRecords();
+        updateRecordsDB();
     }
 }
