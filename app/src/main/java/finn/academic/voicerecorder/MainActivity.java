@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -144,20 +143,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
         txtFolder = findViewById(R.id.myFolderTxtView);
-        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
-        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
 
-        String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
-        File directory = new File(path);
-        if (directory.listFiles() != null) {
-            int delQuantity = directory.listFiles().length;
-            path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
-            directory = new File(path);
-            int recQuantity = directory.listFiles().length;
-
-            allRecordQuantity.setText(String.valueOf(recQuantity));
-            deletedQuantity.setText(String.valueOf(delQuantity));
-        }
+        refreshMyData();
 
         // folders = new ArrayList<>();
         // folders.add(new Folder("Ưa thích", 15));

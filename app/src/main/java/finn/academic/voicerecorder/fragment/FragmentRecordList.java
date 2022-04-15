@@ -72,14 +72,13 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     static MediaPlayer mMediaPlayer;
     private int pos;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_record_list, container, false);
 
+        path = getPath();
         SetUp();
-//        initPlayer(0);
 
         adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
         recordsRecyclerView.setAdapter(adapter);
@@ -257,12 +256,21 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
 
         records = new ArrayList<>();
-        path = this.view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+        if (path.equals("")) {
+            path = this.view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+            //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
+        }
+        else {
+            String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + path; //Set record path
+            path = pathTemp;
+            //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
+        }
+
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
         for (int i = 0; i < files.length; i++)
         {
-            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(this.view.getContext().getExternalFilesDir("/")+"/"+files[i].getName())));
+            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(path+"/"+files[i].getName())));
         }
 
 
@@ -302,7 +310,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         String sname = files[position].getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
         namePlayingRecord.setText(sname);
 
-        mMediaPlayer = MediaPlayer.create(view.getContext().getApplicationContext(), Uri.parse(view.getContext().getExternalFilesDir("/")+"/"+files[position].getName())); // create and load mediaplayer with song resources
+        mMediaPlayer = MediaPlayer.create(view.getContext().getApplicationContext(), Uri.parse(path+"/"+files[position].getName())); // create and load mediaplayer with song resources
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -447,5 +455,11 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             return true;
         else
             return folder.mkdirs();
+    }
+
+    private String getPath() {
+        MainStream mainStream = (MainStream) getActivity();
+        String path = mainStream.getPath();
+        return path;
     }
 }

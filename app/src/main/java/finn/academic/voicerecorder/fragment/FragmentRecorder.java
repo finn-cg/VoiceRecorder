@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.VisualizerView;
 
@@ -72,7 +74,9 @@ public class FragmentRecorder extends Fragment {
         Animation animScaleOutside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_outside);
         Animation animScaleInside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_inside);
 
+        recordPath = getPath();
         SetUp();
+
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +147,13 @@ public class FragmentRecorder extends Fragment {
             running = true;
         }
 
-        recordPath = view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Set record path
+        if (recordPath.equals(""))
+            recordPath = view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Set record path
+        else {
+            String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + recordPath; //Set record path
+            recordPath = pathTemp;
+        }
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.JAPAN);
         Date now = new Date();
         recordFormat = ".mp3";
@@ -335,6 +345,13 @@ public class FragmentRecorder extends Fragment {
             running = false;
         }
     }
+
+    private String getPath() {
+        MainStream mainStream = (MainStream) getActivity();
+        String path = mainStream.getPath();
+        return path;
+    }
+
     @Override
     public void onStop() {
         super.onStop();

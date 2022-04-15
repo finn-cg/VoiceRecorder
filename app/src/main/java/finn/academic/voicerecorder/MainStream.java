@@ -4,11 +4,13 @@ import android.app.Activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import finn.academic.voicerecorder.fragment.FragmentRecordList;
 import finn.academic.voicerecorder.fragment.FragmentRecorder;
@@ -20,7 +22,7 @@ public class MainStream extends Activity implements View.OnClickListener {
     private ImageView setting;
 
     private TextView actionName;
-
+    private String path = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +44,14 @@ public class MainStream extends Activity implements View.OnClickListener {
 
         getFragmentManager().beginTransaction().add(R.id.fragmentStream, new FragmentRecorder()).commit();
         startRecording.setBackgroundResource(R.drawable.custom_button_in_fragment);
+
+        path = getIntent().getStringExtra("key");
+        if (path == null)
+            path = "";
+
     }
 
-    @Override
+@Override
     public void onClick(View view) {
         Fragment fragment = null;
 
@@ -62,6 +69,7 @@ public class MainStream extends Activity implements View.OnClickListener {
             setting.setBackgroundResource(R.color.light_red);
             actionName.setText(getResources().getString(R.string.player));
             fragment = new FragmentRecordList();
+
         } else if (setting.equals(view)) {
             setting.startAnimation(AnimationUtils.loadAnimation(this, R.anim.button_blur_to_clear));
             setting.setBackgroundResource(R.drawable.custom_button_in_fragment);
@@ -75,5 +83,8 @@ public class MainStream extends Activity implements View.OnClickListener {
         transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
         transaction.replace(R.id.fragmentStream, fragment);
         transaction.commit();
+    }
+    public String getPath() {
+        return path;
     }
 }

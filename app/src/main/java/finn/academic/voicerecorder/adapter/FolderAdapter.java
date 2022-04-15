@@ -25,12 +25,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.model.Database;
@@ -110,7 +112,12 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         holder.goToFolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToMainStream();
+                Intent intent = new Intent(view.getContext(), MainStream.class);
+                intent.putExtra("key", String.valueOf(folder.getName()));
+                String path = view.getContext().getExternalFilesDir("/") + "/" + folder.getName();
+                createFolderIfNotExists(path);
+                view.getContext().startActivity(intent);
+                //goToMainStream();
             }
         });
     }
@@ -296,6 +303,14 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             folder.setSelected(false);
         }
         this.notifyDataSetChanged();
+    }
+
+    public static boolean createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (folder.exists())
+            return true;
+        else
+            return folder.mkdirs();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
