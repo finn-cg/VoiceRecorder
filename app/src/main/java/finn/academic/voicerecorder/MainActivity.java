@@ -257,4 +257,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         dialog.show();
     }
+    public void refreshMyData(){
+        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
+        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
+
+        String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
+        File directory = new File(path);
+        if (directory.listFiles() != null) {
+            int delQuantity = directory.listFiles().length;
+            path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
+            directory = new File(path);
+            int recQuantity = directory.listFiles().length;
+
+            allRecordQuantity.setText(String.valueOf(recQuantity));
+            deletedQuantity.setText(String.valueOf(delQuantity));
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshMyData();
+    }
 }

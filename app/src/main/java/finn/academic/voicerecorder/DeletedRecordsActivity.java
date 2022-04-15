@@ -125,7 +125,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         files = directory.listFiles(); //Get all files from path above
         for (int i = 0; i < files.length; i++)
         {
-            records.add(new Record(getApplicationContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getApplicationContext().getExternalFilesDir("/")+"/"+files[i].getName())));
+            records.add(new Record(getApplicationContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getApplicationContext().getExternalFilesDir("/")+"/deletedRecent/"+files[i].getName())));
         }
 
     }

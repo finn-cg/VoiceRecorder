@@ -2,6 +2,7 @@ package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -36,6 +37,8 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import finn.academic.voicerecorder.MainActivity;
+import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
@@ -69,13 +72,14 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     static MediaPlayer mMediaPlayer;
     private int pos;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_record_list, container, false);
 
         SetUp();
-        initPlayer(0);
+//        initPlayer(0);
 
         adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
         recordsRecyclerView.setAdapter(adapter);
@@ -256,11 +260,11 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         path = this.view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
-
         for (int i = 0; i < files.length; i++)
         {
             records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(this.view.getContext().getExternalFilesDir("/")+"/"+files[i].getName())));
         }
+
 
         /*records.add(new Record("Record 1", 0, 360));
         records.add(new Record("Record 2", 5, 123));
