@@ -108,7 +108,7 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <finn.academic.voicerecorder.VisualizerView
+        <finn.academic.voicerecorder.view.VisualizerView
             android:id="@+id/visualizer"
             android:layout_width="fill_parent"
             android:layout_height="80dp"

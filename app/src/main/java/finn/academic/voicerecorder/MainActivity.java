@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,13 +17,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import finn.academic.voicerecorder.adapter.FolderAdapter;
 import finn.academic.voicerecorder.model.Database;
@@ -287,7 +284,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         adapter.notifyDataSetChanged();
-        Toast.makeText(this, "Refreshed", Toast.LENGTH_SHORT).show();
         updateVisibilityFolderRecyclerView();
     }
 

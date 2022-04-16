@@ -257,7 +257,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
         records = new ArrayList<>();
         if (path.equals("")) {
-            path = this.view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Get the path of records stored
+            path = this.view.getContext().getExternalFilesDir("/")+"/default"; //Get the path of records stored
+            createFolderIfNotExists(path);
             //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
         }
         else {

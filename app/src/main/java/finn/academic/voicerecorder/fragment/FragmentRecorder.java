@@ -3,7 +3,6 @@ package finn.academic.voicerecorder.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -34,10 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
-import finn.academic.voicerecorder.VisualizerView;
+import finn.academic.voicerecorder.view.VisualizerView;
 
 public class FragmentRecorder extends Fragment {
     private View view;
@@ -78,7 +76,6 @@ public class FragmentRecorder extends Fragment {
 
         recordPath = getPath();
         SetUp();
-
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +147,11 @@ public class FragmentRecorder extends Fragment {
         }
 
         if (recordPath.equals(""))
-            recordPath = view.getContext().getExternalFilesDir("/").getAbsolutePath(); //Set record path
+        {
+            recordPath = view.getContext().getExternalFilesDir("/")+"/default"; //Set record path
+            createFolderIfNotExists(recordPath);
+        }
+
         else {
             String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + recordPath; //Set record path
             recordPath = pathTemp;
@@ -203,16 +204,18 @@ public class FragmentRecorder extends Fragment {
 
         Button cancel = dialog.findViewById(R.id.cancelDialogMakeChange);
         Button save = dialog.findViewById(R.id.saveDialogMakeChange);
+        save.setEnabled(true);
+        save.setAlpha(1);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 dialog.dismiss();
-/*                File file = new File(recordPathAbs);
+                File file = new File(recordPathAbs);
                 if (file.exists()){
                     file.delete();
-                }*/
+                }
             }
         });
 
@@ -222,46 +225,51 @@ public class FragmentRecorder extends Fragment {
 
                 File dir = new File(recordPath+"/");
                 newRecordName = (EditText) dialog.findViewById(R.id.newName);
-                if(dir.exists()){
-                    File from = new File(dir,recordFile);
-                    File to = new File(dir,newRecordName.getText().toString() + recordFormat);
-                    if(from.exists()) {
-                        if (to.exists()) {
-                            final Dialog dialog2 = new Dialog(getContext());
-                            dialog2.setContentView(R.layout.dialog_overwrite_record);
-                            dialog2.setCanceledOnTouchOutside(false);
+                if (newRecordName.getText().toString().equals("")) {
+                    dialog.dismiss();
+                }
+                else {
+                    if(dir.exists()){
+                        File from = new File(dir,recordFile);
+                        File to = new File(dir,newRecordName.getText().toString() + recordFormat);
+                        if(from.exists()) {
+                            if (to.exists()) {
+                                final Dialog dialog2 = new Dialog(getContext());
+                                dialog2.setContentView(R.layout.dialog_overwrite_record);
+                                dialog2.setCanceledOnTouchOutside(false);
 
-                            TextView title2 = dialog2.findViewById(R.id.mainTitleDialogMakeChange);
-                            TextView description2 = dialog2.findViewById(R.id.descriptionDialogMakeChange);
+                                TextView title2 = dialog2.findViewById(R.id.mainTitleDialogMakeChange);
+                                TextView description2 = dialog2.findViewById(R.id.descriptionDialogMakeChange);
 
-                            title2.setText(getResources().getString(R.string.exist_record_name));
-                            description2.setText(getResources().getString(R.string.overwrite_record));
+                                title2.setText(getResources().getString(R.string.exist_record_name));
+                                description2.setText(getResources().getString(R.string.overwrite_record));
 
-                            Button no = dialog2.findViewById(R.id.noDialogMakeChange);
-                            Button yes = dialog2.findViewById(R.id.yesDialogMakeChange);
-                            yes.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    from.renameTo(to);
-                                    dialog.dismiss();
-                                    dialog2.dismiss();
-                                }
-                            });
-                            no.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    dialog2.dismiss();
-                                }
-                            });
-                            dialog2.show();
-                        }
-                        else {
-                            from.renameTo(to);
-                            dialog.dismiss();
+                                Button no = dialog2.findViewById(R.id.noDialogMakeChange);
+                                Button yes = dialog2.findViewById(R.id.yesDialogMakeChange);
+                                yes.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        from.renameTo(to);
+                                        dialog.dismiss();
+                                        dialog2.dismiss();
+                                    }
+                                });
+                                no.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        dialog2.dismiss();
+                                    }
+                                });
+                                dialog2.show();
+                            }
+                            else {
+                                from.renameTo(to);
+                                dialog.dismiss();
+                            }
                         }
                     }
-
                 }
+
             }
         });
         dialog.show();
@@ -352,6 +360,14 @@ public class FragmentRecorder extends Fragment {
         MainStream mainStream = (MainStream) getActivity();
         String path = mainStream.getPath();
         return path;
+    }
+
+    public static boolean createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (folder.exists())
+            return true;
+        else
+            return folder.mkdirs();
     }
 
     @Override
