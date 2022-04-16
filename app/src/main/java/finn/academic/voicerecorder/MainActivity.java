@@ -1,6 +1,5 @@
 package finn.academic.voicerecorder;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,11 +8,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,10 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private TextView txtFolder;
 
-    private Animation animation;
     private TextView allRecordQuantity, deletedQuantity;
-
-    private ImageButton refresh_button;
 
     Database database;
 
@@ -149,20 +143,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         refreshRecords();
 
-        // folders = new ArrayList<>();
-        // folders.add(new Folder("Ưa thích", 15));
-        // folders.add(new Folder("Du lịch", 4));
-        // folders.add(new Folder("Gia đình", 22));
-        // folders.add(new Folder("Bạn bè", 48));
-        // folders.add(new Folder("Công việc", 19));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
-        // folders.add(new Folder("Giải trí", 30));
     }
 
     @Override
@@ -265,6 +245,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void updateRecordsDB() {
+        adapter = new FolderAdapter(MainActivity.this, folders);
+        folderRecyclerView.setAdapter(adapter);
+
         database = new Database(this, "folder.sqlite", null, 1);
         database.queryData("CREATE TABLE IF NOT EXISTS Folder(Name TEXT PRIMARY KEY, numRecords INTEGER)");
         folders = new ArrayList<>();
