@@ -217,7 +217,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     folders.add(new Folder(name, 0));
                     adapter.notifyDataSetChanged();
-
+                    String path = view.getContext().getExternalFilesDir("/") + "/" + name;
+                    createFolderIfNotExists(path);
                     updateVisibilityFolderRecyclerView();
 
                     dialog.dismiss();
@@ -268,6 +269,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         adapter.notifyDataSetChanged();
         updateVisibilityFolderRecyclerView();
+    }
+
+    public static boolean createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (folder.exists())
+            return true;
+        else
+            return folder.mkdirs();
     }
 
     @Override
