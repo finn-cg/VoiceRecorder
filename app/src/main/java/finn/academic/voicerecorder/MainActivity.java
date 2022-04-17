@@ -235,7 +235,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         File directory = new File(path);
         if (directory.listFiles() != null) {
             int delQuantity = directory.listFiles().length;
-            path = getApplicationContext().getExternalFilesDir("/").getAbsolutePath();
+            path = getApplicationContext().getExternalFilesDir("/") + "/default";
             directory = new File(path);
             int recQuantity = directory.listFiles().length;
 

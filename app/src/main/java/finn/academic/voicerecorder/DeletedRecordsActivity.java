@@ -121,6 +121,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
         records = new ArrayList<>();
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
+        createFolderIfNotExists(path);
         File directory = new File(path);
         files = directory.listFiles(); //Get all files from path above
         for (int i = 0; i < files.length; i++)
@@ -144,6 +145,15 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         }
         return millSecond;
     }
+
+    public static boolean createFolderIfNotExists(String path) {
+        File folder = new File(path);
+        if (folder.exists())
+            return true;
+        else
+            return folder.mkdirs();
+    }
+
     @Override
     public void onItemClick(int position) {
     }
