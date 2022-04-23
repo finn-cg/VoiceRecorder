@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -174,6 +176,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         TextView txtAlert = dialog.findViewById(R.id.descriptionDialogMakeChange);
         EditText txtName = dialog.findViewById(R.id.newName);
+
+        txtName.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (i == KeyEvent.KEYCODE_ENTER)) {
+                    String name = txtName.getText().toString().trim();
+
+                    if (ListHandler.containsName(folders, name)) {
+                        txtAlert.setText(getResources().getString(R.string.existing_name));
+                        txtAlert.setTextColor(getResources().getColor(R.color.light_red));
+                    } else {
+                        database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
+
+                        folders.add(new Folder(name, 0));
+                        adapter.notifyDataSetChanged();
+
+                        updateVisibilityFolderRecyclerView();
+
+                        dialog.dismiss();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         txtName.addTextChangedListener(new TextWatcher() {
             @Override
