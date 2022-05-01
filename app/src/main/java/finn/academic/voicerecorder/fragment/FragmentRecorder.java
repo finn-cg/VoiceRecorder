@@ -40,6 +40,7 @@ import java.util.Locale;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.model.Database;
+import finn.academic.voicerecorder.util.FileHandler;
 import finn.academic.voicerecorder.view.VisualizerView;
 
 public class FragmentRecorder extends Fragment {
@@ -160,11 +161,11 @@ public class FragmentRecorder extends Fragment {
         if (recordPath.equals(""))
         {
             recordPath = view.getContext().getExternalFilesDir("/")+"/default"; //Set record path
-            createFolderIfNotExists(recordPath);
         } else {
             String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + recordPath; //Set record path
             recordPath = pathTemp;
         }
+        FileHandler.createFolderIfNotExists(recordPath);
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.JAPAN);
         Date now = new Date();
@@ -403,14 +404,6 @@ public class FragmentRecorder extends Fragment {
         MainStream mainStream = (MainStream) getActivity();
         String path = mainStream.getPath();
         return path;
-    }
-
-    public static boolean createFolderIfNotExists(String path) {
-        File folder = new File(path);
-        if (folder.exists())
-            return true;
-        else
-            return folder.mkdirs();
     }
 
     @Override

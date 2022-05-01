@@ -56,4 +56,6 @@
     <string name="alert_delete_folder">All items in this folder would be deleted!</string>
     <string name="deleted">Deleted</string>
 
+    <string name="error">Something went wrong!</string>
+
 </resources>

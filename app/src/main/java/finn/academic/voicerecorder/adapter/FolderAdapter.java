@@ -35,14 +35,19 @@ import finn.academic.voicerecorder.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
+import finn.academic.voicerecorder.model.Record;
+import finn.academic.voicerecorder.util.FileHandler;
 import finn.academic.voicerecorder.util.ListHandler;
 
 public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Folder> folders;
+    private String path;
+    private File directory;
     Database database;
 //    private ShowSelectingListener showSelectingListener;
 
@@ -80,6 +85,9 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             holder.uncheckBox();
         }
 
+        path = context.getExternalFilesDir("/") + "/" + folders.get(position).getName();
+        directory = new File(path);
+
         holder.selectBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -116,7 +124,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                 Intent intent = new Intent(view.getContext(), MainStream.class);
                 intent.putExtra("key", String.valueOf(folder.getName()));
                 String path = view.getContext().getExternalFilesDir("/") + "/" + folder.getName();
-                createFolderIfNotExists(path);
+                FileHandler.createFolderIfNotExists(path);
                 context.startActivity(intent);
                 //goToMainStream();
             }
@@ -149,14 +157,18 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                         description.setText(context.getResources().getString(R.string.existing_name));
                         description.setTextColor(context.getResources().getColor(R.color.light_red));
                     } else {
-                        database.queryData("UPDATE Folder " +
-                                "SET Name = '" + name + "' " +
-                                "WHERE Name = '" + folders.get(position).getName() + "'");
-
-                        folders.get(position).setName(name);
-                        notifyDataSetChanged();
-
-                        dialog.dismiss();
+                        path = context.getExternalFilesDir("/") + "/" + name;
+                        if (FileHandler.rename(directory, new File(path))) {
+                            database.queryData("UPDATE Folder " +
+                                    "SET Name = '" + name + "' " +
+                                    "WHERE Name = '" + folders.get(position).getName() + "'");
+                            folders.get(position).setName(name);
+                            notifyDataSetChanged();
+                            dialog.dismiss();
+                        } else {
+                            description.setText(context.getResources().getString(R.string.error));
+                            description.setTextColor(context.getResources().getColor(R.color.light_red));
+                        }
                     }
                     return true;
                 }
@@ -219,14 +231,18 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                     description.setText(context.getResources().getString(R.string.existing_name));
                     description.setTextColor(context.getResources().getColor(R.color.light_red));
                 } else {
-                    database.queryData("UPDATE Folder " +
-                            "SET Name = '" + name + "' " +
-                            "WHERE Name = '" + folders.get(position).getName() + "'");
-
-                    folders.get(position).setName(name);
-                    notifyDataSetChanged();
-
-                    dialog.dismiss();
+                    path = context.getExternalFilesDir("/") + "/" + name;
+                    if (FileHandler.rename(directory, new File(path))) {
+                        database.queryData("UPDATE Folder " +
+                                "SET Name = '" + name + "' " +
+                                "WHERE Name = '" + folders.get(position).getName() + "'");
+                        folders.get(position).setName(name);
+                        notifyDataSetChanged();
+                        dialog.dismiss();
+                    } else {
+                        description.setText(context.getResources().getString(R.string.error));
+                        description.setTextColor(context.getResources().getColor(R.color.light_red));
+                    }
                 }
             }
         });
@@ -311,14 +327,6 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             folder.setSelected(false);
         }
         this.notifyDataSetChanged();
-    }
-
-    public static boolean createFolderIfNotExists(String path) {
-        File folder = new File(path);
-        if (folder.exists())
-            return true;
-        else
-            return folder.mkdirs();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -47,6 +47,7 @@ import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.model.Record;
+import finn.academic.voicerecorder.util.FileHandler;
 
 public class FragmentRecordList extends Fragment implements RecordAdapter.RecyclerViewClickInterface {
     private View view;
@@ -199,7 +200,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
                 File curDirectory = files.get(pos);
                 String path = view.getContext().getExternalFilesDir("/") + "/deletedRecent";
-                createFolderIfNotExists(path);
+                FileHandler.createFolderIfNotExists(path);
                 File destDirectory = new File(path);
                 try {
                     moveFile(curDirectory, destDirectory);
@@ -267,12 +268,12 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         for (String path : paths) {
             if (path.equals("")) {
                 path = this.view.getContext().getExternalFilesDir("/")+"/default"; //Get the path of records stored
-                createFolderIfNotExists(path);
                 //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
             } else {
                 String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + path; //Set record path
                 path = pathTemp;
             }
+            FileHandler.createFolderIfNotExists(path);
 
             File directory = new File(path);
             Collections.addAll(files, directory.listFiles()); //Get all files from path above
@@ -322,7 +323,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         String sname = files.get(position).getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
         namePlayingRecord.setText(sname);
 
-        Log.d("File path", files.get(position).getPath()+"/"+files.get(position).getName());
         mMediaPlayer = MediaPlayer.create(view.getContext().getApplicationContext(), Uri.parse(files.get(position).getPath())); // create and load mediaplayer with song resources
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -460,14 +460,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             for (File child : Objects.requireNonNull(fileOrDirectory.listFiles()))
                 deleteRecursive(child);
         fileOrDirectory.delete();
-    }
-
-    public static boolean createFolderIfNotExists(String path) {
-        File folder = new File(path);
-        if (folder.exists())
-            return true;
-        else
-            return folder.mkdirs();
     }
 
     private ArrayList<String> getPaths() {

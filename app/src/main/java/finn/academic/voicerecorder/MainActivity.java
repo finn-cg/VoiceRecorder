@@ -33,6 +33,7 @@ import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.receiver.BlockOutgoingCall;
 import finn.academic.voicerecorder.receiver.VolumeChangedReceiver;
+import finn.academic.voicerecorder.util.FileHandler;
 import finn.academic.voicerecorder.util.ListHandler;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -61,7 +62,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         SetUp();
         SetUpDB();
-
 
         adapter = new FolderAdapter(MainActivity.this, folders);
         folderRecyclerView.setAdapter(adapter);
@@ -167,9 +167,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         selectAllBtn = findViewById(R.id.selectAllBtn);
         addAFolder = (RelativeLayout) findViewById(R.id.addAFolderLayout);
         txtFolder = findViewById(R.id.myFolderTxtView);
+        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
+        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
 
         refreshRecords();
-
     }
 
     @Override
@@ -279,7 +280,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     folders.add(new Folder(name, 0));
                     adapter.notifyDataSetChanged();
                     String path = view.getContext().getExternalFilesDir("/") + "/" + name;
-                    createFolderIfNotExists(path);
+                    FileHandler.createFolderIfNotExists(path);
                     updateVisibilityFolderRecyclerView();
 
                     dialog.dismiss();
@@ -290,26 +291,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
         dialog.show();
     }
     private void refreshRecords(){
-        allRecordQuantity = (TextView) findViewById(R.id.allRecordQuantity);
-        deletedQuantity = (TextView) findViewById(R.id.deletedQuantity);
-
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         File directory = new File(path);
         if (directory.listFiles() != null) {
             int delQuantity = directory.listFiles().length;
-            path = getApplicationContext().getExternalFilesDir("/") + "/default";
-            directory = new File(path);
-            int recQuantity = directory.listFiles().length;
-
-            database = new Database(this, "folder.sqlite", null, 1);
-            Cursor dataFolders = database.getData("SELECT SUM(numRecords) FROM Folder");
-            if (dataFolders.moveToNext()) {
-                recQuantity += dataFolders.getInt(0);
-            }
-
-            allRecordQuantity.setText(String.valueOf(recQuantity));
             deletedQuantity.setText(String.valueOf(delQuantity));
         }
+
+        path = getApplicationContext().getExternalFilesDir("/") + "/default";
+        directory = new File(path);
+
+        int recQuantity = 0;
+
+        if (directory.listFiles() != null) {
+            recQuantity += directory.listFiles().length;
+        }
+
+        database = new Database(this, "folder.sqlite", null, 1);
+        Cursor dataFolders = database.getData("SELECT SUM(numRecords) FROM Folder");
+        if (dataFolders.moveToNext()) {
+            recQuantity += dataFolders.getInt(0);
+        }
+        Log.d("recQuantity Main", String.valueOf(recQuantity));
+
+        allRecordQuantity.setText(String.valueOf(recQuantity));
     }
 
     private void updateRecordsDB() {
@@ -324,6 +329,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 int recQuantity = directory.listFiles().length;
                 database.queryData("UPDATE Folder SET numRecords=" + String.valueOf(recQuantity) + " WHERE Name='" + folderName + "'");
                 Folder folder = new Folder(folderName, recQuantity);
+                Log.d("recQuantity", String.valueOf(recQuantity));
                 folders.set(i, folder);
             }
             i++;
@@ -332,18 +338,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         updateVisibilityFolderRecyclerView();
     }
 
-    public static boolean createFolderIfNotExists(String path) {
-        File folder = new File(path);
-        if (folder.exists())
-            return true;
-        else
-            return folder.mkdirs();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        refreshRecords();
         updateRecordsDB();
+        refreshRecords();
     }
 }

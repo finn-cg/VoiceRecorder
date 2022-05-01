@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
+import finn.academic.voicerecorder.util.FileHandler;
 
 public class DeletedRecordsActivity extends AppCompatActivity implements RecordAdapter.RecyclerViewClickInterface {
     private RecyclerView recentlyDeletedRecyclerView;
@@ -122,8 +123,9 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
         records = new ArrayList<>();
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
-        createFolderIfNotExists(path);
+        FileHandler.createFolderIfNotExists(path);
         File directory = new File(path);
+        files = new ArrayList<>();
         Collections.addAll(files, directory.listFiles()); //Get all files from path above
         for (int i = 0; i < files.size(); i++)
         {
@@ -145,14 +147,6 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             e.printStackTrace();
         }
         return millSecond;
-    }
-
-    public static boolean createFolderIfNotExists(String path) {
-        File folder = new File(path);
-        if (folder.exists())
-            return true;
-        else
-            return folder.mkdirs();
     }
 
     @Override
