@@ -59,8 +59,6 @@ public class FragmentSetting extends Fragment {
                 editor.putBoolean("continuous", b);
                 editor.commit();
 
-                Log.d("continuous", "hahaha");
-
                 if (b) {
                     Toast.makeText(view.getContext(),
                             view.getContext().getResources().getString(R.string.continuous) + " " +
@@ -79,8 +77,6 @@ public class FragmentSetting extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("block_call", b);
                 editor.commit();
-
-                Log.d("block_call", "hahaha");
 
                 if (b) {
                     Toast.makeText(view.getContext(),

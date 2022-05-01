@@ -54,9 +54,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     Database database;
 
-    IntentFilter mainFilter;
-    BroadcastReceiver receiver;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -219,6 +216,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
 
                         folders.add(new Folder(name, 0));
+                        folders = new ArrayList<>(folders);
                         adapter.notifyDataSetChanged();
 
                         updateVisibilityFolderRecyclerView();
@@ -242,6 +240,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     save.setEnabled(false);
                     save.setAlpha(0.2f);
                 } else {
+                    int max = charSequence.length() - 1;
+                    if (charSequence.charAt(max >= 0 ? max : 0) == '\n') {
+                        txtName.setText(charSequence.subSequence(0, charSequence.length() - 1));
+                        save.performClick();
+                        return;
+                    }
+
                     save.setEnabled(true);
                     save.setAlpha(1.0f);
                 }
@@ -302,14 +307,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void updateRecordsDB() {
-        adapter = new FolderAdapter(MainActivity.this, folders);
-        folderRecyclerView.setAdapter(adapter);
-
-        database = new Database(this, "folder.sqlite", null, 1);
-        database.queryData("CREATE TABLE IF NOT EXISTS Folder(Name TEXT PRIMARY KEY, numRecords INTEGER)");
-        folders = new ArrayList<>();
-
         Cursor dataFolders = database.getData("SELECT * FROM Folder");
+        int i = 0;
         while (dataFolders.moveToNext()) {
             String folderName = dataFolders.getString(0);
             String path = this.getExternalFilesDir("/") + "/" + folderName;
@@ -319,9 +318,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 int recQuantity = directory.listFiles().length;
                 database.queryData("UPDATE Folder SET numRecords=" + String.valueOf(recQuantity) + " WHERE Name='" + folderName + "'");
                 Folder folder = new Folder(folderName, recQuantity);
-                folders.add(folder);
-
+                folders.set(i, folder);
             }
+            i++;
         }
         adapter.notifyDataSetChanged();
         updateVisibilityFolderRecyclerView();

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -181,6 +182,13 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                     save.setEnabled(false);
                     save.setAlpha(0.2f);
                 } else {
+                    int max = charSequence.length() - 1;
+                    if (charSequence.charAt(max >= 0 ? max : 0) == '\n') {
+                        txtName.setText(charSequence.subSequence(0, charSequence.length() - 1));
+                        save.performClick();
+                        return;
+                    }
+
                     save.setEnabled(true);
                     save.setAlpha(1.0f);
                 }

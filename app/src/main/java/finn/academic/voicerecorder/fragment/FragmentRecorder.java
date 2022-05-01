@@ -10,6 +10,8 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,7 @@ import java.util.Locale;
 
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
+import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.view.VisualizerView;
 
 public class FragmentRecorder extends Fragment {
@@ -158,9 +161,7 @@ public class FragmentRecorder extends Fragment {
         {
             recordPath = view.getContext().getExternalFilesDir("/")+"/default"; //Set record path
             createFolderIfNotExists(recordPath);
-        }
-
-        else {
+        } else {
             String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + recordPath; //Set record path
             recordPath = pathTemp;
         }
@@ -215,6 +216,37 @@ public class FragmentRecorder extends Fragment {
         save.setEnabled(true);
         save.setAlpha(1);
 
+        newRecordName = (EditText) dialog.findViewById(R.id.newName);
+
+        newRecordName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().isEmpty() || charSequence.toString().equals("")) {
+                    save.setEnabled(false);
+                    save.setAlpha(0.2f);
+                } else {
+                    int max = charSequence.length() - 1;
+                    if (charSequence.charAt(max >= 0 ? max : 0) == '\n') {
+                        newRecordName.setText(charSequence.subSequence(0, charSequence.length() - 1));
+                        save.performClick();
+                        return;
+                    }
+
+                    save.setEnabled(true);
+                    save.setAlpha(1.0f);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -232,7 +264,6 @@ public class FragmentRecorder extends Fragment {
             public void onClick(View view) {
 
                 File dir = new File(recordPath+"/");
-                newRecordName = (EditText) dialog.findViewById(R.id.newName);
                 if (newRecordName.getText().toString().equals("")) {
                     dialog.dismiss();
                 }
@@ -278,10 +309,12 @@ public class FragmentRecorder extends Fragment {
                     }
                 }
 
+                // ======== update numRecords
             }
         });
         dialog.show();
     }
+
     private void startTimer() {
         t = new Thread() {
             @Override
@@ -339,6 +372,7 @@ public class FragmentRecorder extends Fragment {
             }
         };
     }
+
     Runnable updateVisualizer = new Runnable() {
         @Override
         public void run() {
@@ -351,6 +385,7 @@ public class FragmentRecorder extends Fragment {
                 handler.postDelayed(this, REPEAT_INTERVAL);
         }
     };
+
     private void resetTimer() {
         second = 0;
         minute = 0;
