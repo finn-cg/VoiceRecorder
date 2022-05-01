@@ -3,6 +3,8 @@ package finn.academic.voicerecorder.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -64,6 +66,8 @@ public class FragmentRecorder extends Fragment {
     private Handler handler; // Handler for updating the visualizer
     private Thread t;
 
+    private SharedPreferences sharedPreferences;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,7 +84,9 @@ public class FragmentRecorder extends Fragment {
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (isRecording) {
+                    editor.putBoolean("is_recording", false);
                     //Stop recording
                     iconRecord.setImageResource(R.drawable.logo);
                     view.clearAnimation();
@@ -92,15 +98,16 @@ public class FragmentRecorder extends Fragment {
                 else {
                     //Start recording
                     if (checkPermissions()) {
+                        editor.putBoolean("is_recording", true);
                         iconRecord.setImageResource(R.drawable.square_stop);
                         view.startAnimation(animScaleOutside);
                         recordButtonInside.startAnimation(animScaleInside);
                         isRecording = true;
                         StartRecording();
                         handler.post(updateVisualizer);
-
                     }
                 }
+                editor.commit();
             }
         });
 
@@ -128,6 +135,7 @@ public class FragmentRecorder extends Fragment {
         secondRecord = view.findViewById(R.id.secondRecord);
         iconRecord = view.findViewById(R.id.iconRecord);
 
+        sharedPreferences = view.getContext().getSharedPreferences("status", Context.MODE_PRIVATE);
     }
     private boolean checkPermissions() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {

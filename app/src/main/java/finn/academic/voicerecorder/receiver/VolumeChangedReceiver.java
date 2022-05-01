@@ -17,8 +17,15 @@ public class VolumeChangedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int volume = (Integer)intent.getExtras().get("android.media.EXTRA_VOLUME_STREAM_VALUE");
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        seekBarVolume = ((Activity) context).findViewById(R.id.seekBarVolume);
+
+        if (audioManager == null) {
+            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        }
+
+        if (seekBarVolume == null) {
+            seekBarVolume = ((Activity) context).findViewById(R.id.seekBarVolume);
+        }
+
         seekBarVolume.setProgress(volume);
     }
 }

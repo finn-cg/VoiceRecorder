@@ -1,8 +1,12 @@
 package finn.academic.voicerecorder;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -25,6 +31,8 @@ import java.util.ArrayList;
 import finn.academic.voicerecorder.adapter.FolderAdapter;
 import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
+import finn.academic.voicerecorder.receiver.BlockOutgoingCall;
+import finn.academic.voicerecorder.receiver.VolumeChangedReceiver;
 import finn.academic.voicerecorder.util.ListHandler;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -45,6 +53,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private TextView allRecordQuantity, deletedQuantity;
 
     Database database;
+
+    IntentFilter mainFilter;
+    BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +104,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
             }
         });
-        
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.PROCESS_OUTGOING_CALLS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.PROCESS_OUTGOING_CALLS}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.READ_PHONE_STATE}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.ANSWER_PHONE_CALLS}, 1);
+        }
     }
 
     private void SetUpDB() {
