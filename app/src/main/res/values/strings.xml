@@ -54,6 +54,8 @@
     <string name="namesake">You\'re reusing the old name!</string>
     <string name="delete_folder">Delete this folder</string>
     <string name="alert_delete_folder">All items in this folder would be deleted!</string>
+    <string name="delete_folders">Delete folders</string>
+    <string name="alert_delete_folders">All items in these folders would be deleted!</string>
     <string name="deleted">Deleted</string>
 
     <string name="error">Something went wrong!</string>

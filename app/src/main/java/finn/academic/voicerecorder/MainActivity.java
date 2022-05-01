@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -84,7 +86,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     selectAllLayout.setVisibility(View.GONE);
                     adapter.hideAllSelecting();
                 } else {
-
+                    showYesNoDialog();
+//                    adapter.deleteAllChecked();
+//                    adapter.hideAllSelecting();
                 }
             }
         });
@@ -119,6 +123,46 @@ public class MainActivity extends Activity implements View.OnClickListener {
             ActivityCompat.requestPermissions(this,
                     new String[] {Manifest.permission.ANSWER_PHONE_CALLS}, 1);
         }
+    }
+
+    private void showYesNoDialog() {
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.dialog_overwrite_record);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+        TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+
+        title.setText(getResources().getString(R.string.delete_folders));
+        description.setText(getResources().getString(R.string.alert_delete_folders));
+
+        Button no = dialog.findViewById(R.id.noDialogMakeChange);
+        Button yes = dialog.findViewById(R.id.yesDialogMakeChange);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adapter.deleteAllChecked();
+                adapter.hideAllSelecting();
+                selectBtn.setText(getResources().getString(R.string.edit));
+                selectAllLayout.setVisibility(View.GONE);
+                dialog.dismiss();
+            }
+        });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                refreshRecords();
+            }
+        });
+
+        dialog.show();
     }
 
     private void SetUpDB() {
@@ -290,7 +334,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         dialog.show();
     }
-    private void refreshRecords(){
+    public void refreshRecords(){
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         File directory = new File(path);
         if (directory.listFiles() != null) {
@@ -312,27 +356,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (dataFolders.moveToNext()) {
             recQuantity += dataFolders.getInt(0);
         }
-        Log.d("recQuantity Main", String.valueOf(recQuantity));
 
         allRecordQuantity.setText(String.valueOf(recQuantity));
     }
 
     private void updateRecordsDB() {
-        Cursor dataFolders = database.getData("SELECT * FROM Folder");
-        int i = 0;
-        while (dataFolders.moveToNext()) {
-            String folderName = dataFolders.getString(0);
+        for (Folder f : folders) {
+            String folderName = f.getName();
             String path = this.getExternalFilesDir("/") + "/" + folderName;
             File directory = new File(path);
             if (directory.listFiles() != null) {
                 directory = new File(path);
                 int recQuantity = directory.listFiles().length;
-                database.queryData("UPDATE Folder SET numRecords=" + String.valueOf(recQuantity) + " WHERE Name='" + folderName + "'");
-                Folder folder = new Folder(folderName, recQuantity);
-                Log.d("recQuantity", String.valueOf(recQuantity));
-                folders.set(i, folder);
+                database.queryData("UPDATE Folder SET numRecords=" + recQuantity + " WHERE Name='" + folderName + "'");
+                f = new Folder(folderName, recQuantity);
             }
-            i++;
         }
         adapter.notifyDataSetChanged();
         updateVisibilityFolderRecyclerView();

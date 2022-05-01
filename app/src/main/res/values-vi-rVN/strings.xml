@@ -49,4 +49,6 @@
     <string name="alert_delete_folder">Tất cả bản ghi trong thư mục này cũng sẽ bị xóa!</string>
     <string name="deleted">Đã xóa</string>
     <string name="error">Lỗi hệ thống!</string>
+    <string name="delete_folders">Xóa thư mục</string>
+    <string name="alert_delete_folders">Tất cả bản ghi trong các thư mục này cũng sẽ bị xóa!</string>
 </resources>

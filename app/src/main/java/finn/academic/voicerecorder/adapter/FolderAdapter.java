@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -266,6 +267,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FileHandler.deleteRecursive(directory);
                 database.queryData("DELETE FROM Folder WHERE Name = '" + folders.get(position).getName() + "'");
                 Toast.makeText(context, context.getResources().getString(R.string.deleted) + " "
                         + folders.get(position).getName(), Toast.LENGTH_SHORT).show();
@@ -283,6 +285,13 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             }
         });
 
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                ((MainActivity) context).refreshRecords();
+            }
+        });
+
         dialog.show();
     }
 
@@ -291,15 +300,20 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
         return folders.size();
     }
 
-//    public List<Folder> getSelectedFolder() {
-//        List<Folder> folderList = new ArrayList<>();
-//        for (Folder folder : folders) {
-//            if (folder.getSelected()) {
-//                folderList.add(folder);
-//            }
-//        }
-//        return folderList;
-//    }
+    public void deleteAllChecked() {
+        ArrayList<Folder> ftemp = new ArrayList<>();
+        for (Folder f : folders) {
+            if (f.getSelected()) {
+                String p = context.getExternalFilesDir("/") + "/" + f.getName();
+                File d = new File(p);
+                FileHandler.deleteRecursive(d);
+                database.queryData("DELETE FROM Folder WHERE Name = '" + f.getName() + "'");
+                ftemp.add(f);
+            }
+        }
+        folders.removeAll(ftemp);
+        this.notifyDataSetChanged();
+    }
 
     public void showAllSelecting() {
         for (Folder folder : folders) {
