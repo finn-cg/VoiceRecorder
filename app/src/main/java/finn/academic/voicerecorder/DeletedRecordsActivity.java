@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
@@ -36,7 +37,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
     private RelativeLayout utilLayout;
 
-    private File[] files;
+    private ArrayList<File> files;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,10 +124,10 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         createFolderIfNotExists(path);
         File directory = new File(path);
-        files = directory.listFiles(); //Get all files from path above
-        for (int i = 0; i < files.length; i++)
+        Collections.addAll(files, directory.listFiles()); //Get all files from path above
+        for (int i = 0; i < files.size(); i++)
         {
-            records.add(new Record(getApplicationContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(getApplicationContext().getExternalFilesDir("/")+"/deletedRecent/"+files[i].getName())));
+            records.add(new Record(getApplicationContext(),files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" +files.get(i).getName()), path));
         }
 
     }

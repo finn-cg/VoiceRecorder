@@ -301,6 +301,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             directory = new File(path);
             int recQuantity = directory.listFiles().length;
 
+            database = new Database(this, "folder.sqlite", null, 1);
+            Cursor dataFolders = database.getData("SELECT SUM(numRecords) FROM Folder");
+            if (dataFolders.moveToNext()) {
+                recQuantity += dataFolders.getInt(0);
+            }
+
             allRecordQuantity.setText(String.valueOf(recQuantity));
             deletedQuantity.setText(String.valueOf(delQuantity));
         }

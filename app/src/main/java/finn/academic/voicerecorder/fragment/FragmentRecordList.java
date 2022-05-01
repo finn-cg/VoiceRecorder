@@ -3,6 +3,7 @@ package finn.academic.voicerecorder.fragment;
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +37,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
+import finn.academic.voicerecorder.model.Database;
+import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.model.Record;
 
 public class FragmentRecordList extends Fragment implements RecordAdapter.RecyclerViewClickInterface {
@@ -67,8 +72,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
     private Boolean isShowUtils = false;
 
-    private File[] files;
-    private String path = "";
+    private ArrayList<File> files;
+    private ArrayList<String> paths;
     static MediaPlayer mMediaPlayer;
     private int pos;
 
@@ -77,7 +82,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_record_list, container, false);
 
-        path = getPath();
+        paths = getPaths();
         SetUp();
 
         adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
@@ -157,7 +162,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             @Override
             public void onClick(View view) {
                 if (pos <= 0) {
-                    pos = files.length - 1;
+                    pos = files.size() - 1;
                 } else {
                     pos--;
                 }
@@ -169,7 +174,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         forwardRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (pos < files.length - 1) {
+                if (pos < files.size() - 1) {
                     pos++;
                 } else {
                     pos = 0;
@@ -192,7 +197,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             @Override
             public void onClick(View view) {
 
-                File curDirectory = files[pos];
+                File curDirectory = files.get(pos);
                 String path = view.getContext().getExternalFilesDir("/") + "/deletedRecent";
                 createFolderIfNotExists(path);
                 File destDirectory = new File(path);
@@ -256,22 +261,27 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
 
         records = new ArrayList<>();
-        if (path.equals("")) {
-            path = this.view.getContext().getExternalFilesDir("/")+"/default"; //Get the path of records stored
-            createFolderIfNotExists(path);
-            //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
-        }
-        else {
-            String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + path; //Set record path
-            path = pathTemp;
-            //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
-        }
+        files = new ArrayList<>();
+        int old = 0;
 
-        File directory = new File(path);
-        files = directory.listFiles(); //Get all files from path above
-        for (int i = 0; i < files.length; i++)
-        {
-            records.add(new Record(getContext(),files[i].getName(), files[i].lastModified(), getAudioFileLength(path+"/"+files[i].getName())));
+        for (String path : paths) {
+            if (path.equals("")) {
+                path = this.view.getContext().getExternalFilesDir("/")+"/default"; //Get the path of records stored
+                createFolderIfNotExists(path);
+                //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
+            } else {
+                String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + path; //Set record path
+                path = pathTemp;
+            }
+
+            File directory = new File(path);
+            Collections.addAll(files, directory.listFiles()); //Get all files from path above
+
+            for (int i = old; i < files.size(); i++) {
+                records.add(new Record(getContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path));
+            }
+
+            old += directory.listFiles().length;
         }
 
 
@@ -288,8 +298,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         records.add(new Record("Record 11", 530, 99));
         records.add(new Record("Record 12", 30, 120));*/
     }
+
     public long getAudioFileLength(String path) {
-        StringBuilder stringBuilder = new StringBuilder();
         long millSecond = 0;
         try {
             Uri uri = Uri.parse(path);
@@ -303,15 +313,17 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
         return millSecond;
     }
+
     private void initPlayer(final int position) {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
         }
 
-        String sname = files[position].getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
+        String sname = files.get(position).getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
         namePlayingRecord.setText(sname);
 
-        mMediaPlayer = MediaPlayer.create(view.getContext().getApplicationContext(), Uri.parse(path+"/"+files[position].getName())); // create and load mediaplayer with song resources
+        Log.d("File path", files.get(position).getPath()+"/"+files.get(position).getName());
+        mMediaPlayer = MediaPlayer.create(view.getContext().getApplicationContext(), Uri.parse(files.get(position).getPath())); // create and load mediaplayer with song resources
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -328,7 +340,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             public void onCompletion(MediaPlayer mp) {
                 int curSongPoition = position;
                 // code to repeat songs until the
-                if (curSongPoition < files.length - 1) {
+                if (curSongPoition < files.size() - 1) {
                     curSongPoition++;
                     initPlayer(curSongPoition);
                 } else {
@@ -458,9 +470,22 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             return folder.mkdirs();
     }
 
-    private String getPath() {
+    private ArrayList<String> getPaths() {
         MainStream mainStream = (MainStream) getActivity();
         String path = mainStream.getPath();
-        return path;
+
+        ArrayList<String> pathList = new ArrayList<>();
+        if (path != "") {
+            pathList.add(path);
+        } else {
+            pathList.add("");
+            Database database = new Database(view.getContext(), "folder.sqlite", null, 1);
+            Cursor dataFolders = database.getData("SELECT * FROM Folder");
+            while (dataFolders.moveToNext()) {
+                pathList.add(dataFolders.getString(0));
+            }
+        }
+
+        return pathList;
     }
 }

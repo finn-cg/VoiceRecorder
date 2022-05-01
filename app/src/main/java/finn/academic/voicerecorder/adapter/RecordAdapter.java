@@ -28,10 +28,10 @@ import finn.academic.voicerecorder.model.Record;
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
     private Context context;
     private ArrayList<Record> records;
-    private File[] files;
+    private ArrayList<File> files;
     private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecordAdapter(Context context, ArrayList<Record> records, File[] files, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public RecordAdapter(Context context, ArrayList<Record> records, ArrayList<File> files, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.records = records;
         this.files = files;
