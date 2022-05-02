@@ -62,4 +62,8 @@
     <string name="record_name">Tên bản ghi</string>
     <string name="delete_all_alert">Tất cả bản ghi đã được di chuyển đến thùng rác!</string>
     <string name="delete_alert">Các bản ghi đã được di chuyển đến thùng rác!</string>
+    <string name="delete_record">Xóa bản ghi</string>
+    <string name="permanently_deleted">Các bản ghi được chọn sẽ bị xóa vĩnh viễn!</string>
+    <string name="per_deleted_record_alert">Các bản ghi được chọn đã bị xóa vĩnh viễn!</string>
+    <string name="per_deleted_all_record_alert">Tất cả bản ghi đã bị xóa vĩnh viễn!</string>
 </resources>

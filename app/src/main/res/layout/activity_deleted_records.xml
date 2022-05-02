@@ -7,6 +7,36 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/emptyAlert"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:alpha=".60"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/aux_item"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_folder"
+            android:textColor="@color/aux_item"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/mainDeleteLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

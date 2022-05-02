@@ -72,6 +72,10 @@
     <string name="record_name">Record name</string>
 
     <string name="delete_all_alert">All records have been moved to trash!</string>
-    <string name="delete_alert">Those records have been moved to trash!</string>
+    <string name="delete_alert">Chosen records have been moved to trash!</string>
+    <string name="delete_record">Delete records</string>
+    <string name="permanently_deleted">Records would be permanently deleted!</string>
+    <string name="per_deleted_record_alert">Chosen records have been permanently deleted!</string>
+    <string name="per_deleted_all_record_alert">All records have been permanently deleted!</string>
 
 </resources>
