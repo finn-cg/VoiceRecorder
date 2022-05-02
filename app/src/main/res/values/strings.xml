@@ -1,4 +1,10 @@
 <resources>
+    <string name="Cuong">Nguyen Nhat Cuong</string>
+    <string name="Bao">Tran Le Quoc Bao</string>
+    <string name="Minh">Doan Nhat Minh</string>
+    <string name="Thong">Vo Tran Quang Thong</string>
+
+    <string name="copyright">Powered by</string>
 
     <string name="app_name">Voice Recorder</string>
     <string name="version">Version 1.0.0</string>

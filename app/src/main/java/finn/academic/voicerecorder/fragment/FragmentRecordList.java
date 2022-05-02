@@ -272,7 +272,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
         for (String path : paths) {
             if (path.equals("")) {
-                path = this.view.getContext().getExternalFilesDir("/")+"/default"; //Get the path of records stored
+                path = this.view.getContext().getExternalFilesDir("/") + "/default"; //Get the path of records stored
                 //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
             } else {
                 String pathTemp = view.getContext().getExternalFilesDir("/") + "/" + path; //Set record path
@@ -314,7 +314,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             millSecond = Long.parseLong(duration);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return millSecond;
@@ -354,7 +354,10 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                         curSongPosition = 0;
                         initPlayer(curSongPosition);
                     }
+                } else {
+                    playRecord.setBackgroundResource(R.drawable.red_play);
                 }
+
             }
         });
 
@@ -399,6 +402,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         }).start();
     }
+
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
@@ -412,6 +416,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             endTimePlayingRecord.setText(eTime);
         }
     };
+
     private void play() {
         if (mMediaPlayer != null && !mMediaPlayer.isPlaying()) {
             mMediaPlayer.start();
@@ -429,6 +434,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
 
     }
+
     public String createTimeLabel(int duration) {
         String timeLabel = "";
         int min = duration / 1000 / 60;
@@ -448,6 +454,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
         ft.detach(this).attach(this).commit();
     }
+
     @Override
     public void onItemClick(int position) {
         initPlayer(position);

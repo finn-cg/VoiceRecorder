@@ -51,4 +51,9 @@
     <string name="error">Lỗi hệ thống!</string>
     <string name="delete_folders">Xóa thư mục</string>
     <string name="alert_delete_folders">Tất cả bản ghi trong các thư mục này cũng sẽ bị xóa!</string>
+    <string name="Cuong">Nguyễn Nhật Cường</string>
+    <string name="Bao">Trần Lê Quốc Bảo</string>
+    <string name="Minh">Đoàn Nhật Minh</string>
+    <string name="Thong">Võ Trần Quang Thông</string>
+    <string name="copyright">Được phát triển bởi</string>
 </resources>
