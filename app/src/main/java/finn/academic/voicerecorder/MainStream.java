@@ -7,9 +7,11 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,13 @@ public class MainStream extends Activity implements View.OnClickListener {
         startRecording.setOnClickListener(this);
         listRecords.setOnClickListener(this);
         setting.setOnClickListener(this);
+
+        detailMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMenuDetail();
+            }
+        });
     }
 
     private void SetUp() {
@@ -99,6 +108,20 @@ public class MainStream extends Activity implements View.OnClickListener {
     }
 
     private void showMenuDetail() {
+        PopupMenu popupMenu = new PopupMenu(this, detailMenu);
+        popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menuDetail:
+                        Toast.makeText(MainStream.this, "hihi", Toast.LENGTH_SHORT).show();
+                        break;
+                }
 
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 }
