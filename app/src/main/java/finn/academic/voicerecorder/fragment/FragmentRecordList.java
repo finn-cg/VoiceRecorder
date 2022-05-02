@@ -201,7 +201,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             @Override
             public void onClick(View view) {
                 if (deleteButton.getText().equals(view.getContext().getString(R.string.delete_all))) {
-                    if (adapter.deleteAllRecords()) {
+                    if (adapter.deleteAllRecords(false)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.delete_all_alert), Toast.LENGTH_SHORT).show();
                     } else {
@@ -209,7 +209,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                                 .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    if (adapter.deleteAllSelected()) {
+                    if (adapter.deleteAllSelected(false)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.delete_alert), Toast.LENGTH_SHORT).show();
                     } else {

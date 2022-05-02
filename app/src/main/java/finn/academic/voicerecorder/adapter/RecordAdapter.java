@@ -146,14 +146,22 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         }
     }
 
-    public Boolean deleteAllSelected() {
+    private Boolean permanentlyDeleteRecord(int position) {
+        File curDirectory = files.get(position);
+        deletedFiles.add(files.get(position));
+        deletedRecords.add(records.get(position));
+
+        return curDirectory.delete();
+    }
+
+    public Boolean deleteAllSelected(Boolean permanent) {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
             if (records.get(i).getSelected()) {
-                res = deleteRecord(i);
+                res = permanent ? permanentlyDeleteRecord(i) : deleteRecord(i);
             }
         }
         files.removeAll(deletedFiles);
@@ -164,13 +172,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return res;
     }
 
-    public Boolean deleteAllRecords() {
+    public Boolean deleteAllRecords(Boolean permanent) {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
-            res = deleteRecord(i);
+            res = permanent ? permanentlyDeleteRecord(i) : deleteRecord(i);
         }
         files.removeAll(deletedFiles);
         records.removeAll(deletedRecords);
