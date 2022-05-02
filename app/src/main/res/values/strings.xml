@@ -49,6 +49,7 @@
     <string name="manyDayAgo">days ago</string>
 
     <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
     <string name="volume">Volume</string>
     <string name="continuous">Continuous play</string>
     <string name="block_call">Block calls while recording</string>

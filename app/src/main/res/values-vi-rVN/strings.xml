@@ -37,6 +37,7 @@
     <string name="aDayAgo">Một ngày trước</string>
     <string name="manyDayAgo"> ngày trước</string>
     <string name="pause">Tạm dừng</string>
+    <string name="resume">Tiếp tục</string>
     <string name="volume">Âm lượng</string>
     <string name="continuous">Phát liên tục</string>
     <string name="block_call">Chặn cuộc gọi khi đang ghi âm</string>

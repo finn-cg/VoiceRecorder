@@ -53,6 +53,7 @@ public class FragmentRecorder extends Fragment {
 
     //private Boolean startRecord;
     private boolean isRecording = false;
+    private boolean isPausing = false;
     private String recordPermission = Manifest.permission.RECORD_AUDIO;
     private int PERMISSION_CODE = 101;
 
@@ -118,6 +119,24 @@ public class FragmentRecorder extends Fragment {
                 // enable = true => black
                 // enable = false => aux_item
                 // enable when recording and disable when starting pause
+                if (isPausing) {
+                    //Resume
+                    isPausing = false;
+                    mediaRecorder.resume();
+                    pauseRecordButton.setText(getResources().getString(R.string.pause));
+                    recordButton.setClickable(true);
+                    recordButton.startAnimation(animScaleOutside);
+                    recordButtonInside.startAnimation(animScaleInside);
+                }
+                else {
+                    //Pause
+                    isPausing = true;
+                    mediaRecorder.pause();
+                    pauseRecordButton.setText(getResources().getString(R.string.resume));
+                    recordButton.setClickable(false);
+                    recordButton.clearAnimation();
+                    recordButtonInside.clearAnimation();
+                }
             }
         });
 
@@ -134,6 +153,8 @@ public class FragmentRecorder extends Fragment {
         minuteRecord = view.findViewById(R.id.minuteRecord);
         secondRecord = view.findViewById(R.id.secondRecord);
         iconRecord = view.findViewById(R.id.iconRecord);
+        pauseRecordButton = view.findViewById(R.id.pauseRecordButton);
+        pauseRecordButton.setVisibility(View.GONE);
 
         sharedPreferences = view.getContext().getSharedPreferences("status", Context.MODE_PRIVATE);
     }
@@ -151,8 +172,11 @@ public class FragmentRecorder extends Fragment {
         if (!running) {
             startTimer();
             t.start();
+
             running = true;
         }
+
+        pauseRecordButton.setVisibility(View.VISIBLE);
 
         if (recordPath.equals(""))
         {
@@ -188,6 +212,8 @@ public class FragmentRecorder extends Fragment {
 
     private void StopRecording() {
         resetTimer();
+
+        pauseRecordButton.setVisibility(View.GONE);
 
         mediaRecorder.stop(); //Stop record
         mediaRecorder.release();
@@ -321,51 +347,55 @@ public class FragmentRecorder extends Fragment {
             @Override
             public void run() {
                 while (!isInterrupted() && isRecording) {
-                    try {
-                        Thread.sleep(1000);
-                        ((Activity) view.getContext()).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (second <= 60)
-                                    second++;
-                                if (second >= 0 && second <= 9) {
-                                    secondRecord.setText(String.valueOf("0" + second));
-                                }
-                                else {
-                                    if (second == 60) {
-                                        secondRecord.setText("00");
-                                    }
-                                    else
-                                        secondRecord.setText(String.valueOf(second));
-                                }
-
-                                if (second >= 60) {
-                                    second = 0;
-                                    minute++;
-                                    if (minute >= 0 && minute <= 9) {
-                                        minuteRecord.setText(String.valueOf("0" + minute));
+                    if (!isPausing)
+                    {
+                        try {
+                            Thread.sleep(1000);
+                            ((Activity) view.getContext()).runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (second <= 60)
+                                        second++;
+                                    if (second >= 0 && second <= 9) {
+                                        secondRecord.setText(String.valueOf("0" + second));
                                     }
                                     else {
-                                        if (minute == 60) {
-                                            minuteRecord.setText("00");
+                                        if (second == 60) {
+                                            secondRecord.setText("00");
                                         }
                                         else
-                                            minuteRecord.setText(String.valueOf(minute));
-
+                                            secondRecord.setText(String.valueOf(second));
                                     }
 
-                                }
-                                if (minute >= 60) {
-                                    minute = 0;
-                                    hour++;
-                                    hourRecord.setText(String.valueOf(hour));
-                                }
-                            }
-                        });
+                                    if (second >= 60) {
+                                        second = 0;
+                                        minute++;
+                                        if (minute >= 0 && minute <= 9) {
+                                            minuteRecord.setText(String.valueOf("0" + minute));
+                                        }
+                                        else {
+                                            if (minute == 60) {
+                                                minuteRecord.setText("00");
+                                            }
+                                            else
+                                                minuteRecord.setText(String.valueOf(minute));
 
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                                        }
+
+                                    }
+                                    if (minute >= 60) {
+                                        minute = 0;
+                                        hour++;
+                                        hourRecord.setText(String.valueOf(hour));
+                                    }
+                                }
+                            });
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 }
                 if (isInterrupted()) {
                     return;
