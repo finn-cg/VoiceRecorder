@@ -71,4 +71,7 @@
     <string name="empty_folder">Folder is empty!</string>
     <string name="record_name">Record name</string>
 
+    <string name="delete_all_alert">All records have been moved to trash!</string>
+    <string name="delete_alert">Those records have been moved to trash!</string>
+
 </resources>

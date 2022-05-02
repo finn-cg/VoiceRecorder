@@ -60,4 +60,6 @@
     <string name="detail">Chi tiết</string>
     <string name="empty_folder">Thư mục này trống!</string>
     <string name="record_name">Tên bản ghi</string>
+    <string name="delete_all_alert">Tất cả bản ghi đã được di chuyển đến thùng rác!</string>
+    <string name="delete_alert">Các bản ghi đã được di chuyển đến thùng rác!</string>
 </resources>

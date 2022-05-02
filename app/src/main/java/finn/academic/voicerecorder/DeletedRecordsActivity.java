@@ -67,7 +67,6 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                     adapter.hideAllSelecting();
                 }
                 mainPlayLayout.setVisibility(View.GONE);
-                setSelectButton();
             }
         });
 
@@ -90,19 +89,6 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                 }
             }
         });
-    }
-
-    private void setSelectButton() {
-        for (Record record : records) {
-            if (record.getSelected()) {
-                recoverBtn.setText(getResources().getString(R.string.recover));
-                deleteBtn.setText(getResources().getString(R.string.delete));
-                return;
-            }
-        }
-
-        recoverBtn.setText(getResources().getString(R.string.recover_all));
-        deleteBtn.setText(getResources().getString(R.string.delete_all));
     }
 
     private void SetUp() {

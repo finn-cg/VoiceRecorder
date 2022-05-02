@@ -50,6 +50,7 @@ import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.model.Record;
 import finn.academic.voicerecorder.util.FileHandler;
+import finn.academic.voicerecorder.util.FragmentHandler;
 
 public class FragmentRecordList extends Fragment implements RecordAdapter.RecyclerViewClickInterface {
     private View view;
@@ -73,6 +74,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
 
     private Button cancelCheckButton;
+    private Button deleteButton;
 
     private Boolean isShowUtils = false;
 
@@ -90,7 +92,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
         paths = getPaths();
         SetUp();
-
 
         utilRecordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,27 +197,39 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (deleteButton.getText().equals(view.getContext().getString(R.string.delete_all))) {
+                    if (adapter.deleteAllRecords()) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.delete_all_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (adapter.deleteAllSelected()) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.delete_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                updateEmtyElert();
+
+                if (records.size() == 0 || records.isEmpty()) {
+                    cancelCheckButton.performClick();
+                }
+            }
+        });
+
         deletePlayingRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                File curDirectory = files.get(pos);
-                String path = view.getContext().getExternalFilesDir("/") + "/deletedRecent";
-                FileHandler.createFolderIfNotExists(path);
-                File destDirectory = new File(path);
-                try {
-                    File newFile =
-                            new File(view.getContext().getExternalFilesDir("/") +
-                                    "/" + records.get(pos).getFolder() +
-                                    "/" + FileHandler.getDeleteName(curDirectory, records.get(pos).getFolder()));
-                    FileHandler.rename(curDirectory, newFile);
-                    FileHandler.moveFile(newFile, destDirectory);
-                    refreshFragment();
-                    Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.deleted) + " "
-                            + files.get(pos).getName(), Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                // Delete record
+                deleteRecord(pos);
             }
         });
 
@@ -266,6 +279,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         seekBarRecord = view.findViewById(R.id.seekBarRecord);
 
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
+        deleteButton = view.findViewById(R.id.deleteButton);
         deletePlayingRecord = view.findViewById(R.id.deletePlayingRecord);
 
         if (mMediaPlayer != null) {
@@ -279,6 +293,26 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     public void onResume() {
         super.onResume();
         updateDataRecords();
+    }
+
+    private void deleteRecord(int position) {
+        File curDirectory = files.get(position);
+        String path = view.getContext().getExternalFilesDir("/") + "/deletedRecent";
+        FileHandler.createFolderIfNotExists(path);
+        File destDirectory = new File(path);
+        try {
+            File newFile =
+                    new File(view.getContext().getExternalFilesDir("/") +
+                            "/" + records.get(position).getFolder() +
+                            "/" + FileHandler.getDeleteName(curDirectory, records.get(position).getFolder()));
+            FileHandler.rename(curDirectory, newFile);
+            FileHandler.moveFile(newFile, destDirectory);
+            FragmentHandler.refreshFragment(this);
+            Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.deleted) + " "
+                    + files.get(position).getName(), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateDataRecords() {
@@ -308,7 +342,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             old += directory.listFiles().length;
         }
 
-        adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
+        adapter = new RecordAdapter(view.getContext(), records, files, this);
         recordsRecyclerView.setAdapter(adapter);
 
         updateEmtyElert();
@@ -491,14 +525,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         return timeLabel;
     }
 
-    private void refreshFragment() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 26) {
-            ft.setReorderingAllowed(false);
-        }
-        ft.detach(this).attach(this).commit();
-    }
-
     @Override
     public void onItemClick(int position) {
         initPlayer(position);
@@ -531,11 +557,12 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     }
 
     private void clearMediaPlayer() {
-        if (mMediaPlayer.isPlaying())
-        {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
+        if (mMediaPlayer != null) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+            }
         }
     }
 }

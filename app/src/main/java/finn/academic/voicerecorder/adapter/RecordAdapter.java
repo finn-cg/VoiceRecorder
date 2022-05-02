@@ -20,10 +20,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.model.Record;
+import finn.academic.voicerecorder.util.FileHandler;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
     private Context context;
@@ -31,7 +33,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private ArrayList<File> files;
     private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public RecordAdapter(Context context, ArrayList<Record> records, ArrayList<File> files, RecyclerViewClickInterface recyclerViewClickInterface) {
+    private ArrayList<Record> deletedRecords;
+    private ArrayList<File> deletedFiles;
+
+    public RecordAdapter(Context context, ArrayList<Record> records, ArrayList<File> files,
+                         RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.records = records;
         this.files = files;
@@ -116,6 +122,62 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 }
             }
         });
+    }
+
+    private Boolean deleteRecord(int position) {
+        File curDirectory = files.get(position);
+        String path = context.getExternalFilesDir("/") + "/deletedRecent";
+        FileHandler.createFolderIfNotExists(path);
+        File destDirectory = new File(path);
+        try {
+            File newFile =
+                    new File(context.getExternalFilesDir("/") +
+                            "/" + records.get(position).getFolder() +
+                            "/" + FileHandler.getDeleteName(curDirectory, records.get(position).getFolder()));
+            FileHandler.rename(curDirectory, newFile);
+            FileHandler.moveFile(newFile, destDirectory);
+
+            deletedFiles.add(files.get(position));
+            deletedRecords.add(records.get(position));
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public Boolean deleteAllSelected() {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            if (records.get(i).getSelected()) {
+                res = deleteRecord(i);
+            }
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
+    }
+
+    public Boolean deleteAllRecords() {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            res = deleteRecord(i);
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
     }
 
     public void showAllSelecting() {
