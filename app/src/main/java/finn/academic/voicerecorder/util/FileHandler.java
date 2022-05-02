@@ -11,6 +11,22 @@ public class FileHandler {
         return from.getParentFile().exists() && from.exists() && from.renameTo(to);
     }
 
+    public static String getDeleteName(File file, String folderName) {
+        String name = file.getName();
+        return name.substring(0, name.length() - ".mp3".length()) + "_" + folderName + ".mp3";
+    }
+
+    public static String getFolderName(File file) {
+        String name = file.getName();
+        return name.substring(name.lastIndexOf('_') + 1, name.length()).replace(".mp3", "");
+    }
+
+    public static String getOldName(File file) {
+        String name = file.getName();
+        String folderName = name.substring(name.lastIndexOf('_') + 1, name.length());
+        return name.substring(0, name.lastIndexOf(folderName)) + ".mp3";
+    }
+
     public static boolean createFolderIfNotExists(String path) {
         File folder = new File(path);
         if (folder.exists())
@@ -29,7 +45,8 @@ public class FileHandler {
 
     public static void moveFile(File srcFileOrDirectory, File desFileOrDirectory) throws IOException {
         File newFile = new File(desFileOrDirectory, srcFileOrDirectory.getName());
-        try (FileChannel outputChannel = new FileOutputStream(newFile).getChannel(); FileChannel inputChannel = new FileInputStream(srcFileOrDirectory).getChannel()) {
+        try (FileChannel outputChannel = new FileOutputStream(newFile).getChannel();
+             FileChannel inputChannel = new FileInputStream(srcFileOrDirectory).getChannel()) {
             inputChannel.transferTo(0, inputChannel.size(), outputChannel);
             inputChannel.close();
             deleteRecursive(srcFileOrDirectory);

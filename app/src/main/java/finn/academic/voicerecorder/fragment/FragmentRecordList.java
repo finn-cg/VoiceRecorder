@@ -91,9 +91,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         paths = getPaths();
         SetUp();
 
-        adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
-        recordsRecyclerView.setAdapter(adapter);
-
 
         utilRecordLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,8 +205,15 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                 FileHandler.createFolderIfNotExists(path);
                 File destDirectory = new File(path);
                 try {
-                    FileHandler.moveFile(curDirectory, destDirectory);
+                    File newFile =
+                            new File(view.getContext().getExternalFilesDir("/") +
+                                    "/" + records.get(pos).getFolder() +
+                                    "/" + FileHandler.getDeleteName(curDirectory, records.get(pos).getFolder()));
+                    FileHandler.rename(curDirectory, newFile);
+                    FileHandler.moveFile(newFile, destDirectory);
                     refreshFragment();
+                    Toast.makeText(view.getContext(), view.getContext().getResources().getString(R.string.deleted) + " "
+                            + files.get(pos).getName(), Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -268,11 +272,23 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             mMediaPlayer.stop();
         }
 
+        updateDataRecords();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateDataRecords();
+    }
+
+    private void updateDataRecords() {
         records = new ArrayList<>();
         files = new ArrayList<>();
+
         int old = 0;
 
         for (String path : paths) {
+            String folder = path;
             if (path.equals("")) {
                 path = this.view.getContext().getExternalFilesDir("/") + "/default"; //Get the path of records stored
                 //Toast.makeText(view.getContext(), path, Toast.LENGTH_SHORT).show();
@@ -286,27 +302,27 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             Collections.addAll(files, directory.listFiles()); //Get all files from path above
 
             for (int i = old; i < files.size(); i++) {
-                records.add(new Record(getContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path));
+                records.add(new Record(getContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path, folder.equals("") ? "default" : folder));
             }
 
             old += directory.listFiles().length;
         }
 
+        adapter = new RecordAdapter(view.getContext(), records, files, (RecordAdapter.RecyclerViewClickInterface) this);
+        recordsRecyclerView.setAdapter(adapter);
+
         updateEmtyElert();
+        releasePlaySession();
+    }
 
-
-        /*records.add(new Record("Record 1", 0, 360));
-        records.add(new Record("Record 2", 5, 123));
-        records.add(new Record("Record 3", 360, 20));
-        records.add(new Record("Record 4", 255, 35));
-        records.add(new Record("Record 5", 16, 100));
-        records.add(new Record("Record 6", 90, 80));
-        records.add(new Record("Record 7", 120, 55));
-        records.add(new Record("Record 8", 100, 44));
-        records.add(new Record("Record 9", 1000, 33));
-        records.add(new Record("Record 10", 600, 88));
-        records.add(new Record("Record 11", 530, 99));
-        records.add(new Record("Record 12", 30, 120));*/
+    private void releasePlaySession() {
+        playRecord.setBackgroundResource(R.drawable.red_play);
+        namePlayingRecord.setText(view.getContext().getResources().getString(R.string.record_name));
+        durationPlayingRecord.setText("00:00");
+        seekBarRecord.setMax(0);
+        startTimePlayingRecord.setText("00:00");
+        endTimePlayingRecord.setText("00:00");
+        mainPlayLayout.setVisibility(View.GONE);
     }
 
     private void updateEmtyElert() {
@@ -367,7 +383,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                         initPlayer(curSongPosition);
                     }
                 } else {
-                    playRecord.setBackgroundResource(R.drawable.red_play);
+                    releasePlaySession();
                 }
 
             }
