@@ -335,7 +335,8 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
             }
         }
         folders.removeAll(ftemp);
-        this.notifyDataSetChanged();
+        notifyDataSetChanged();
+        ((MainActivity) context).updateVisibilityFolderRecyclerView();
     }
 
     public void showAllSelecting() {

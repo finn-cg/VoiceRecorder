@@ -258,11 +258,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         txtAlert.setText(getResources().getString(R.string.existing_name));
                         txtAlert.setTextColor(getResources().getColor(R.color.light_red));
                     } else {
+                        selectBtn.setText(getResources().getString(R.string.edit));
                         adapter.hideAllSelecting();
                         database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
 
                         folders.add(new Folder(name, 0));
-                        folders = new ArrayList<>(folders);
                         adapter.notifyDataSetChanged();
 
                         updateVisibilityFolderRecyclerView();
@@ -320,6 +320,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     txtAlert.setText(getResources().getString(R.string.existing_name));
                     txtAlert.setTextColor(getResources().getColor(R.color.light_red));
                 } else {
+                    selectBtn.setText(getResources().getString(R.string.edit));
                     adapter.hideAllSelecting();
                     database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
 
@@ -368,10 +369,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             String path = this.getExternalFilesDir("/") + "/" + folderName;
             File directory = new File(path);
             if (directory.listFiles() != null) {
-                directory = new File(path);
                 int recQuantity = directory.listFiles().length;
                 database.queryData("UPDATE Folder SET numRecords=" + recQuantity + " WHERE Name='" + folderName + "'");
-                f = new Folder(folderName, recQuantity);
+                f.setRecords(recQuantity);
             }
         }
         adapter.notifyDataSetChanged();
