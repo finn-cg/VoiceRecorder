@@ -335,6 +335,11 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private void initPlayer(final int position) {
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.reset();
+            seekBarRecord.setProgress(0);
+            String sTime = createTimeLabel(0);
+            startTimePlayingRecord.setText(sTime);
+            String eTime = createTimeLabel(mMediaPlayer.getDuration());
+            endTimePlayingRecord.setText(eTime);
         }
 
         String sname = files.get(position).getName().replace(".mp3", "").replace(".m4a", "").replace(".wav", "").replace(".m4b", "").replace(".3gp", "").replace("mp4", "");
@@ -379,17 +384,23 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                 if (fromUser) {
                     mMediaPlayer.seekTo(progress);
                     seekBarRecord.setProgress(progress);
+                    String sTime = createTimeLabel(progress);
+                    startTimePlayingRecord.setText(sTime);
+                    String eTime = createTimeLabel(mMediaPlayer.getDuration() - progress);
+                    endTimePlayingRecord.setText(eTime);
                 }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                if (mMediaPlayer.isPlaying())
+                    pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                if (!mMediaPlayer.isPlaying())
+                    play();
             }
         });
 
@@ -397,15 +408,18 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         new Thread(new Runnable() {
             @Override
             public void run() {
+
+
                 while (mMediaPlayer != null) {
                     try {
 //                        Log.i("Thread ", "Thread Called");
                         // create new message to send to handler
                         if (mMediaPlayer.isPlaying()) {
+                            Thread.sleep(1000);
                             Message msg = new Message();
                             msg.what = mMediaPlayer.getCurrentPosition();
                             handler.sendMessage(msg);
-                            Thread.sleep(1000);
+
                         }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -421,11 +435,13 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         public void handleMessage(Message msg) {
 //            Log.i("handler ", "handler called");
             int current_position = msg.what;
+
             seekBarRecord.setProgress(current_position);
             String sTime = createTimeLabel(current_position);
-            String eTime = createTimeLabel(current_position - mMediaPlayer.getDuration());
+            String eTime = createTimeLabel(mMediaPlayer.getDuration() - current_position);
             startTimePlayingRecord.setText(sTime);
             endTimePlayingRecord.setText(eTime);
+
         }
     };
 
@@ -490,5 +506,20 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
 
         return pathList;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        clearMediaPlayer();
+    }
+
+    private void clearMediaPlayer() {
+        if (mMediaPlayer.isPlaying())
+        {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
     }
 }
