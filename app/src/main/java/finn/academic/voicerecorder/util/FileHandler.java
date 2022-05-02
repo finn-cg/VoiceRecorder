@@ -1,10 +1,14 @@
 package finn.academic.voicerecorder.util;
 
+import android.content.Context;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+
+import finn.academic.voicerecorder.model.Database;
 
 public class FileHandler {
     public static boolean rename(File from, File to) {
@@ -23,7 +27,7 @@ public class FileHandler {
 
     public static String getOldName(File file) {
         String name = file.getName();
-        String folderName = name.substring(name.lastIndexOf('_') + 1, name.length());
+        String folderName = name.substring(name.lastIndexOf('_'), name.length());
         return name.substring(0, name.lastIndexOf(folderName)) + ".mp3";
     }
 
@@ -33,6 +37,21 @@ public class FileHandler {
             return true;
         else
             return folder.mkdirs();
+    }
+
+    public static boolean createFolderIfNotExistsInDB(String path, String name, Context context) {
+        File folder = new File(path);
+        Database database = new Database(context, "folder.sqlite", null, 1);
+
+        if (folder.exists())
+            return true;
+        else
+            if (folder.mkdirs()) {
+                database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
+                return true;
+            } else {
+                return false;
+            }
     }
 
     public static void deleteRecursive(File fileOrDirectory) {

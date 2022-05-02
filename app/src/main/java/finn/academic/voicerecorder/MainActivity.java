@@ -65,9 +65,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         SetUp();
         SetUpDB();
 
-        adapter = new FolderAdapter(MainActivity.this, folders);
-        folderRecyclerView.setAdapter(adapter);
-
         allRecords.setOnClickListener(this);
         recentlyDeleted.setOnClickListener(this);
         addAFolder.setOnClickListener(this);
@@ -166,7 +163,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void SetUpDB() {
-        database = new Database(this, "folder.sqlite", null, 1);
+        if (database == null) {
+            database = new Database(this, "folder.sqlite", null, 1);
+        }
         database.queryData("CREATE TABLE IF NOT EXISTS Folder(Name TEXT PRIMARY KEY, numRecords INTEGER)");
 
         folders = new ArrayList<>();
@@ -178,6 +177,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         updateVisibilityFolderRecyclerView();
+
+        adapter = new FolderAdapter(MainActivity.this, folders);
+        folderRecyclerView.setAdapter(adapter);
     }
 
     public void updateVisibilityFolderRecyclerView() {
@@ -286,8 +288,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     save.setEnabled(false);
                     save.setAlpha(0.2f);
                 } else {
-                    int max = charSequence.length() - 1;
-                    if (charSequence.charAt(max >= 0 ? max : 0) == '\n') {
+                    if (charSequence.toString().contains("\n")) {
                         txtName.setText(charSequence.subSequence(0, charSequence.length() - 1));
                         save.performClick();
                         return;
@@ -380,6 +381,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        SetUpDB();
         updateRecordsDB();
         refreshRecords();
     }

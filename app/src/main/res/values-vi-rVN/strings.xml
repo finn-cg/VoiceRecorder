@@ -66,4 +66,6 @@
     <string name="permanently_deleted">Các bản ghi được chọn sẽ bị xóa vĩnh viễn!</string>
     <string name="per_deleted_record_alert">Các bản ghi được chọn đã bị xóa vĩnh viễn!</string>
     <string name="per_deleted_all_record_alert">Tất cả bản ghi đã bị xóa vĩnh viễn!</string>
+    <string name="recover_all_alert">Tất cả bản ghi đã được phục hồi!</string>
+    <string name="recover_alert">Các bạn ghi đã được phục hồi!</string>
 </resources>
