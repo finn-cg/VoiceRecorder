@@ -3,10 +3,12 @@ package finn.academic.voicerecorder.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -24,7 +26,6 @@ import android.app.Fragment;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -39,7 +40,6 @@ import java.util.Locale;
 
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
-import finn.academic.voicerecorder.model.Database;
 import finn.academic.voicerecorder.util.FileHandler;
 import finn.academic.voicerecorder.view.VisualizerView;
 
@@ -58,7 +58,6 @@ public class FragmentRecorder extends Fragment {
 
     private MediaRecorder mediaRecorder;
     private String recordFile;
-    private Chronometer timer;
     private TextView hourRecord, minuteRecord, secondRecord;
     private String recordPath, recordPathAbs, recordFormat;
     private EditText newRecordName;
@@ -76,8 +75,6 @@ public class FragmentRecorder extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_recorder, container, false);
-
-        //startRecord = true;
 
         Animation animScaleOutside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_outside);
         Animation animScaleInside = AnimationUtils.loadAnimation(view.getContext(), R.anim.scale_record_inside);
@@ -133,7 +130,6 @@ public class FragmentRecorder extends Fragment {
         recordButton = view.findViewById(R.id.recordButtonOutside);
         recordButtonInside = view.findViewById(R.id.recordButtonInside);
         pauseRecordButton = view.findViewById(R.id.pauseRecordButton);
-        timer = (Chronometer) view.findViewById(R.id.record_timer);
         hourRecord = view.findViewById(R.id.hourRecord);
         minuteRecord = view.findViewById(R.id.minuteRecord);
         secondRecord = view.findViewById(R.id.secondRecord);
@@ -199,6 +195,7 @@ public class FragmentRecorder extends Fragment {
         handler.removeCallbacks(updateVisualizer);
         visualizerView.clear();
         showSaveRecordDialog();
+
     }
 
     private void showSaveRecordDialog() {
@@ -251,18 +248,21 @@ public class FragmentRecorder extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                refreshFrag();
 
                 dialog.dismiss();
                 File file = new File(recordPathAbs);
                 if (file.exists()){
                     file.delete();
                 }
+
             }
         });
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                refreshFrag();
 
                 File dir = new File(recordPath+"/");
                 if (newRecordName.getText().toString().equals("")) {
@@ -404,6 +404,14 @@ public class FragmentRecorder extends Fragment {
         MainStream mainStream = (MainStream) getActivity();
         String path = mainStream.getPath();
         return path;
+    }
+
+    private void refreshFrag() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false);
+        }
+        ft.detach(this).attach(this).commit();
     }
 
     @Override
