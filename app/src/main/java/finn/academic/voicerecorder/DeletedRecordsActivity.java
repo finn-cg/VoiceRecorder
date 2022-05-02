@@ -88,6 +88,34 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             }
         });
 
+        recoverBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (recoverBtn.getText().equals(getResources().getString(R.string.recover_all))) {
+                    if (adapter.recoverAllRecords()) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.recover_all_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (adapter.recoverAllSelected()) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.recover_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                }
+                updateEmtyElert();
+
+                if (records.size() == 0 || records.isEmpty()) {
+                    editBtn.performClick();
+                }
+            }
+        });
+
         recentlyDeletedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {

@@ -146,6 +146,29 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         }
     }
 
+    private Boolean recoverRecord(int position) {
+        File curDirectory = files.get(position);
+        String folder = FileHandler.getFolderName(curDirectory);
+        String path = context.getExternalFilesDir("/") + "/" + folder;
+        FileHandler.createFolderIfNotExistsInDB(path, folder, context);
+        File destDirectory = new File(path);
+        try {
+            File newFile =
+                    new File(context.getExternalFilesDir("/") +
+                            "/deletedRecent" +
+                            "/" + FileHandler.getOldName(curDirectory));
+            FileHandler.rename(curDirectory, newFile);
+            FileHandler.moveFile(newFile, destDirectory);
+
+            deletedFiles.add(files.get(position));
+            deletedRecords.add(records.get(position));
+
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     private Boolean permanentlyDeleteRecord(int position) {
         File curDirectory = files.get(position);
         deletedFiles.add(files.get(position));
@@ -163,6 +186,40 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             if (records.get(i).getSelected()) {
                 res = permanent ? permanentlyDeleteRecord(i) : deleteRecord(i);
             }
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
+    }
+
+    public Boolean recoverAllSelected() {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            if (records.get(i).getSelected()) {
+                res = recoverRecord(i);
+            }
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
+    }
+
+    public Boolean recoverAllRecords() {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+                res = recoverRecord(i);
         }
         files.removeAll(deletedFiles);
         records.removeAll(deletedRecords);

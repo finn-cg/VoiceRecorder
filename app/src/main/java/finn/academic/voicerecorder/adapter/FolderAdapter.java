@@ -218,8 +218,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                     save.setEnabled(false);
                     save.setAlpha(0.2f);
                 } else {
-                    int max = charSequence.length() - 1;
-                    if (charSequence.charAt(max >= 0 ? max : 0) == '\n') {
+                    if (charSequence.toString().contains("\n")) {
                         txtName.setText(charSequence.subSequence(0, charSequence.length() - 1));
                         save.performClick();
                         return;
