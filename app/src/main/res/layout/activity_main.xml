@@ -176,12 +176,13 @@
                     <Button
                         android:id="@+id/selectAllBtn"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:background="@android:color/transparent"
                         android:text="@string/select_all"
                         android:textColor="@color/light_red"
-                        android:paddingRight="20dp"
-                        android:paddingLeft="20dp"/>
+                        android:minHeight="0dp"
+                        android:minWidth="0dp"
+                        android:paddingRight="16dp" />
 
                     <View
                         android:layout_width="1dp"
@@ -195,14 +196,16 @@
 
                 <Button
                     android:id="@+id/select_button"
-                    android:layout_width="72dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:paddingLeft="16dp"
                     android:layout_alignParentRight="true"
                     android:background="@android:color/transparent"
                     android:text="@string/edit"
                     android:textColor="@color/light_red"
                     android:textAlignment="textEnd"/>
-
             </LinearLayout>
 
         </RelativeLayout>

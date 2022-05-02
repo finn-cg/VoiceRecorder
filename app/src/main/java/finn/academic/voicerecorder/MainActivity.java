@@ -258,6 +258,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         txtAlert.setText(getResources().getString(R.string.existing_name));
                         txtAlert.setTextColor(getResources().getColor(R.color.light_red));
                     } else {
+                        adapter.hideAllSelecting();
                         database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
 
                         folders.add(new Folder(name, 0));
@@ -319,6 +320,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     txtAlert.setText(getResources().getString(R.string.existing_name));
                     txtAlert.setTextColor(getResources().getColor(R.color.light_red));
                 } else {
+                    adapter.hideAllSelecting();
                     database.queryData("INSERT INTO Folder VALUES('" + name + "', 0)");
 
                     folders.add(new Folder(name, 0));

@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -20,6 +21,7 @@ public class MainStream extends Activity implements View.OnClickListener {
     private ImageView startRecording;
     private ImageView listRecords;
     private ImageView setting;
+    private ImageView detailMenu;
 
     private TextView actionName;
     private String path = "";
@@ -39,6 +41,7 @@ public class MainStream extends Activity implements View.OnClickListener {
         startRecording = findViewById(R.id.startRecording);
         listRecords = findViewById(R.id.listRecords);
         setting = findViewById(R.id.Setting);
+        detailMenu = findViewById(R.id.detailMenu);
 
         actionName =  findViewById(R.id.actionName);
 
@@ -51,7 +54,7 @@ public class MainStream extends Activity implements View.OnClickListener {
 
     }
 
-@Override
+    @Override
     public void onClick(View view) {
         Fragment fragment = null;
 
@@ -93,5 +96,9 @@ public class MainStream extends Activity implements View.OnClickListener {
     {
         super.onBackPressed();  // optional depending on your needs
         this.finish();
+    }
+
+    private void showMenuDetail() {
+
     }
 }

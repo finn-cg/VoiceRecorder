@@ -95,13 +95,36 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                 folder.setSelected(b);
 
                 Button selectBtn = ((Activity) context).findViewById(R.id.select_button);
+                Button selectAll = ((MainActivity) context).findViewById(R.id.selectAllBtn);
+                Boolean checkSelectBtn = false;
+                Boolean checkSelectAllBtn = false;
                 for (Folder f : folders) {
-                    if (f.getSelected()) {
-                        selectBtn.setText(context.getResources().getString(R.string.delete));
+                    if (checkSelectAllBtn && checkSelectBtn) {
                         return;
                     }
+
+                    if (!checkSelectBtn) {
+                        if (f.getSelected()) {
+                            selectBtn.setText(context.getResources().getString(R.string.delete));
+                            checkSelectBtn = true;
+                        }
+                    }
+
+                    if (!checkSelectAllBtn) {
+                        if (!f.getSelected()) {
+                            selectAll.setText(context.getResources().getString(R.string.select_all));
+                            checkSelectAllBtn = true;
+                        }
+                    }
                 }
-                selectBtn.setText(context.getResources().getString(R.string.cancel));
+
+                if (!checkSelectBtn) {
+                    selectBtn.setText(context.getResources().getString(R.string.cancel));
+                }
+
+                if (!checkSelectAllBtn) {
+                    selectAll.setText(context.getResources().getString(R.string.unselect_all));
+                }
             }
         });
 
