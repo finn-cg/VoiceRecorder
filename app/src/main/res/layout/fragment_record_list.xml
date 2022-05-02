@@ -8,9 +8,40 @@
     android:background="@color/white">
 
     <LinearLayout
+        android:id="@+id/emptyAlert"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:alpha=".60"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textColor="@color/aux_item"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thư mục này trống!"
+            android:textColor="@color/aux_item"
+            android:textSize="14dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:id="@+id/searchRecordBar"
@@ -306,9 +337,9 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="12dp"
+                        android:background="@drawable/red_trash"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:background="@drawable/red_trash" />
+                        android:focusable="true" />
 
                 </RelativeLayout>
 

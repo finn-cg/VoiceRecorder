@@ -67,4 +67,7 @@
     <string name="error">Something went wrong!</string>
     <string name="detail">Details</string>
 
+    <string name="empty_folder">Folder is empty!</string>
+    <string name="record_name">Record name</string>
+
 </resources>

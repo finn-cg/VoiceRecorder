@@ -66,6 +66,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private LinearLayout searchRecordBar;
     private LinearLayout playLayout;
     private LinearLayout mainPlayLayout;
+    private LinearLayout emptyAlert;
 
     private TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
     private SeekBar seekBarRecord;
@@ -207,7 +208,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                 FileHandler.createFolderIfNotExists(path);
                 File destDirectory = new File(path);
                 try {
-                    moveFile(curDirectory, destDirectory);
+                    FileHandler.moveFile(curDirectory, destDirectory);
                     refreshFragment();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -245,6 +246,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         searchRecordBar = view.findViewById(R.id.searchRecordBar);
         playLayout = view.findViewById(R.id.playLayout);
         mainPlayLayout = view.findViewById(R.id.mainPlayLayout);
+        emptyAlert = view.findViewById(R.id.emptyAlert);
 
         playHeading = view.findViewById(R.id.playHeading);
         namePlayingRecord = view.findViewById(R.id.namePlayingRecord);
@@ -290,6 +292,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             old += directory.listFiles().length;
         }
 
+        updateEmtyElert();
+
 
         /*records.add(new Record("Record 1", 0, 360));
         records.add(new Record("Record 2", 5, 123));
@@ -303,6 +307,14 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         records.add(new Record("Record 10", 600, 88));
         records.add(new Record("Record 11", 530, 99));
         records.add(new Record("Record 12", 30, 120));*/
+    }
+
+    private void updateEmtyElert() {
+        if (records.isEmpty()) {
+            emptyAlert.setVisibility(View.VISIBLE);
+        } else {
+            emptyAlert.setVisibility(View.GONE);
+        }
     }
 
     public long getAudioFileLength(String path) {
@@ -459,22 +471,6 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     public void onItemClick(int position) {
         initPlayer(position);
         pos = position;
-    }
-
-    public static void moveFile(File srcFileOrDirectory, File desFileOrDirectory) throws IOException {
-        File newFile = new File(desFileOrDirectory, srcFileOrDirectory.getName());
-        try (FileChannel outputChannel = new FileOutputStream(newFile).getChannel(); FileChannel inputChannel = new FileInputStream(srcFileOrDirectory).getChannel()) {
-            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-            inputChannel.close();
-            deleteRecursive(srcFileOrDirectory);
-        }
-    }
-
-    private static void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : Objects.requireNonNull(fileOrDirectory.listFiles()))
-                deleteRecursive(child);
-        fileOrDirectory.delete();
     }
 
     private ArrayList<String> getPaths() {

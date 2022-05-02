@@ -1,6 +1,10 @@
 package finn.academic.voicerecorder.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 
 public class FileHandler {
     public static boolean rename(File from, File to) {
@@ -21,5 +25,14 @@ public class FileHandler {
                 deleteRecursive(child);
 
         fileOrDirectory.delete();
+    }
+
+    public static void moveFile(File srcFileOrDirectory, File desFileOrDirectory) throws IOException {
+        File newFile = new File(desFileOrDirectory, srcFileOrDirectory.getName());
+        try (FileChannel outputChannel = new FileOutputStream(newFile).getChannel(); FileChannel inputChannel = new FileInputStream(srcFileOrDirectory).getChannel()) {
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+            deleteRecursive(srcFileOrDirectory);
+        }
     }
 }

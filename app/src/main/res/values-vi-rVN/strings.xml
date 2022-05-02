@@ -57,4 +57,6 @@
     <string name="Thong">Võ Trần Quang Thông</string>
     <string name="copyright">Được phát triển bởi</string>
     <string name="detail">Chi tiết</string>
+    <string name="empty_folder">Thư mục này trống!</string>
+    <string name="record_name">Tên bản ghi</string>
 </resources>
