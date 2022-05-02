@@ -1,5 +1,6 @@
 package finn.academic.voicerecorder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import android.app.Fragment;
@@ -7,6 +8,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -14,6 +16,10 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
 
 import finn.academic.voicerecorder.fragment.FragmentDetail;
 import finn.academic.voicerecorder.fragment.FragmentRecordList;
@@ -25,6 +31,8 @@ public class MainStream extends Activity implements View.OnClickListener {
     private ImageView listRecords;
     private ImageView setting;
     private ImageView detailMenu;
+
+    private MenuBuilder menuBuilder;
 
     private TextView actionName;
     private String path = "";
@@ -39,12 +47,7 @@ public class MainStream extends Activity implements View.OnClickListener {
         listRecords.setOnClickListener(this);
         setting.setOnClickListener(this);
 
-        detailMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showMenuDetail();
-            }
-        });
+      showMenuDetail();
     }
 
     private void SetUp() {
@@ -108,25 +111,44 @@ public class MainStream extends Activity implements View.OnClickListener {
         this.finish();
     }
 
+    @SuppressLint("RestrictedApi")
     private void showMenuDetail() {
-        PopupMenu popupMenu = new PopupMenu(this, detailMenu);
-        popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.menuDetail:
-                        Fragment fragment = new FragmentDetail();
-                        FragmentTransaction transaction = MainStream.this.getFragmentManager().beginTransaction();
-                        transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
-                        transaction.replace(R.id.fragmentStream, fragment);
-                        transaction.commit();
-                        break;
-                }
+        menuBuilder = new MenuBuilder(this);
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.menu,menuBuilder);
+        detailMenu.setOnClickListener(new View.OnClickListener() {
 
-                return false;
+            @Override
+            public void onClick(View view) {
+                MenuPopupHelper optionMenu = new MenuPopupHelper(MainStream.this, menuBuilder, view);
+                optionMenu.setForceShowIcon(true);
+
+                menuBuilder.setCallback(new MenuBuilder.Callback() {
+                    @Override
+                    public boolean onMenuItemSelected(@NonNull MenuBuilder menu, @NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menuDetail:
+                                setting.setBackgroundResource(R.color.light_red);
+                                startRecording.setBackgroundResource(R.color.light_red);
+                                listRecords.setBackgroundResource(R.color.light_red);
+                                actionName.setText(getResources().getString(R.string.detail));
+                                Fragment fragment = new FragmentDetail();
+                                FragmentTransaction transaction = MainStream.this.getFragmentManager().beginTransaction();
+                                transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
+                                transaction.replace(R.id.fragmentStream, fragment);
+                                transaction.commit();
+                                break;
+                        }
+                        return false;
+                    }
+
+                    @Override
+                    public void onMenuModeChange(@NonNull MenuBuilder menu) {
+
+                    }
+                });
+                optionMenu.show();
             }
         });
-        popupMenu.show();
     }
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Detail"
-        android:id="@+id/menuDetail"/>
+    <item
+        android:id="@+id/menuDetail"
+        android:icon="@drawable/detail"
+        android:title="@string/detail" />
 </menu>
