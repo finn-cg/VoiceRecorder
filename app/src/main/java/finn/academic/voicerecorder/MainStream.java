@@ -15,6 +15,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import finn.academic.voicerecorder.fragment.FragmentDetail;
 import finn.academic.voicerecorder.fragment.FragmentRecordList;
 import finn.academic.voicerecorder.fragment.FragmentRecorder;
 import finn.academic.voicerecorder.fragment.FragmentSetting;
@@ -115,7 +116,11 @@ public class MainStream extends Activity implements View.OnClickListener {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.menuDetail:
-                        Toast.makeText(MainStream.this, "hihi", Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new FragmentDetail();
+                        FragmentTransaction transaction = MainStream.this.getFragmentManager().beginTransaction();
+                        transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
+                        transaction.replace(R.id.fragmentStream, fragment);
+                        transaction.commit();
                         break;
                 }
 
