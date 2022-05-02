@@ -288,11 +288,10 @@ public class FragmentRecorder extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshFrag();
-
                 File dir = new File(recordPath+"/");
                 if (newRecordName.getText().toString().equals("")) {
                     dialog.dismiss();
+                    refreshFrag();
                 }
                 else {
                     if(dir.exists()){
@@ -315,22 +314,27 @@ public class FragmentRecorder extends Fragment {
                                 yes.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+
                                         from.renameTo(to);
                                         dialog.dismiss();
                                         dialog2.dismiss();
+                                        refreshFrag();
                                     }
                                 });
                                 no.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+
                                         dialog2.dismiss();
                                     }
                                 });
+
                                 dialog2.show();
                             }
                             else {
                                 from.renameTo(to);
                                 dialog.dismiss();
+                                refreshFrag();
                             }
                         }
                     }
