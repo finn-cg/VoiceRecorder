@@ -31,7 +31,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thư mục này trống!"
+            android:text="@string/empty_folder"
             android:textColor="@color/aux_item"
             android:textSize="14dp" />
 
@@ -230,7 +230,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="12dp"
-                                android:text="Tên bài hát"
+                                android:text="@string/record_name"
                                 android:textColor="@color/black"
                                 android:textSize="18dp"
                                 android:textStyle="bold" />
