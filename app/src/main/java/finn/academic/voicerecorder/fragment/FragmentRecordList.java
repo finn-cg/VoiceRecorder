@@ -2,7 +2,9 @@ package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -77,6 +79,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private ArrayList<String> paths;
     static MediaPlayer mMediaPlayer;
     private int pos;
+
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -230,6 +234,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     }
 
     private void SetUp() {
+        sharedPreferences = view.getContext().getSharedPreferences("setting", Context.MODE_PRIVATE);
         recordsRecyclerView = view.findViewById(R.id.recordsRecyclerView);
 
         utilRecordLayout = view.findViewById(R.id.utilRecordLayout);
@@ -338,14 +343,17 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                int curSongPoition = position;
-                // code to repeat songs until the
-                if (curSongPoition < files.size() - 1) {
-                    curSongPoition++;
-                    initPlayer(curSongPoition);
-                } else {
-                    curSongPoition = 0;
-                    initPlayer(curSongPoition);
+                // Continuous
+                if (sharedPreferences.getBoolean("continuous", false)) {
+                    int curSongPosition = position;
+                    // code to repeat songs until the
+                    if (curSongPosition < files.size() - 1) {
+                        curSongPosition++;
+                        initPlayer(curSongPosition);
+                    } else {
+                        curSongPosition = 0;
+                        initPlayer(curSongPosition);
+                    }
                 }
             }
         });
