@@ -60,12 +60,13 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
     private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
     private SeekBar seekBarRecord;
-    private int pos;
+    private int pos = -1;
     static MediaPlayer mMediaPlayer;
     SharedPreferences sharedPreferences;
 
     private ArrayList<File> files;
     private ArrayList<File> allFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +144,9 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         playRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                play();
+                if (pos >= 0) {
+                    play();
+                }
             }
         });
 
@@ -194,7 +197,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                 if (charSequence.toString().contains("\n")) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(recentlyDeletedRecyclerView.getWindowToken(), 0);
-                    searchFieldDel.setText(charSequence.toString().replace("\n",""));
+                    searchFieldDel.setText(charSequence.toString().replace("\n", ""));
                 } else {
 //                Toast.makeText(view.getContext(),
 //                        searchField.getText().toString(),
@@ -294,6 +297,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
     private void updateEmptyElert() {
         if (records.isEmpty()) {
             emptyAlert.setVisibility(View.VISIBLE);
+            pos = -1;
         } else {
             emptyAlert.setVisibility(View.GONE);
         }
@@ -497,9 +501,8 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         allFiles = new ArrayList<>();
         Collections.addAll(files, directory.listFiles()); //Get all files from path above
         Collections.addAll(allFiles, directory.listFiles()); //Get all files from path above
-        for (int i = 0; i < files.size(); i++)
-        {
-            Record r = new Record(getApplicationContext(),files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" +files.get(i).getName()), path, "");
+        for (int i = 0; i < files.size(); i++) {
+            Record r = new Record(getApplicationContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path, "");
             records.add(r);
             allRecords.add(r);
         }
@@ -519,7 +522,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
             millSecond = Long.parseLong(duration);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return millSecond;

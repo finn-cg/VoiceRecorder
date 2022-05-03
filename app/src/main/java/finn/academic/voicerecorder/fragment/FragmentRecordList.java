@@ -1,23 +1,17 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.inputmethodservice.Keyboard;
-import android.media.AudioRecord;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,21 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 
-import finn.academic.voicerecorder.MainActivity;
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Database;
-import finn.academic.voicerecorder.model.Folder;
 import finn.academic.voicerecorder.model.Record;
 import finn.academic.voicerecorder.util.FileHandler;
 import finn.academic.voicerecorder.util.FragmentHandler;
@@ -91,7 +78,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private ArrayList<File> allFiles;
     private ArrayList<String> paths;
     static MediaPlayer mMediaPlayer;
-    private int pos;
+    private int pos = -1;
 
     SharedPreferences sharedPreferences;
 
@@ -168,7 +155,9 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         playRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                play();
+                if (pos >= 0) {
+                    play();
+                }
             }
         });
 
@@ -227,7 +216,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                                 .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 }
-                updateEmtyElert();
+                updateEmptyElert();
 
                 if (records.size() == 0 || records.isEmpty()) {
                     cancelCheckButton.performClick();
@@ -269,7 +258,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
                 if (charSequence.toString().contains("\n")) {
                     InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    searchField.setText(charSequence.toString().replace("\n",""));
+                    searchField.setText(charSequence.toString().replace("\n", ""));
                 } else {
 //                Toast.makeText(view.getContext(),
 //                        searchField.getText().toString(),
@@ -407,7 +396,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         adapter = new RecordAdapter(view.getContext(), records, files, this);
         recordsRecyclerView.setAdapter(adapter);
 
-        updateEmtyElert();
+        updateEmptyElert();
         releasePlaySession();
     }
 
@@ -421,9 +410,10 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         mainPlayLayout.setVisibility(View.GONE);
     }
 
-    private void updateEmtyElert() {
+    private void updateEmptyElert() {
         if (records.isEmpty()) {
             emptyAlert.setVisibility(View.VISIBLE);
+            pos = -1;
         } else {
             emptyAlert.setVisibility(View.GONE);
         }
