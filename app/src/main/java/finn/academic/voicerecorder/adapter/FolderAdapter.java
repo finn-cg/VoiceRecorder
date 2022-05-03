@@ -219,7 +219,7 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.ViewHolder
                     save.setAlpha(0.2f);
                 } else {
                     if (charSequence.toString().contains("\n")) {
-                        txtName.setText(charSequence.subSequence(0, charSequence.length() - 1));
+                        txtName.setText(charSequence.toString().replace("\n",""));
                         save.performClick();
                         return;
                     }

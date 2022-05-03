@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.inputmethodservice.Keyboard;
+import android.media.AudioRecord;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -13,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +29,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Fragment;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,6 +45,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -57,6 +64,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
     private RecyclerView recordsRecyclerView;
     private ArrayList<Record> records;
+    private ArrayList<Record> allRecords;
     private RecordAdapter adapter;
 
     private RelativeLayout utilRecordLayout;
@@ -72,6 +80,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private TextView playHeading, namePlayingRecord, durationPlayingRecord, startTimePlayingRecord, endTimePlayingRecord;
     private SeekBar seekBarRecord;
     private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
+    private EditText searchField;
 
     private Button cancelCheckButton;
     private Button deleteButton;
@@ -79,6 +88,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private Boolean isShowUtils = false;
 
     private ArrayList<File> files;
+    private ArrayList<File> allFiles;
     private ArrayList<String> paths;
     static MediaPlayer mMediaPlayer;
     private int pos;
@@ -248,6 +258,32 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (charSequence.toString().contains("\n")) {
+                    InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    searchField.setText(charSequence.toString().replace("\n",""));
+                } else {
+//                Toast.makeText(view.getContext(),
+//                        searchField.getText().toString(),
+//                        Toast.LENGTH_SHORT).show();
+                    searchRecords();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // empty
+            }
+        });
+
         return view;
     }
 
@@ -277,6 +313,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         forwardRecord = view.findViewById(R.id.forwardRecord);
 
         seekBarRecord = view.findViewById(R.id.seekBarRecord);
+
+        searchField = view.findViewById(R.id.searchField);
 
         cancelCheckButton = view.findViewById(R.id.cancelCheckButton);
         deleteButton = view.findViewById(R.id.deleteButton);
@@ -315,9 +353,30 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         }
     }
 
+    private void searchRecords() {
+        records = new ArrayList<>();
+        for (Record element : allRecords) {
+            if (element.getName().contains(searchField.getText().toString())) {
+                records.add(element);
+            }
+        }
+
+        files = new ArrayList<>();
+        for (File element : allFiles) {
+            if (element.getName().contains(searchField.getText().toString())) {
+                files.add(element);
+            }
+        }
+
+        adapter = new RecordAdapter(view.getContext(), records, files, FragmentRecordList.this);
+        recordsRecyclerView.setAdapter(adapter);
+    }
+
     private void updateDataRecords() {
         records = new ArrayList<>();
         files = new ArrayList<>();
+        allRecords = new ArrayList<>();
+        allFiles = new ArrayList<>();
 
         int old = 0;
 
@@ -334,9 +393,12 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
             File directory = new File(path);
             Collections.addAll(files, directory.listFiles()); //Get all files from path above
+            Collections.addAll(allFiles, directory.listFiles()); //Get all files from path above
 
             for (int i = old; i < files.size(); i++) {
-                records.add(new Record(getContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path, folder.equals("") ? "default" : folder));
+                Record r = new Record(getContext(), files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" + files.get(i).getName()), path, folder.equals("") ? "default" : folder);
+                records.add(r);
+                allRecords.add(r);
             }
 
             old += directory.listFiles().length;
