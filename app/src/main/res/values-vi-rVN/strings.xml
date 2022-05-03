@@ -68,4 +68,6 @@
     <string name="per_deleted_all_record_alert">Tất cả bản ghi đã bị xóa vĩnh viễn!</string>
     <string name="recover_all_alert">Tất cả bản ghi đã được phục hồi!</string>
     <string name="recover_alert">Các bạn ghi đã được phục hồi!</string>
+    <string name="recover_record">Khôi phục các bản ghi</string>
+    <string name="recover_description">Các bản ghi sẽ ghi đè lên các bản ghi khác có cùng tên trong thư mục!</string>
 </resources>

@@ -92,36 +92,14 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showYesNoDialog();
+                showYesNoDialogForDelete();
             }
         });
 
         recoverBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (recoverBtn.getText().equals(getResources().getString(R.string.recover_all))) {
-                    if (adapter.recoverAllRecords(allFiles, allRecords)) {
-                        Toast.makeText(view.getContext(), view.getContext()
-                                .getResources().getString(R.string.recover_all_alert), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(view.getContext(), view.getContext()
-                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if (adapter.recoverAllSelected(allFiles, allRecords)) {
-                        Toast.makeText(view.getContext(), view.getContext()
-                                .getResources().getString(R.string.recover_alert), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(view.getContext(), view.getContext()
-                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                updateEmptyElert();
-                adapter.hideAllSelecting();
-
-                if (records.size() == 0 || records.isEmpty()) {
-                    editBtn.performClick();
-                }
+                showYesNoDialogForRecover();
             }
         });
 
@@ -187,7 +165,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         recentlyDeletedRecyclerView.setAdapter(adapter);
     }
 
-    private void showYesNoDialog() {
+    private void showYesNoDialogForDelete() {
         final Dialog dialog = new Dialog(DeletedRecordsActivity.this);
         dialog.setContentView(R.layout.dialog_overwrite_record);
         dialog.setCanceledOnTouchOutside(false);
@@ -223,6 +201,59 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
                 deleteBtn.setText(getResources().getString(R.string.delete_all));
                 recoverBtn.setText(getResources().getString(R.string.recover_all));
+                updateEmptyElert();
+                adapter.hideAllSelecting();
+
+                if (records.size() == 0 || records.isEmpty()) {
+                    editBtn.performClick();
+                }
+
+                dialog.dismiss();
+            }
+        });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showYesNoDialogForRecover() {
+        final Dialog dialog = new Dialog(DeletedRecordsActivity.this);
+        dialog.setContentView(R.layout.dialog_overwrite_record);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView title = dialog.findViewById(R.id.mainTitleDialogMakeChange);
+        TextView description = dialog.findViewById(R.id.descriptionDialogMakeChange);
+
+        title.setText(getResources().getString(R.string.recover_record));
+        description.setText(getResources().getString(R.string.recover_description));
+
+        Button no = dialog.findViewById(R.id.noDialogMakeChange);
+        Button yes = dialog.findViewById(R.id.yesDialogMakeChange);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (recoverBtn.getText().equals(getResources().getString(R.string.recover_all))) {
+                    if (adapter.recoverAllRecords(allFiles, allRecords)) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.recover_all_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (adapter.recoverAllSelected(allFiles, allRecords)) {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.recover_alert), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(view.getContext(), view.getContext()
+                                .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                    }
+                }
                 updateEmptyElert();
                 adapter.hideAllSelecting();
 

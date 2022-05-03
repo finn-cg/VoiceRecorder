@@ -80,4 +80,7 @@
     <string name="per_deleted_record_alert">Chosen records have been permanently deleted!</string>
     <string name="per_deleted_all_record_alert">All records have been permanently deleted!</string>
 
+    <string name="recover_record">Recover records</string>
+    <string name="recover_description">Records would be overwritten on the same name file in folder!</string>
+
 </resources>
