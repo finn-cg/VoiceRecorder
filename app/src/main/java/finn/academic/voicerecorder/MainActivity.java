@@ -381,6 +381,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        selectBtn.setText(getResources().getString(R.string.edit));
+        selectAllLayout.setVisibility(View.GONE);
+        adapter.hideAllSelecting();
         SetUpDB();
         updateRecordsDB();
         refreshRecords();

@@ -4,4 +4,8 @@
         android:id="@+id/menuDetail"
         android:icon="@drawable/detail"
         android:title="@string/detail" />
+    <item
+        android:id="@+id/menuGuide"
+        android:icon="@drawable/guide"
+        android:title="@string/guide" />
 </menu>

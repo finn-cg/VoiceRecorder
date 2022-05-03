@@ -20,8 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.fragment.app.FragmentActivity;
 
 import finn.academic.voicerecorder.fragment.FragmentDetail;
+import finn.academic.voicerecorder.fragment.FragmentGuide;
 import finn.academic.voicerecorder.fragment.FragmentRecordList;
 import finn.academic.voicerecorder.fragment.FragmentRecorder;
 import finn.academic.voicerecorder.fragment.FragmentSetting;
@@ -36,6 +38,7 @@ public class MainStream extends Activity implements View.OnClickListener {
 
     private TextView actionName;
     private String path = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +50,7 @@ public class MainStream extends Activity implements View.OnClickListener {
         listRecords.setOnClickListener(this);
         setting.setOnClickListener(this);
 
-      showMenuDetail();
+        showMenuDetail();
     }
 
     private void SetUp() {
@@ -56,7 +59,7 @@ public class MainStream extends Activity implements View.OnClickListener {
         setting = findViewById(R.id.Setting);
         detailMenu = findViewById(R.id.detailMenu);
 
-        actionName =  findViewById(R.id.actionName);
+        actionName = findViewById(R.id.actionName);
 
         getFragmentManager().beginTransaction().add(R.id.fragmentStream, new FragmentRecorder()).commit();
         startRecording.setBackgroundResource(R.drawable.custom_button_in_fragment);
@@ -100,13 +103,13 @@ public class MainStream extends Activity implements View.OnClickListener {
         transaction.replace(R.id.fragmentStream, fragment);
         transaction.commit();
     }
+
     public String getPath() {
         return path;
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();  // optional depending on your needs
         this.finish();
     }
@@ -115,7 +118,7 @@ public class MainStream extends Activity implements View.OnClickListener {
     private void showMenuDetail() {
         menuBuilder = new MenuBuilder(this);
         MenuInflater inflater = new MenuInflater(this);
-        inflater.inflate(R.menu.menu,menuBuilder);
+        inflater.inflate(R.menu.menu, menuBuilder);
         detailMenu.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -137,6 +140,9 @@ public class MainStream extends Activity implements View.OnClickListener {
                                 transaction.setCustomAnimations(R.animator.fragment_blur_to_clear, R.animator.fragment_clear_to_blur);
                                 transaction.replace(R.id.fragmentStream, fragment);
                                 transaction.commit();
+                                break;
+                            case R.id.menuGuide:
+                                startActivity(new Intent(MainStream.this, FragmentGuide.class));
                                 break;
                         }
                         return false;

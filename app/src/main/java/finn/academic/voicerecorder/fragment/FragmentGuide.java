@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -13,7 +14,7 @@ import com.google.android.material.tabs.TabLayout;
 import finn.academic.voicerecorder.R;
 import finn.academic.voicerecorder.adapter.GuideAdapter;
 
-public class FragmentGuide extends AppCompatActivity {
+public class FragmentGuide extends FragmentActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -29,11 +30,11 @@ public class FragmentGuide extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         GuideAdapter guideAdapter = new GuideAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        guideAdapter.addFragment(new FragmentGuideFolder(), "FOLDER");
-        guideAdapter.addFragment(new FragmentGuideRecentlyDeleted(), "RECENTLY DELETED");
-        guideAdapter.addFragment(new FragmentGuideRecorder(), "RECORDER");
-        guideAdapter.addFragment(new FragmentGuidePlayer(), "PLAYER");
-        guideAdapter.addFragment(new FragmentGuideSetting(), "SETTING");
+        guideAdapter.addFragment(new FragmentGuideFolder(), "1");
+        guideAdapter.addFragment(new FragmentGuideRecentlyDeleted(), "2");
+        guideAdapter.addFragment(new FragmentGuideRecorder(), "3");
+        guideAdapter.addFragment(new FragmentGuidePlayer(), "4");
+        guideAdapter.addFragment(new FragmentGuideSetting(), "5");
         viewPager.setAdapter(guideAdapter);
     }
 }
