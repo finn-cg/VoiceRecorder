@@ -245,30 +245,30 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <ImageButton
                             android:id="@+id/rewindRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_margin="8dp"
-                            android:src="@drawable/red_rewind" />
+                            android:background="@drawable/red_rewind" />
 
-                        <ImageView
+                        <ImageButton
                             android:id="@+id/playRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_margin="8dp"
-                            android:src="@drawable/red_play" />
+                            android:background="@drawable/red_play" />
 
-                        <ImageView
+                        <ImageButton
                             android:id="@+id/forwardRecord"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_margin="8dp"
-                            android:src="@drawable/red_fast_forward" />
+                            android:background="@drawable/red_fast_forward" />
 
                     </LinearLayout>
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/deletePlayingRecord"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -277,7 +277,7 @@
                         android:layout_marginRight="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/red_trash" />
+                        android:background="@drawable/red_trash" />
 
                 </RelativeLayout>
 
