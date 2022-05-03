@@ -89,12 +89,13 @@
                 android:src="@drawable/search" />
 
             <EditText
+                android:id="@+id/searchFieldDelete"
                 android:layout_width="fill_parent"
                 android:layout_height="32dp"
                 android:background="@android:color/transparent"
                 android:hint="@string/search"
                 android:textColor="@color/black"
-                android:textColorHint="@color/aux_item" />
+                android:textColorHint="@color/aux_item"/>
 
         </LinearLayout>
 

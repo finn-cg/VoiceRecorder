@@ -146,7 +146,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         }
     }
 
-    private Boolean recoverRecord(int position) {
+    private Boolean recoverRecord(int position, ArrayList<File> f, ArrayList<Record> r) {
         File curDirectory = files.get(position);
         String folder = FileHandler.getFolderName(curDirectory);
         String path = context.getExternalFilesDir("/") + "/" + folder;
@@ -163,28 +163,34 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             deletedFiles.add(files.get(position));
             deletedRecords.add(records.get(position));
 
+            f.removeAll(deletedFiles);
+            r.removeAll(deletedRecords);
+
             return true;
         } catch (IOException e) {
             return false;
         }
     }
 
-    private Boolean permanentlyDeleteRecord(int position) {
+    private Boolean permanentlyDeleteRecord(int position, ArrayList<File> f, ArrayList<Record> r) {
         File curDirectory = files.get(position);
         deletedFiles.add(files.get(position));
         deletedRecords.add(records.get(position));
 
+        f.removeAll(deletedFiles);
+        r.removeAll(deletedRecords);
+
         return curDirectory.delete();
     }
 
-    public Boolean deleteAllSelected(Boolean permanent) {
+    public Boolean permanentlyDeleteAllSelected(ArrayList<File> f, ArrayList<Record> r) {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
             if (records.get(i).getSelected()) {
-                res = permanent ? permanentlyDeleteRecord(i) : deleteRecord(i);
+                res = permanentlyDeleteRecord(i, f, r);
             }
         }
         files.removeAll(deletedFiles);
@@ -195,14 +201,30 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return res;
     }
 
-    public Boolean recoverAllSelected() {
+    public Boolean permanentlyDeleteAllRecord(ArrayList<File> f, ArrayList<Record> r) {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            res = permanentlyDeleteRecord(i, f, r);
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
+    }
+
+    public Boolean deleteAllSelected() {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
             if (records.get(i).getSelected()) {
-                res = recoverRecord(i);
+                res = deleteRecord(i);
             }
         }
         files.removeAll(deletedFiles);
@@ -213,13 +235,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return res;
     }
 
-    public Boolean recoverAllRecords() {
+    public Boolean recoverAllSelected(ArrayList<File> f, ArrayList<Record> r) {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
-                res = recoverRecord(i);
+            if (records.get(i).getSelected()) {
+                res = recoverRecord(i, f, r);
+            }
         }
         files.removeAll(deletedFiles);
         records.removeAll(deletedRecords);
@@ -229,13 +253,29 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return res;
     }
 
-    public Boolean deleteAllRecords(Boolean permanent) {
+    public Boolean recoverAllRecords(ArrayList<File> f, ArrayList<Record> r) {
         Boolean res = true;
 
         deletedFiles = new ArrayList<>();
         deletedRecords = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
-            res = permanent ? permanentlyDeleteRecord(i) : deleteRecord(i);
+            res = recoverRecord(i, f, r);
+        }
+        files.removeAll(deletedFiles);
+        records.removeAll(deletedRecords);
+
+        notifyDataSetChanged();
+
+        return res;
+    }
+
+    public Boolean deleteAllRecords() {
+        Boolean res = true;
+
+        deletedFiles = new ArrayList<>();
+        deletedRecords = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            res = deleteRecord(i);
         }
         files.removeAll(deletedFiles);
         records.removeAll(deletedRecords);
@@ -264,7 +304,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return records.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameRecord;
         TextView timeRecord;
         TextView durationRecord;

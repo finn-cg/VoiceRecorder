@@ -5,13 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,11 +32,14 @@ import finn.academic.voicerecorder.util.FileHandler;
 public class DeletedRecordsActivity extends AppCompatActivity implements RecordAdapter.RecyclerViewClickInterface {
     private RecyclerView recentlyDeletedRecyclerView;
     private ArrayList<Record> records;
+    private ArrayList<Record> allRecords;
     private RecordAdapter adapter;
 
     private Button editBtn;
     private Button recoverBtn;
     private Button deleteBtn;
+
+    private EditText searchFieldDel;
 
     private LinearLayout playLayout;
     private LinearLayout mainPlayLayout;
@@ -43,6 +50,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
     private RelativeLayout utilLayout;
 
     private ArrayList<File> files;
+    private ArrayList<File> allFiles;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +100,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             @Override
             public void onClick(View view) {
                 if (recoverBtn.getText().equals(getResources().getString(R.string.recover_all))) {
-                    if (adapter.recoverAllRecords()) {
+                    if (adapter.recoverAllRecords(allFiles, allRecords)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.recover_all_alert), Toast.LENGTH_SHORT).show();
                     } else {
@@ -100,7 +108,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                                 .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    if (adapter.recoverAllSelected()) {
+                    if (adapter.recoverAllSelected(allFiles, allRecords)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.recover_alert), Toast.LENGTH_SHORT).show();
                     } else {
@@ -108,7 +116,8 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                                 .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 }
-                updateEmtyElert();
+                updateEmptyElert();
+                adapter.hideAllSelecting();
 
                 if (records.size() == 0 || records.isEmpty()) {
                     editBtn.performClick();
@@ -125,12 +134,57 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                 }
             }
         });
+
+        searchFieldDel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                if (charSequence.toString().contains("\n")) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(recentlyDeletedRecyclerView.getWindowToken(), 0);
+                    searchFieldDel.setText(charSequence.toString().replace("\n",""));
+                } else {
+//                Toast.makeText(view.getContext(),
+//                        searchField.getText().toString(),
+//                        Toast.LENGTH_SHORT).show();
+                    searchRecords();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // empty
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateDataRecords();
+    }
+
+    private void searchRecords() {
+        records = new ArrayList<>();
+        for (Record element : allRecords) {
+            if (element.getName().contains(searchFieldDel.getText().toString())) {
+                records.add(element);
+            }
+        }
+
+        files = new ArrayList<>();
+        for (File element : allFiles) {
+            if (element.getName().contains(searchFieldDel.getText().toString())) {
+                files.add(element);
+            }
+        }
+
+        adapter = new RecordAdapter(this, records, files, DeletedRecordsActivity.this);
+        recentlyDeletedRecyclerView.setAdapter(adapter);
     }
 
     private void showYesNoDialog() {
@@ -150,7 +204,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             @Override
             public void onClick(View view) {
                 if (deleteBtn.getText().equals(view.getContext().getString(R.string.delete_all))) {
-                    if (adapter.deleteAllRecords(true)) {
+                    if (adapter.permanentlyDeleteAllRecord(allFiles, allRecords)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.per_deleted_all_record_alert), Toast.LENGTH_SHORT).show();
                     } else {
@@ -158,7 +212,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                                 .getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    if (adapter.deleteAllSelected(true)) {
+                    if (adapter.permanentlyDeleteAllSelected(allFiles, allRecords)) {
                         Toast.makeText(view.getContext(), view.getContext()
                                 .getResources().getString(R.string.per_deleted_record_alert), Toast.LENGTH_SHORT).show();
                     } else {
@@ -169,7 +223,8 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
                 deleteBtn.setText(getResources().getString(R.string.delete_all));
                 recoverBtn.setText(getResources().getString(R.string.recover_all));
-                updateEmtyElert();
+                updateEmptyElert();
+                adapter.hideAllSelecting();
 
                 if (records.size() == 0 || records.isEmpty()) {
                     editBtn.performClick();
@@ -188,7 +243,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         dialog.show();
     }
 
-    private void updateEmtyElert() {
+    private void updateEmptyElert() {
         if (records.isEmpty()) {
             emptyAlert.setVisibility(View.VISIBLE);
         } else {
@@ -202,6 +257,8 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         editBtn = findViewById(R.id.editInDelButton);
         recoverBtn = findViewById(R.id.recoverButton);
         deleteBtn = findViewById(R.id.deleteButton);
+
+        searchFieldDel = findViewById(R.id.searchFieldDelete);
 
         playLayout = findViewById(R.id.playLayout);
         mainPlayLayout = findViewById(R.id.mainPlayLayout);
@@ -217,16 +274,21 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
     private void updateDataRecords() {
         records = new ArrayList<>();
+        allRecords = new ArrayList<>();
         String path = getApplicationContext().getExternalFilesDir("/") + "/deletedRecent"; //Get the path of records stored
         FileHandler.createFolderIfNotExists(path);
         File directory = new File(path);
         files = new ArrayList<>();
+        allFiles = new ArrayList<>();
         Collections.addAll(files, directory.listFiles()); //Get all files from path above
+        Collections.addAll(allFiles, directory.listFiles()); //Get all files from path above
         for (int i = 0; i < files.size(); i++)
         {
-            records.add(new Record(getApplicationContext(),files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" +files.get(i).getName()), path, ""));
+            Record r = new Record(getApplicationContext(),files.get(i).getName(), files.get(i).lastModified(), getAudioFileLength(path + "/" +files.get(i).getName()), path, "");
+            records.add(r);
+            allRecords.add(r);
         }
-        updateEmtyElert();
+        updateEmptyElert();
 
         adapter = new RecordAdapter(DeletedRecordsActivity.this, records, files, this);
         recentlyDeletedRecyclerView.setAdapter(adapter);
