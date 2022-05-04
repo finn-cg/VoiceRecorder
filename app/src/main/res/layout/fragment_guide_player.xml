@@ -9,4 +9,117 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="32dp"
+            android:background="@color/light_red"
+            android:gravity="center"
+            android:text="@string/player"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="8dp"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="500dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/guide_player"
+                    android:adjustViewBounds="true"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="1. Choose record to play"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="2. Press to show option search and select records to delete"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="3. Search records"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="4. Select records to delete"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="5. Previous record"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="6. Next record"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="7. Play/Pause record"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha=".6"
+                android:paddingTop="8dp"
+                android:text="8. Delete playing record"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

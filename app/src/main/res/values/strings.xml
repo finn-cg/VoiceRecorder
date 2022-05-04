@@ -99,4 +99,11 @@
     <string name="guide_player_7">7. Play/Pause record</string>
     <string name="guide_player_8">8. Delete playing record</string>
 
+    <string name="guide_recently_delete_1">1. Choose record to play</string>
+    <string name="guide_recently_delete_2">2. Select records to delete or recover</string>
+    <string name="guide_recently_delete_3">3. Search records</string>
+    <string name="guide_recently_delete_4">4. Previous record</string>
+    <string name="guide_recently_delete_5">5. Next record</string>
+    <string name="guide_recently_delete_6">6. Play/Pause record</string>
+
 </resources>

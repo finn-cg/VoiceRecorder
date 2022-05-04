@@ -84,4 +84,10 @@
     <string name="guide_player_6">6. Phát bản ghi tiếp theo</string>
     <string name="guide_player_7">7. Phát/Dừng bản ghi</string>
     <string name="guide_player_8">8. Xoá bản ghi đang phát</string>
+    <string name="guide_recently_delete_5">5. Phát bản ghi tiếp theo</string>
+    <string name="guide_recently_delete_4">4. Phát bản ghi trước</string>
+    <string name="guide_recently_delete_6">6. Phát/Dừng bản ghi</string>
+    <string name="guide_recently_delete_3">3. Tìm kiếm bản ghi</string>
+    <string name="guide_recently_delete_2">2. Chọn các bản ghi để xoá hoặc khôi phục</string>
+    <string name="guide_recently_delete_1">1. Chọn bản ghi để phát</string>
 </resources>
