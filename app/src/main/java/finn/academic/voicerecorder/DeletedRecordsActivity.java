@@ -9,6 +9,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -19,11 +21,14 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -66,6 +71,8 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
     private ArrayList<File> files;
     private ArrayList<File> allFiles;
+
+    private ImageView menuPlayingRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +218,39 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
                 // empty
             }
         });
+
+        menuPlayingRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRecordDetail();
+            }
+        });
+    }
+
+    private void showRecordDetail() {
+        if (pos >= 0) {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.fragment_record_detail);
+
+            Window window = dialog.getWindow();
+            if (window == null) {
+                return;
+            }
+
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            TextView recordName = dialog.findViewById(R.id.recordName);
+            TextView recordLenght = dialog.findViewById(R.id.recordLenght);
+            TextView recordCreatedTime = dialog.findViewById(R.id.recordCreatedTime);
+
+            recordName.setText(records.get(pos).getName());
+            recordLenght.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
+            recordCreatedTime.setText(records.get(pos).timeAgo());
+
+            dialog.show();
+        }
     }
 
     @Override
@@ -333,6 +373,7 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
         seekBarRecord = findViewById(R.id.seekBarRecord);
         deletePlayingRecord = findViewById(R.id.deletePlayingRecord);
 
+        menuPlayingRecord = findViewById(R.id.menuPlayingRecord);
 
         updateDataRecords();
 
