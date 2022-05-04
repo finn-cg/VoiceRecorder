@@ -65,7 +65,7 @@ public class FragmentRecorder extends Fragment {
 
     int second = 0, minute = 0, hour = 0;
     volatile boolean running = false;
-    public static final int REPEAT_INTERVAL = 40;
+    public static int REPEAT_INTERVAL = 40;
     private VisualizerView visualizerView;
     private Handler handler; // Handler for updating the visualizer
     private Thread t;
@@ -127,6 +127,7 @@ public class FragmentRecorder extends Fragment {
                     recordButton.setClickable(true);
                     recordButton.startAnimation(animScaleOutside);
                     recordButtonInside.startAnimation(animScaleInside);
+                    REPEAT_INTERVAL = 40;
                 }
                 else {
                     //Pause
@@ -136,6 +137,7 @@ public class FragmentRecorder extends Fragment {
                     recordButton.setClickable(false);
                     recordButton.clearAnimation();
                     recordButtonInside.clearAnimation();
+                    REPEAT_INTERVAL = 99999;
                 }
             }
         });
