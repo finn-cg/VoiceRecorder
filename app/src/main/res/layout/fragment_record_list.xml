@@ -258,7 +258,8 @@
                         android:layout_marginRight="12dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/aux_util" />
+                        android:src="@drawable/aux_util"
+                        android:alpha=".6"/>
 
                 </RelativeLayout>
 
