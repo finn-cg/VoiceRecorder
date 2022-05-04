@@ -96,4 +96,7 @@
     <string name="guide_recorder_4">4. Xem hướng dẫn sử dụng</string>
     <string name="guide_recorder_5">5. Dừng ghi âm</string>
     <string name="guide_recorder_6">6. Tạm dừng ghi âm</string>
+    <string name="guide_setting_1">1. Điều chỉnh âm lượng</string>
+    <string name="guide_setting_2">2. Bật để phát các bản ghi liên tục</string>
+    <string name="guide_setting_3">3. Bật để chặn cuộc gọi đến ghi đang ghi âm</string>
 </resources>
