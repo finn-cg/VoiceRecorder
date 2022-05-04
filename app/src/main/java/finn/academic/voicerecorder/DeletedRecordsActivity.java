@@ -242,11 +242,11 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             TextView recordName = dialog.findViewById(R.id.recordName);
-            TextView recordLenght = dialog.findViewById(R.id.recordLenght);
+            TextView recordLength = dialog.findViewById(R.id.recordLength);
             TextView recordCreatedTime = dialog.findViewById(R.id.recordCreatedTime);
 
             recordName.setText(records.get(pos).getName());
-            recordLenght.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
+            recordLength.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
             recordCreatedTime.setText(records.get(pos).timeAgo());
 
             dialog.show();

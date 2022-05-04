@@ -62,12 +62,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
-                        android:text="Lenght:"
+                        android:text="@string/Length"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/recordLenght"
+                        android:id="@+id/recordLength"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
@@ -85,7 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="8dp"
-                        android:text="Created Time:"
+                        android:text="@string/created_time"
                         android:textColor="@color/black"
                         android:textSize="16sp" />
 

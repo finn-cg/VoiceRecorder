@@ -118,7 +118,7 @@
     <string name="guide_setting_3">3. Turn on to block incoming call while recording</string>
 
     <string name="name2">Name:</string>
-    <string name="lenght">Lenght:</string>
+    <string name="Length">Length:</string>
     <string name="created_time">Created Time:</string>
 
 </resources>
