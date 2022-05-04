@@ -90,4 +90,13 @@
     <string name="guide_folder_4">4. Press to delete folder</string>
     <string name="guide_folder_5">5. Press to create new folder</string>
 
+    <string name="guide_player_1">1. Choose record to play</string>
+    <string name="guide_player_2">2. Press to show option search and select records to delete</string>
+    <string name="guide_player_3">3. Search records</string>
+    <string name="guide_player_4">4. Select records to delete</string>
+    <string name="guide_player_5">5. Previous record</string>
+    <string name="guide_player_6">6. Next record</string>
+    <string name="guide_player_7">7. Play/Pause record</string>
+    <string name="guide_player_8">8. Delete playing record</string>
+
 </resources>

@@ -76,4 +76,12 @@
     <string name="guide_folder_3">3. Chọn thư mục đã tạo để chứa bản ghi</string>
     <string name="guide_folder_4">4. Nhấn để xoá thư mục</string>
     <string name="guide_folder_5">5. Nhấn để tạo mới thư mục</string>
+    <string name="guide_player_1">1. Chọn bản ghi để phát</string>
+    <string name="guide_player_2">2. Nhấn để hiện ra lựa chọn tìm kiếm và chọn các bản ghi để xoá</string>
+    <string name="guide_player_3">3. Tìm kiếm bản ghi</string>
+    <string name="guide_player_4">4. Chọn các bản ghi để xoá</string>
+    <string name="guide_player_5">5. Phát bản ghi trước</string>
+    <string name="guide_player_6">6. Phát bản ghi tiếp theo</string>
+    <string name="guide_player_7">7. Phát/Dừng bản ghi</string>
+    <string name="guide_player_8">8. Xoá bản ghi đang phát</string>
 </resources>
