@@ -71,4 +71,9 @@
     <string name="recover_record">Khôi phục các bản ghi</string>
     <string name="recover_description">Các bản ghi sẽ ghi đè lên các bản ghi khác có cùng tên trong thư mục!</string>
     <string name="guide">Hướng dẫn sử dụng</string>
+    <string name="guide_folder_1">1. Chọn thư mục mặc định để chứa bản ghi</string>
+    <string name="guide_folder_2">2. Xem những bản ghi đã bị xoá gần đây</string>
+    <string name="guide_folder_3">3. Chọn thư mục đã tạo để chứa bản ghi</string>
+    <string name="guide_folder_4">4. Nhấn để xoá thư mục</string>
+    <string name="guide_folder_5">5. Nhấn để tạo mới thư mục</string>
 </resources>

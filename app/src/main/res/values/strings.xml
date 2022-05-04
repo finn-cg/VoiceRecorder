@@ -84,4 +84,10 @@
     <string name="recover_description">Records would be overwritten on the same name file in folder!</string>
     <string name="guide">How to use</string>
 
+    <string name="guide_folder_1">1. Choose default folder to contain record</string>
+    <string name="guide_folder_2">2. View records are deleted recently</string>
+    <string name="guide_folder_3">3. Choose created folder to contain record</string>
+    <string name="guide_folder_4">4. Press to delete folder</string>
+    <string name="guide_folder_5">5. Press to create new folder</string>
+
 </resources>

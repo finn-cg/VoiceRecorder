@@ -228,7 +228,9 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             @Override
             public void onClick(View view) {
                 // Delete record
-                deleteRecord(pos);
+                if (pos >= 0) {
+                    deleteRecord(pos);
+                }
             }
         });
 
