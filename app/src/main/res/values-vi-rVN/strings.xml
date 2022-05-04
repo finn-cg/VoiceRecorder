@@ -99,4 +99,7 @@
     <string name="guide_setting_1">1. Điều chỉnh âm lượng</string>
     <string name="guide_setting_2">2. Bật để phát các bản ghi liên tục</string>
     <string name="guide_setting_3">3. Bật để chặn cuộc gọi đến ghi đang ghi âm</string>
+    <string name="name2">Tên:</string>
+    <string name="lenght">Độ dài:</string>
+    <string name="created_time">Thời gian được tạo:</string>
 </resources>
