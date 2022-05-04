@@ -343,6 +343,14 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         updateDataRecords();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+        }
+    }
+
     private void showRecordDetail() {
         if (pos >= 0) {
             final Dialog dialog = new Dialog(view.getContext());
