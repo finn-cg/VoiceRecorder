@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="1. Choose record to play"
+                android:text="@string/guide_player_1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="2. Press to show option search and select records to delete"
+                android:text="@string/guide_player_2"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="3. Search records"
+                android:text="@string/guide_player_3"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="4. Select records to delete"
+                android:text="@string/guide_player_4"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="5. Previous record"
+                android:text="@string/guide_player_5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="6. Next record"
+                android:text="@string/guide_player_6"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="7. Play/Pause record"
+                android:text="@string/guide_player_7"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="8. Delete playing record"
+                android:text="@string/guide_player_8"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

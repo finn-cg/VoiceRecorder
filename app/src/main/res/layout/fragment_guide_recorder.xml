@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="1. Press to start record"
+                android:text="@string/guide_recorder_1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="2. Show option view details and view guide"
+                android:text="@string/guide_recorder_2"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="3. View details"
+                android:text="@string/guide_recorder_3"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="4. View how to use"
+                android:text="@string/guide_recorder_4"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="5. Stop record"
+                android:text="@string/guide_recorder_5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="6. Pause record"
+                android:text="@string/guide_recorder_6"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

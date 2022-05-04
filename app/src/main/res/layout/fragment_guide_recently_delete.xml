@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="1. Choose record to play"
+                android:text="@string/guide_recently_delete_1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="2. Select to delete or recover records"
+                android:text="@string/guide_recently_delete_2"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="3. Search records"
+                android:text="@string/guide_recently_delete_3"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="4. Previous record"
+                android:text="@string/guide_recently_delete_4"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="5. Next record"
+                android:text="@string/guide_recently_delete_5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="6. Play/Pause record"
+                android:text="@string/guide_recently_delete_6"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />

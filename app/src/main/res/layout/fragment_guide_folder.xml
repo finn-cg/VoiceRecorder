@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="1. Choose default folder to contain record"
+                android:text="@string/guide_folder_1"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="2. View records are deleted recently"
+                android:text="@string/guide_folder_2"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="3. Choose created folder to contain record"
+                android:text="@string/guide_folder_3"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="4. Press to delete folder"
+                android:text="@string/guide_folder_4"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:alpha=".6"
                 android:paddingTop="8dp"
-                android:text="5. Press to create new folder"
+                android:text="@string/guide_folder_5"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
