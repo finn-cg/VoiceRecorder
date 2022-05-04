@@ -11,12 +11,14 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class VisualizerView extends View {
-    private static final int LINE_WIDTH = 1; // width of visualizer lines
-    private static final int LINE_SCALE = 75; // scales visualizer lines
+    private static final int LINE_WIDTH = 3; // width of visualizer lines
+    private static final int LINE_SCALE = 10; // scales visualizer lines
     private List<Float> amplitudes; // amplitudes for line lengths
     private int width; // width of this View
     private int height; // height of this View
     private Paint linePaint; // specifies line drawing characteristics
+    private float curX;
+    private float tmp = 0;
 
     // constructor
     public VisualizerView(Context context, AttributeSet attrs) {
@@ -53,7 +55,8 @@ public class VisualizerView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         int middle = height / 2; // get the middle of the View
-        float curX = 0; // start curX at zero
+        curX = tmp; // start curX at zero
+        canvas.drawLine(0, middle, width, middle, linePaint);
 
         // for each item in the amplitudes ArrayList
         for (float power : amplitudes) {
