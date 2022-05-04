@@ -90,4 +90,10 @@
     <string name="guide_recently_delete_3">3. Tìm kiếm bản ghi</string>
     <string name="guide_recently_delete_2">2. Chọn các bản ghi để xoá hoặc khôi phục</string>
     <string name="guide_recently_delete_1">1. Chọn bản ghi để phát</string>
+    <string name="guide_recorder_1">1. Nhấn để bắt đầu ghi âm</string>
+    <string name="guide_recorder_2">2. Hiển thị lựa chọn xem chi tiết ứng dụng và xem hướng dẫn sử dụng</string>
+    <string name="guide_recorder_3">3. Xem chi tiết ứng dụng</string>
+    <string name="guide_recorder_4">4. Xem hướng dẫn sử dụng</string>
+    <string name="guide_recorder_5">5. Dừng ghi âm</string>
+    <string name="guide_recorder_6">6. Tạm dừng ghi âm</string>
 </resources>
