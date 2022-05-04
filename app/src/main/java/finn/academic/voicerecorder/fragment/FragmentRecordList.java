@@ -1,9 +1,13 @@
 package finn.academic.voicerecorder.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,12 +25,15 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Fragment;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -68,6 +75,7 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     private SeekBar seekBarRecord;
     private ImageButton playRecord, rewindRecord, forwardRecord, deletePlayingRecord;
     private EditText searchField;
+    private ImageView menuPlayingRecord;
 
     private Button cancelCheckButton;
     private Button deleteButton;
@@ -275,6 +283,13 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
             }
         });
 
+        menuPlayingRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showRecordDetail();
+            }
+        });
+
         return view;
     }
 
@@ -311,6 +326,8 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
         deleteButton = view.findViewById(R.id.deleteButton);
         deletePlayingRecord = view.findViewById(R.id.deletePlayingRecord);
 
+        menuPlayingRecord = view.findViewById(R.id.menuPlayingRecord);
+
         if (mMediaPlayer != null) {
             mMediaPlayer.stop();
         }
@@ -322,6 +339,32 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
     public void onResume() {
         super.onResume();
         updateDataRecords();
+    }
+
+    private void showRecordDetail() {
+        if (pos >= 0) {
+            final Dialog dialog = new Dialog(view.getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.fragment_record_detail);
+
+            Window window = dialog.getWindow();
+            if (window == null) {
+                return;
+            }
+
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            TextView recordName = dialog.findViewById(R.id.recordName);
+            TextView recordLenght = dialog.findViewById(R.id.recordLenght);
+            TextView recordCreatedTime = dialog.findViewById(R.id.recordCreatedTime);
+
+            recordName.setText(records.get(pos).getName());
+            recordLenght.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
+            recordCreatedTime.setText(records.get(pos).timeAgo());
+
+            dialog.show();
+        }
     }
 
     private void deleteRecord(int position) {
