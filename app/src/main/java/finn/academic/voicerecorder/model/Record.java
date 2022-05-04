@@ -71,6 +71,10 @@ public class Record {
         return duration;
     }
 
+    public long getTime() {
+        return time;
+    }
+
     public void setDuration(long duration) {
         this.duration = duration;
     }

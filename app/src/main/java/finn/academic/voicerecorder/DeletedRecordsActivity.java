@@ -36,8 +36,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import finn.academic.voicerecorder.adapter.RecordAdapter;
 import finn.academic.voicerecorder.model.Record;
@@ -247,7 +249,10 @@ public class DeletedRecordsActivity extends AppCompatActivity implements RecordA
 
             recordName.setText(records.get(pos).getName());
             recordLength.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
-            recordCreatedTime.setText(records.get(pos).timeAgo());
+
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            String time = df.format(records.get(pos).getTime());
+            recordCreatedTime.setText(time);
 
             dialog.show();
         }

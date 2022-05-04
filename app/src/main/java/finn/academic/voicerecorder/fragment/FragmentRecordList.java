@@ -42,8 +42,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import finn.academic.voicerecorder.MainStream;
 import finn.academic.voicerecorder.R;
@@ -361,7 +363,10 @@ public class FragmentRecordList extends Fragment implements RecordAdapter.Recycl
 
             recordName.setText(records.get(pos).getName());
             recordLength.setText(RecordAdapter.formateMilliSeccond(records.get(pos).duration()));
-            recordCreatedTime.setText(records.get(pos).timeAgo());
+
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            String time = df.format(records.get(pos).getTime());
+            recordCreatedTime.setText(time);
 
             dialog.show();
         }
